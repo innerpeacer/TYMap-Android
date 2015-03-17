@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -134,12 +135,17 @@ public abstract class BaseMapViewActivity extends Activity implements
 	}
 
 	@Override
-	public void onClickAtPoint(Point mappoint) {
+	public void onClickAtPoint(NPMapView mapView, Point mappoint) {
 
 	}
 
 	@Override
-	public void onPoiSelected(List<NPPoi> poiList) {
+	public void onPoiSelected(NPMapView mapView, List<NPPoi> poiList) {
 
+	}
+
+	@Override
+	public void onFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo) {
+		Log.i(TAG, "" + mapInfo);
 	}
 }

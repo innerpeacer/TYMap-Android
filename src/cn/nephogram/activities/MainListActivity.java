@@ -18,11 +18,11 @@ public class MainListActivity extends HelperListActivity {
 		AppSettings settings = new AppSettings(this);
 
 		settings.setDefaultCityID("0021");
-		settings.setDefaultBuildingID("002100001");
+		settings.setDefaultBuildingID("002100002");
 
 		setTitle(getResources().getString(R.string.app_name));
 
-		NPMapView.useAsset = false;
+		NPMapView.useAsset = true;
 	};
 
 	protected void constructList() {

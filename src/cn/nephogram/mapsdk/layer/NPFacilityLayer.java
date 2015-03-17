@@ -14,8 +14,11 @@ import org.codehaus.jackson.JsonParser;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import cn.nephogram.mapsdk.NPMapType;
 import cn.nephogram.mapsdk.NPPictureSymbol;
 import cn.nephogram.mapsdk.NPRenderingScheme;
+import cn.nephogram.mapsdk.poi.NPPoi;
+import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -29,8 +32,10 @@ import com.esri.core.renderer.UniqueValueRenderer;
 public class NPFacilityLayer extends GraphicsLayer {
 	static final String TAG = NPFacilityLayer.class.getSimpleName();
 	private Context context;
+
 	@SuppressLint("UseSparseArrays")
 	private Map<Integer, List<Graphic>> groupedGraphicDict = new HashMap<Integer, List<Graphic>>();
+	private Map<String, Graphic> facilityDict = new HashMap<String, Graphic>();
 
 	private NPRenderingScheme renderingScheme;
 
@@ -72,6 +77,7 @@ public class NPFacilityLayer extends GraphicsLayer {
 	public void loadContentsFromFileWithInfo(String path) {
 		removeAll();
 		groupedGraphicDict.clear();
+		facilityDict.clear();
 
 		JsonFactory factory = new JsonFactory();
 
@@ -90,6 +96,10 @@ public class NPFacilityLayer extends GraphicsLayer {
 
 				List<Graphic> graphicList = groupedGraphicDict.get(categoryID);
 				graphicList.add(graphic);
+
+				String poiID = (String) graphic
+						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+				facilityDict.put(poiID, graphic);
 			}
 
 			addGraphics(graphics);
@@ -105,6 +115,9 @@ public class NPFacilityLayer extends GraphicsLayer {
 
 	public void loadContentsFromAssetsWithInfo(String path) {
 		removeAll();
+		groupedGraphicDict.clear();
+		facilityDict.clear();
+
 		JsonFactory factory = new JsonFactory();
 
 		try {
@@ -123,6 +136,10 @@ public class NPFacilityLayer extends GraphicsLayer {
 
 				List<Graphic> graphicList = groupedGraphicDict.get(categoryID);
 				graphicList.add(graphic);
+
+				String poiID = (String) graphic
+						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+				facilityDict.put(poiID, graphic);
 			}
 
 			addGraphics(graphics);
@@ -180,4 +197,26 @@ public class NPFacilityLayer extends GraphicsLayer {
 		return new ArrayList<Integer>(groupedGraphicDict.keySet());
 	}
 
+	public NPPoi getPoiWithPoiID(String pid) {
+		NPPoi result = null;
+		Graphic graphic = facilityDict.get(pid);
+		if (graphic != null) {
+			result = new NPPoi(
+					(String) graphic
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+					(String) graphic
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+					(String) graphic
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+					(String) graphic
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+					(String) graphic
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
+					graphic.getGeometry(),
+					(Integer) graphic
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+					POI_LAYER.POI_FACILITY);
+		}
+		return result;
+	}
 }

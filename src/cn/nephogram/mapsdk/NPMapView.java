@@ -16,7 +16,7 @@ import cn.nephogram.mapsdk.layer.NPFloorLayer;
 import cn.nephogram.mapsdk.layer.NPLabelLayer;
 import cn.nephogram.mapsdk.layer.NPRoomLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
-import cn.nephogram.mapsdk.poi.NPPoi.POI_TYPE;
+import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnSingleTapListener;
@@ -52,6 +52,8 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 
 	private NPFacilityLayer facilityLayer;
 	private NPLabelLayer labelLayer;
+
+	private Envelope initialEnvelope;
 
 	/**
 	 * 是否从assets目录读取地图文件，默认为true
@@ -154,10 +156,20 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 					.getLabelFilePath(info.getMapID()));
 		}
 
-		Envelope envelope = new Envelope(info.getMapExtent().getXmin(), info
-				.getMapExtent().getYmin(), info.getMapExtent().getXmax(), info
-				.getMapExtent().getYmax());
-		setExtent(envelope);
+		if (initialEnvelope == null) {
+			initialEnvelope = new Envelope(info.getMapExtent().getXmin(), info
+					.getMapExtent().getYmin(), info.getMapExtent().getXmax(),
+					info.getMapExtent().getYmax());
+			setExtent(initialEnvelope);
+
+		}
+
+		notifyFinishLoadingFloor(this, currentMapInfo);
+
+		// Envelope envelope = new Envelope(info.getMapExtent().getXmin(), info
+		// .getMapExtent().getYmin(), info.getMapExtent().getXmax(), info
+		// .getMapExtent().getYmax());
+		// setExtent(envelope);
 
 	}
 
@@ -238,12 +250,41 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 		facilityLayer.showFacilityWithCategory(categoryID);
 	}
 
+	/**
+	 * 获取当前楼层下特定子层特定poiID的信息
+	 * 
+	 * @param pid
+	 *            poiID
+	 * @param layer
+	 *            目标子层
+	 * 
+	 * @return poi信息
+	 */
+	public NPPoi getPoiOnCurrentFloorWithPoiID(String pid, POI_LAYER layer) {
+		NPPoi result = null;
+
+		switch (layer) {
+		case POI_ROOM:
+			result = roomLayer.getPoiWithPoiID(pid);
+			break;
+
+		case POI_FACILITY:
+			result = facilityLayer.getPoiWithPoiID(pid);
+			break;
+
+		default:
+			break;
+		}
+
+		return result;
+	}
+
 	@Override
 	public void onSingleTap(float x, float y) {
 		clearSelection();
 
 		Point p = toMapPoint(x, y);
-		notifyClickAtPoint(p);
+		notifyClickAtPoint(this, p);
 		//
 		// if (_highlightPOIOnSelection) {
 		// [self highlightPoiFeature:features];
@@ -253,7 +294,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 			List<NPPoi> poiList = extractSelectedPoi(x, y);
 			// Log.i(TAG, "PoiList: " + poiList.size());
 			if (poiList.size() > 0) {
-				notifyPoiSelected(poiList);
+				notifyPoiSelected(this, poiList);
 			}
 		}
 
@@ -306,7 +347,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 							g.getGeometry(),
 							(Integer) g
 									.getAttributeValue(GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-							POI_TYPE.POI_FACILITY);
+							POI_LAYER.POI_FACILITY);
 					poiList.add(poi);
 				}
 			}
@@ -331,7 +372,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 							g.getGeometry(),
 							(Integer) g
 									.getAttributeValue(GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-							POI_TYPE.POI_ROOM);
+							POI_LAYER.POI_ROOM);
 					poiList.add(poi);
 				}
 			}
@@ -356,7 +397,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 							g.getGeometry(),
 							(Integer) g
 									.getAttributeValue(GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-							POI_TYPE.POI_ASSET);
+							POI_LAYER.POI_ASSET);
 					poiList.add(poi);
 				}
 			}
@@ -372,10 +413,12 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 		/**
 		 * 地图点选事件回调方法
 		 * 
+		 * @param mapView
+		 *            地图视图
 		 * @param mappoint
 		 *            点击事件的地图坐标
 		 */
-		void onClickAtPoint(Point mappoint);
+		void onClickAtPoint(NPMapView mapView, Point mappoint);
 
 		/**
 		 * 地图POI选中事件回调
@@ -385,7 +428,18 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 		 * @param array
 		 *            选中的POI数组:[NPPoi]
 		 */
-		void onPoiSelected(List<NPPoi> poiList);
+		void onPoiSelected(NPMapView mapView, List<NPPoi> poiList);
+
+		/**
+		 * 地图楼层加载完成回调
+		 * 
+		 * @param mapView
+		 *            地图视图
+		 * @param mapInfo
+		 *            加载楼层信息
+		 */
+		void onFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo);
+
 	}
 
 	/**
@@ -412,15 +466,21 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 		}
 	}
 
-	private void notifyPoiSelected(List<NPPoi> poiList) {
+	private void notifyPoiSelected(NPMapView mapView, List<NPPoi> poiList) {
 		for (NPMapViewListenser listener : listeners) {
-			listener.onPoiSelected(poiList);
+			listener.onPoiSelected(mapView, poiList);
 		}
 	}
 
-	private void notifyClickAtPoint(Point mappoint) {
+	private void notifyClickAtPoint(NPMapView mapView, Point mappoint) {
 		for (NPMapViewListenser listener : listeners) {
-			listener.onClickAtPoint(mappoint);
+			listener.onClickAtPoint(mapView, mappoint);
+		}
+	}
+
+	private void notifyFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo) {
+		for (NPMapViewListenser listener : listeners) {
+			listener.onFinishLoadingFloor(mapView, mapInfo);
 		}
 	}
 

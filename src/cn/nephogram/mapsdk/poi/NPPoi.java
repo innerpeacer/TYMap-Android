@@ -21,7 +21,7 @@ public class NPPoi {
 
 	private int categoryID;
 
-	private POI_TYPE type;
+	private POI_LAYER type;
 
 	/**
 	 * POI地理ID
@@ -75,19 +75,29 @@ public class NPPoi {
 	/**
 	 * POI类型
 	 */
-	public POI_TYPE getType() {
+	public POI_LAYER getType() {
 		return type;
 	}
 
 	/**
 	 * POI类型，当前按层来分类：房间层（ROOM）、资产层（ASSET）、公共设施层（FACILITY）
 	 */
-	public enum POI_TYPE {
-		POI_ROOM, POI_ASSET, POI_FACILITY
+	public enum POI_LAYER {
+		POI_ROOM(1), POI_ASSET(2), POI_FACILITY(3);
+
+		private int layer;
+
+		private POI_LAYER(int layer) {
+			this.layer = layer;
+		}
+
+		public int layer() {
+			return layer;
+		}
 	}
 
 	public NPPoi(String gid, String pid, String fid, String bid, String pname,
-			Geometry geometry, int cid, POI_TYPE ptype) {
+			Geometry geometry, int cid, POI_LAYER ptype) {
 		this.geoID = gid;
 		this.poiID = pid;
 		this.floorID = fid;
@@ -104,7 +114,7 @@ public class NPPoi {
 				poiID, name, typeString(type));
 	}
 
-	private String typeString(POI_TYPE type) {
+	private String typeString(POI_LAYER type) {
 		String result = null;
 		switch (type) {
 		case POI_ROOM:

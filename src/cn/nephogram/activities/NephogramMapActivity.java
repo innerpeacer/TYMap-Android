@@ -5,6 +5,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.util.Log;
 import cn.nephogram.map.R;
+import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.poi.NPPoi;
 
 import com.esri.core.geometry.Point;
@@ -25,31 +26,22 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 	int index = 0;
 
 	@Override
-	public void onClickAtPoint(Point mappoint) {
+	public void onClickAtPoint(NPMapView mapView, Point mappoint) {
 		Log.i(TAG,
 				"onClickAtPoint: " + mappoint.getX() + ", " + mappoint.getY());
 
-		List<Integer> cList = mapView.getAllFacilityCategoryIDOnCurrentFloor();
-
-		Log.i(TAG, cList.toString());
-
-		if (index > cList.size()) {
-			index = 0;
-		}
-
-		if (index == cList.size()) {
-			mapView.showAllFacilitiesOnCurrentFloor();
-			index++;
-		} else {
-			mapView.showFacilityOnCurrentWithCategory(cList.get(index++));
-		}
 	}
 
 	@Override
-	public void onPoiSelected(List<NPPoi> poiList) {
+	public void onPoiSelected(NPMapView mapView, List<NPPoi> poiList) {
 		Log.i(TAG, "onPoiSelected: ");
 		for (NPPoi poi : poiList) {
-			Log.i(TAG, poi + "\n");
+			// Log.i(TAG, poi + "\n");
+
+			NPPoi p = mapView.getPoiOnCurrentFloorWithPoiID(poi.getPoiID(),
+					poi.getType());
+			Log.i(TAG, p + "\n");
+
 		}
 
 	}

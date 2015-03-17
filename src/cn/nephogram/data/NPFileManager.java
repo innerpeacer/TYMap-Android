@@ -9,7 +9,7 @@ import android.os.Environment;
 
 public class NPFileManager {
 	public static final String ROOT_DIR = Environment
-			.getExternalStorageDirectory() + "/CloudAtlasMap/";
+			.getExternalStorageDirectory() + "/Nephogram/";
 
 	private static String MAP_DIR = ROOT_DIR + "MapFiles";
 
