@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import cn.nephogram.data.NPAssetsManager;
 import cn.nephogram.data.NPFileManager;
 import cn.nephogram.mapsdk.data.NPMapInfo;
@@ -18,14 +17,19 @@ import cn.nephogram.mapsdk.layer.NPRoomLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
+import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.MapView;
+import com.esri.android.map.event.OnPanListener;
 import com.esri.android.map.event.OnSingleTapListener;
+import com.esri.android.map.event.OnZoomListener;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Graphic;
+import com.esri.core.renderer.SimpleRenderer;
 
-public class NPMapView extends MapView implements OnSingleTapListener {
+public class NPMapView extends MapView implements OnSingleTapListener,
+		OnPanListener, OnZoomListener {
 
 	private static final long serialVersionUID = 7475014088599931549L;
 
@@ -48,6 +52,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 
 	private NPFloorLayer floorLayer;
 	private NPRoomLayer roomLayer;
+	private GraphicsLayer roomHighlightLayer;
 	private NPAssetLayer assetLayer;
 
 	private NPFacilityLayer facilityLayer;
@@ -62,7 +67,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 
 	private List<NPMapViewListenser> listeners = new ArrayList<NPMapView.NPMapViewListenser>();
 
-	private boolean highlightPoiOnSelection = true;
+	private boolean highlightPoiOnSelection = false;
 
 	// =====================================
 	public NPMapView(Context context) {
@@ -88,7 +93,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 	 *            地图渲染方案
 	 */
 	public void init(NPRenderingScheme renderingScheme) {
-		Log.i(TAG, "init");
+		// Log.i(TAG, "init");
 
 		SpatialReference sr = NPMapEnvironment.defaultSpatialReference();
 
@@ -97,8 +102,14 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 
 		roomLayer = new NPRoomLayer(context, renderingScheme, sr, null);
 		addLayer(roomLayer);
-		roomLayer.setSelectionColor(renderingScheme
-				.getDefaultHighlightFillSymbol().getColor());
+
+		roomHighlightLayer = new GraphicsLayer();
+		roomHighlightLayer.setRenderer(new SimpleRenderer(renderingScheme
+				.getDefaultHighlightFillSymbol()));
+		addLayer(roomHighlightLayer);
+		// roomLayer.setSelectionColor(renderingScheme
+		// .getDefaultHighlightFillSymbol().getColor());
+		// roomLayer.setSelectionColorWidth(2);
 
 		assetLayer = new NPAssetLayer(context, renderingScheme, sr, null);
 		addLayer(assetLayer);
@@ -110,6 +121,8 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 		addLayer(labelLayer);
 
 		setOnSingleTapListener(this);
+		setOnPanListener(this);
+		setOnZoomListener(this);
 	}
 
 	/**
@@ -118,7 +131,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 	 * @param info
 	 *            目标楼层的地图信息
 	 */
-	public void setFloor(NPMapInfo info) {
+	public void setFloor(final NPMapInfo info) {
 		if (currentMapInfo != null
 				&& info.getMapID().equalsIgnoreCase(currentMapInfo.getMapID())) {
 			return;
@@ -128,43 +141,93 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 
 		floorLayer.removeAll();
 		roomLayer.removeAll();
+		roomHighlightLayer.removeAll();
 		assetLayer.removeAll();
 		facilityLayer.removeAll();
 		labelLayer.removeAll();
 
-		if (useAsset) {
-			floorLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-					.getFloorFilePath(info.getMapID()));
-			roomLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-					.getRoomFilePath(info.getMapID()));
-			assetLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-					.getAssetFilePath(info.getMapID()));
-			facilityLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-					.getFacilityFilePath(info.getMapID()));
-			labelLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-					.getLabelFilePath(info.getMapID()));
-		} else {
-			floorLayer.loadContentsFromFileWithInfo(NPFileManager
-					.getFloorFilePath(info.getMapID()));
-			roomLayer.loadContentsFromFileWithInfo(NPFileManager
-					.getRoomFilePath(info.getMapID()));
-			assetLayer.loadContentsFromFileWithInfo(NPFileManager
-					.getAssetFilePath(info.getMapID()));
-			facilityLayer.loadContentsFromFileWithInfo(NPFileManager
-					.getFacilityFilePath(info.getMapID()));
-			labelLayer.loadContentsFromFileWithInfo(NPFileManager
-					.getLabelFilePath(info.getMapID()));
-		}
+		new Thread(new Runnable() {
 
-		if (initialEnvelope == null) {
-			initialEnvelope = new Envelope(info.getMapExtent().getXmin(), info
-					.getMapExtent().getYmin(), info.getMapExtent().getXmax(),
-					info.getMapExtent().getYmax());
-			setExtent(initialEnvelope);
+			@Override
+			public void run() {
+				if (useAsset) {
+					floorLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+							.getFloorFilePath(info.getMapID()));
+					roomLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+							.getRoomFilePath(info.getMapID()));
+					assetLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+							.getAssetFilePath(info.getMapID()));
+					facilityLayer
+							.loadContentsFromAssetsWithInfo(NPAssetsManager
+									.getFacilityFilePath(info.getMapID()));
+					labelLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+							.getLabelFilePath(info.getMapID()));
+				} else {
+					floorLayer.loadContentsFromFileWithInfo(NPFileManager
+							.getFloorFilePath(info.getMapID()));
+					roomLayer.loadContentsFromFileWithInfo(NPFileManager
+							.getRoomFilePath(info.getMapID()));
+					assetLayer.loadContentsFromFileWithInfo(NPFileManager
+							.getAssetFilePath(info.getMapID()));
+					facilityLayer.loadContentsFromFileWithInfo(NPFileManager
+							.getFacilityFilePath(info.getMapID()));
+					labelLayer.loadContentsFromFileWithInfo(NPFileManager
+							.getLabelFilePath(info.getMapID()));
+				}
 
-		}
+				if (initialEnvelope == null) {
+					initialEnvelope = new Envelope(info.getMapExtent()
+							.getXmin(), info.getMapExtent().getYmin(), info
+							.getMapExtent().getXmax(), info.getMapExtent()
+							.getYmax());
+					setExtent(initialEnvelope);
 
-		notifyFinishLoadingFloor(this, currentMapInfo);
+					// setMaxResolution(info.getMapSize().getX() * 1.5
+					// / (720 / 2.0));
+					// setMaxResolution(info.getMapSize().getX() * 1.5 / (720));
+
+					double width = 0.06; // 6cm
+					setMinScale(info.getMapSize().getX() / width);
+					setMaxScale(6 / width);
+				}
+
+				notifyFinishLoadingFloor(NPMapView.this, currentMapInfo);
+			}
+		}).start();
+
+		// if (useAsset) {
+		// floorLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+		// .getFloorFilePath(info.getMapID()));
+		// roomLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+		// .getRoomFilePath(info.getMapID()));
+		// assetLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+		// .getAssetFilePath(info.getMapID()));
+		// facilityLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+		// .getFacilityFilePath(info.getMapID()));
+		// labelLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
+		// .getLabelFilePath(info.getMapID()));
+		// } else {
+		// floorLayer.loadContentsFromFileWithInfo(NPFileManager
+		// .getFloorFilePath(info.getMapID()));
+		// roomLayer.loadContentsFromFileWithInfo(NPFileManager
+		// .getRoomFilePath(info.getMapID()));
+		// assetLayer.loadContentsFromFileWithInfo(NPFileManager
+		// .getAssetFilePath(info.getMapID()));
+		// facilityLayer.loadContentsFromFileWithInfo(NPFileManager
+		// .getFacilityFilePath(info.getMapID()));
+		// labelLayer.loadContentsFromFileWithInfo(NPFileManager
+		// .getLabelFilePath(info.getMapID()));
+		// }
+		//
+		// if (initialEnvelope == null) {
+		// initialEnvelope = new Envelope(info.getMapExtent().getXmin(), info
+		// .getMapExtent().getYmin(), info.getMapExtent().getXmax(),
+		// info.getMapExtent().getYmax());
+		// setExtent(initialEnvelope);
+		//
+		// }
+		//
+		// notifyFinishLoadingFloor(this, currentMapInfo);
 
 		// Envelope envelope = new Envelope(info.getMapExtent().getXmin(), info
 		// .getMapExtent().getYmin(), info.getMapExtent().getXmax(), info
@@ -220,6 +283,7 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 	 */
 	public void clearSelection() {
 		roomLayer.clearSelection();
+		roomHighlightLayer.removeAll();
 		// assetLayer.clearSelection();
 		facilityLayer.clearSelection();
 	}
@@ -279,16 +343,64 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 		return result;
 	}
 
+	/**
+	 * 高亮显示POI
+	 * 
+	 * @param poi
+	 *            目标poi 目标poi至少包含poiID和layer信息，当前支持ROOM和FACILITY高亮
+	 */
+	public void highlightPoi(NPPoi poi) {
+		switch (poi.getLayer()) {
+		case POI_ROOM:
+			// roomLayer.highlightPoi(poi.getPoiID());
+			NPPoi roomPoi = roomLayer.getPoiWithPoiID(poi.getPoiID());
+			if (poi != null) {
+				roomHighlightLayer.addGraphic(new Graphic(
+						roomPoi.getGeometry(), null));
+			}
+			break;
+
+		case POI_FACILITY:
+			facilityLayer.highlightPoi(poi.getPoiID());
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * 高亮显示一组POI
+	 * 
+	 * @param poiList
+	 *            目标poi数组
+	 */
+	public void highlightPois(List<NPPoi> poiList) {
+		for (NPPoi poi : poiList) {
+			highlightPoi(poi);
+		}
+	}
+
+	/**
+	 * 根据坐标x和y提取当前楼层的ROOM POI
+	 * 
+	 * @param x
+	 *            坐标x
+	 * @param y
+	 *            坐标y
+	 * 
+	 * @return ROOM POI
+	 */
+	public NPPoi extractRoomPoiOnCurrentFloor(double x, double y) {
+		return roomLayer.extractPoiOnCurrentFloor(x, y);
+	}
+
 	@Override
 	public void onSingleTap(float x, float y) {
 		clearSelection();
 
 		Point p = toMapPoint(x, y);
 		notifyClickAtPoint(this, p);
-		//
-		// if (_highlightPOIOnSelection) {
-		// [self highlightPoiFeature:features];
-		// }
 
 		if (listeners.size() > 0) {
 			List<NPPoi> poiList = extractSelectedPoi(x, y);
@@ -301,6 +413,74 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 		if (highlightPoiOnSelection) {
 			highlightPoiFeature(x, y);
 		}
+	}
+
+	@Override
+	public void postPointerMove(float fromx, float fromy, float tox, float toy) {
+		// Log.i(TAG, "postPointerMove: " + fromx + ", " + fromy + ", " + tox
+		// + ", " + toy);
+		// checkMapCenter();
+	}
+
+	@Override
+	public void postPointerUp(float fromx, float fromy, float tox, float toy) {
+		// Log.i(TAG, "postPointerUp");
+		// checkMapCenter();
+	}
+
+	private long lastTimeCheckCenter = 0;
+
+	private void checkMapCenter() {
+
+		long now = System.currentTimeMillis();
+		if (now - lastTimeCheckCenter < 200) {
+			return;
+		}
+
+		lastTimeCheckCenter = now;
+
+		Point center = getCenter();
+
+		double x = center.getX();
+		double y = center.getY();
+
+		double xmax = currentMapInfo.getMapExtent().getXmax();
+		double xmin = currentMapInfo.getMapExtent().getXmin();
+		double ymax = currentMapInfo.getMapExtent().getYmax();
+		double ymin = currentMapInfo.getMapExtent().getYmin();
+		if (x <= xmax && x >= xmin && y <= ymax && y >= ymin) {
+			return;
+		}
+
+		x = (x > xmax ? xmax : (x < xmin ? xmin : x));
+		y = (y > ymax ? ymax : (y < ymin ? ymin : y));
+
+		centerAt(new Point(x, y), true);
+	}
+
+	@Override
+	public void prePointerMove(float fromx, float fromy, float tox, float toy) {
+		// Log.i(TAG, "prePointerMove");
+	}
+
+	@Override
+	public void prePointerUp(float fromx, float fromy, float tox, float toy) {
+		// Log.i(TAG, "prePointerUp");
+		checkMapCenter();
+
+	}
+
+	@Override
+	public void postAction(float pivotX, float pivotY, double factor) {
+		boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
+		labelLayer.setVisible(labelVisible);
+	}
+
+	// 一般按5个字算，屏幕占距1cm，6m的房间内可以显示
+	private static final double DEFAULT_SCALE_THRESHOLD = 600;
+
+	@Override
+	public void preAction(float pivotX, float pivotY, double factor) {
 
 	}
 
@@ -320,7 +500,12 @@ public class NPMapView extends MapView implements OnSingleTapListener {
 
 		int[] roomIDs = roomLayer.getGraphicIDs(x, y, DEFAULT_TOLERANCE);
 		if (roomIDs != null && roomIDs.length > 0) {
-			roomLayer.setSelectedGraphics(roomIDs, true);
+			// roomLayer.setSelectedGraphics(roomIDs, true);
+			for (int gid : roomIDs) {
+				Graphic g = roomLayer.getGraphic(gid);
+				roomHighlightLayer
+						.addGraphic(new Graphic(g.getGeometry(), null));
+			}
 			return;
 		}
 	}

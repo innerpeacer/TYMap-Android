@@ -36,6 +36,7 @@ public class NPFacilityLayer extends GraphicsLayer {
 	@SuppressLint("UseSparseArrays")
 	private Map<Integer, List<Graphic>> groupedGraphicDict = new HashMap<Integer, List<Graphic>>();
 	private Map<String, Graphic> facilityDict = new HashMap<String, Graphic>();
+	private Map<String, Integer> facilityGidDict = new HashMap<String, Integer>();
 
 	private NPRenderingScheme renderingScheme;
 
@@ -78,6 +79,7 @@ public class NPFacilityLayer extends GraphicsLayer {
 		removeAll();
 		groupedGraphicDict.clear();
 		facilityDict.clear();
+		facilityGidDict.clear();
 
 		JsonFactory factory = new JsonFactory();
 
@@ -100,9 +102,12 @@ public class NPFacilityLayer extends GraphicsLayer {
 				String poiID = (String) graphic
 						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
 				facilityDict.put(poiID, graphic);
+
+				int gid = addGraphic(graphic);
+				facilityGidDict.put(poiID, gid);
 			}
 
-			addGraphics(graphics);
+			// addGraphics(graphics);
 
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -117,6 +122,7 @@ public class NPFacilityLayer extends GraphicsLayer {
 		removeAll();
 		groupedGraphicDict.clear();
 		facilityDict.clear();
+		facilityGidDict.clear();
 
 		JsonFactory factory = new JsonFactory();
 
@@ -140,9 +146,12 @@ public class NPFacilityLayer extends GraphicsLayer {
 				String poiID = (String) graphic
 						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
 				facilityDict.put(poiID, graphic);
+
+				int gid = addGraphic(graphic);
+				facilityGidDict.put(poiID, gid);
 			}
 
-			addGraphics(graphics);
+			// addGraphics(graphics);
 
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -218,5 +227,12 @@ public class NPFacilityLayer extends GraphicsLayer {
 					POI_LAYER.POI_FACILITY);
 		}
 		return result;
+	}
+
+	public void highlightPoi(String poiID) {
+		if (facilityGidDict.containsKey(poiID)) {
+			int gid = facilityGidDict.get(poiID);
+			setSelectedGraphics(new int[] { gid }, true);
+		}
 	}
 }

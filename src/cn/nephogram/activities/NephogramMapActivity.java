@@ -16,6 +16,8 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// mapView.setHighlightPoiOnSelection(true);
 	}
 
 	@Override
@@ -27,22 +29,24 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 
 	@Override
 	public void onClickAtPoint(NPMapView mapView, Point mappoint) {
-		Log.i(TAG,
-				"onClickAtPoint: " + mappoint.getX() + ", " + mappoint.getY());
 
+		NPPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
+				mappoint.getY());
+
+		Log.i(TAG, poi + "\n");
+		if (poi != null) {
+			mapView.highlightPoi(poi);
+		}
+
+		Log.i(TAG, mapView.getScale() + "");
 	}
 
 	@Override
 	public void onPoiSelected(NPMapView mapView, List<NPPoi> poiList) {
-		Log.i(TAG, "onPoiSelected: ");
-		for (NPPoi poi : poiList) {
-			// Log.i(TAG, poi + "\n");
-
-			NPPoi p = mapView.getPoiOnCurrentFloorWithPoiID(poi.getPoiID(),
-					poi.getType());
-			Log.i(TAG, p + "\n");
-
-		}
+		// Log.i(TAG, "onPoiSelected: ");
+		// for (NPPoi poi : poiList) {
+		// Log.i(TAG, poi + "\n");
+		// }
 
 	}
 }

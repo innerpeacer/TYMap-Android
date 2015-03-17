@@ -20,6 +20,8 @@ import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
+import com.esri.core.geometry.GeometryEngine;
+import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
@@ -34,6 +36,7 @@ public class NPRoomLayer extends GraphicsLayer {
 	private NPRenderingScheme renderingScheme;
 
 	private Map<String, Graphic> roomDict = new HashMap<String, Graphic>();
+	private Map<String, Integer> roomGidDict = new HashMap<String, Integer>();
 
 	public NPRoomLayer(Context context, NPRenderingScheme renderingScheme,
 			SpatialReference spatialReference, Envelope envelope) {
@@ -66,6 +69,7 @@ public class NPRoomLayer extends GraphicsLayer {
 	public void loadContentsFromFileWithInfo(String path) {
 		removeAll();
 		roomDict.clear();
+		roomGidDict.clear();
 		JsonFactory factory = new JsonFactory();
 
 		try {
@@ -78,9 +82,12 @@ public class NPRoomLayer extends GraphicsLayer {
 				String poiID = (String) graphic
 						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
 				roomDict.put(poiID, graphic);
+
+				int gid = addGraphic(graphic);
+				roomGidDict.put(poiID, gid);
 			}
 
-			addGraphics(graphics);
+			// addGraphics(graphics);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -93,6 +100,7 @@ public class NPRoomLayer extends GraphicsLayer {
 	public void loadContentsFromAssetsWithInfo(String path) {
 		removeAll();
 		roomDict.clear();
+		roomGidDict.clear();
 		JsonFactory factory = new JsonFactory();
 
 		try {
@@ -106,6 +114,9 @@ public class NPRoomLayer extends GraphicsLayer {
 				String poiID = (String) graphic
 						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
 				roomDict.put(poiID, graphic);
+
+				int gid = addGraphic(graphic);
+				roomGidDict.put(poiID, gid);
 			}
 
 			addGraphics(graphics);
@@ -140,5 +151,41 @@ public class NPRoomLayer extends GraphicsLayer {
 					POI_LAYER.POI_ROOM);
 		}
 		return result;
+	}
+
+	public void highlightPoi(String poiID) {
+		if (roomGidDict.containsKey(poiID)) {
+			int gid = roomGidDict.get(poiID);
+			setSelectedGraphics(new int[] { gid }, true);
+		}
+	}
+
+	public NPPoi extractPoiOnCurrentFloor(double x, double y) {
+		NPPoi poi = null;
+
+		for (String poiID : roomDict.keySet()) {
+			Graphic graphic = roomDict.get(poiID);
+			if (GeometryEngine.contains(graphic.getGeometry(), new Point(x, y),
+					getSpatialReference())) {
+				poi = new NPPoi(
+						(String) graphic
+								.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+						(String) graphic
+								.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+						(String) graphic
+								.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+						(String) graphic
+								.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+						(String) graphic
+								.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
+						graphic.getGeometry(),
+						(Integer) graphic
+								.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+						POI_LAYER.POI_ROOM);
+				break;
+			}
+		}
+
+		return poi;
 	}
 }

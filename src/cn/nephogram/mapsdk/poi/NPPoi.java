@@ -21,7 +21,7 @@ public class NPPoi {
 
 	private int categoryID;
 
-	private POI_LAYER type;
+	private POI_LAYER layer;
 
 	/**
 	 * POI地理ID
@@ -75,8 +75,8 @@ public class NPPoi {
 	/**
 	 * POI类型
 	 */
-	public POI_LAYER getType() {
-		return type;
+	public POI_LAYER getLayer() {
+		return layer;
 	}
 
 	/**
@@ -105,18 +105,18 @@ public class NPPoi {
 		this.name = pname;
 		this.geometry = geometry;
 		this.categoryID = cid;
-		this.type = ptype;
+		this.layer = ptype;
 	}
 
 	@Override
 	public String toString() {
 		return String.format("GeoID: %s, PoiID: %s, Name: %s TYPE: %s", geoID,
-				poiID, name, typeString(type));
+				poiID, name, layerString(layer));
 	}
 
-	private String typeString(POI_LAYER type) {
+	private String layerString(POI_LAYER layer) {
 		String result = null;
-		switch (type) {
+		switch (layer) {
 		case POI_ROOM:
 			result = "ROOM";
 			break;
