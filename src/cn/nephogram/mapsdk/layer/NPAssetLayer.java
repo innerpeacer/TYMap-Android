@@ -11,8 +11,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 
 import android.content.Context;
-import android.graphics.Color;
-import cn.nephogram.mapsdk.CARenderColor;
+import cn.nephogram.mapsdk.NPRenderingScheme;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -23,58 +22,40 @@ import com.esri.core.renderer.Renderer;
 import com.esri.core.renderer.UniqueValue;
 import com.esri.core.renderer.UniqueValueRenderer;
 import com.esri.core.symbol.SimpleFillSymbol;
-import com.esri.core.symbol.SimpleLineSymbol;
 
 public class NPAssetLayer extends GraphicsLayer {
 	static final String TAG = NPAssetLayer.class.getSimpleName();
 
 	private Context context;
+	private NPRenderingScheme renderingScheme;
 
-	public NPAssetLayer(Context context, SpatialReference spatialReference,
-			Envelope envelope) {
+	public NPAssetLayer(Context context, NPRenderingScheme renderingScheme,
+			SpatialReference spatialReference, Envelope envelope) {
 		super(spatialReference, envelope);
 		this.context = context;
+		this.renderingScheme = renderingScheme;
 
 		setRenderer(createAssetRenderer());
 	}
 
 	private Renderer createAssetRenderer() {
-		UniqueValueRenderer shopRenderer = new UniqueValueRenderer();
+		UniqueValueRenderer assetRenderer = new UniqueValueRenderer();
 		List<UniqueValue> uvInfo = new ArrayList<UniqueValue>();
 
-		SimpleLineSymbol sls = new SimpleLineSymbol(
-				CARenderColor.getOutlineColor(), 0.5f);
-
-		{
-			SimpleFillSymbol parklotFillSymbol = new SimpleFillSymbol(
-					Color.argb(255, 104, 220, 0));
-			parklotFillSymbol.setOutline(sls);
-			UniqueValue uvParklot = new UniqueValue();
-			uvParklot.setSymbol(parklotFillSymbol);
-			uvParklot.setValue(new Integer[] { 28001 });
-			uvInfo.add(uvParklot);
+		for (Integer colorID : renderingScheme.getFillSymbolDictionary()
+				.keySet()) {
+			SimpleFillSymbol sfs = renderingScheme.getFillSymbolDictionary()
+					.get(colorID);
+			UniqueValue uv = new UniqueValue();
+			uv.setSymbol(sfs);
+			uv.setValue(new Integer[] { colorID });
+			uvInfo.add(uv);
 		}
+		assetRenderer.setDefaultSymbol(renderingScheme.getDefaultFillSymbol());
 
-		{
-			SimpleFillSymbol deskFillSymbol = new SimpleFillSymbol(Color.argb(
-					255, 104, 220, 0));
-			deskFillSymbol.setOutline(sls);
-			UniqueValue uvDesk = new UniqueValue();
-			uvDesk.setSymbol(deskFillSymbol);
-			uvDesk.setValue(new Integer[] { 27002 });
-			uvInfo.add(uvDesk);
-		}
-		shopRenderer.setField1("CATEGORY_ID");
-		shopRenderer.setUniqueValueInfos(uvInfo);
-
-		SimpleFillSymbol defaultFillSymbol = new SimpleFillSymbol(Color.argb(
-				255, 255, 253, 231));
-		SimpleLineSymbol defaultLineSymbol = new SimpleLineSymbol(Color.argb(
-				255, 195, 141, 115), 0.5f);
-		defaultFillSymbol.setOutline(defaultLineSymbol);
-		shopRenderer.setDefaultSymbol(defaultFillSymbol);
-
-		return shopRenderer;
+		assetRenderer.setField1("COLOR");
+		assetRenderer.setUniqueValueInfos(uvInfo);
+		return assetRenderer;
 	}
 
 	public void loadContentsFromFileWithInfo(String path) {

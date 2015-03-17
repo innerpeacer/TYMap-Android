@@ -17,6 +17,9 @@ import com.esri.core.tasks.na.RouteResult;
 import com.esri.core.tasks.na.RouteTask;
 import com.esri.core.tasks.na.StopGraphic;
 
+/**
+ * 路径管理类
+ */
 public class NPRouteManager {
 	static final String TAG = NPRouteManager.class.getSimpleName();
 
@@ -48,10 +51,19 @@ public class NPRouteManager {
 		}
 	};
 
-	public NPRouteManager(String url, UserCredentials credentials) {
+	/**
+	 * 路径管理类的实例化方法
+	 * 
+	 * @param url
+	 *            路径服务URL
+	 * @param credential
+	 *            用户访问验证
+	 * 
+	 */
+	public NPRouteManager(String url, UserCredentials credential) {
 		Log.i(TAG, "url:" + url);
 		try {
-			routeTask = RouteTask.createOnlineRouteTask(url, credentials);
+			routeTask = RouteTask.createOnlineRouteTask(url, credential);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -72,9 +84,17 @@ public class NPRouteManager {
 
 	}
 
+	/**
+	 * 请求路径规划，在代理方法获取规划结果
+	 * 
+	 * @param start
+	 *            路径规划起点
+	 * @param end
+	 *            路径规划终点
+	 */
 	public void requestRoute(final Point start, final Point end) {
 		if (routeParams == null) {
-			CARouteException e = new CARouteException(
+			NPRouteException e = new NPRouteException(
 					"route parameters from server not fetched");
 			notifyRouteSolvingFailed(e);
 			return;
@@ -111,56 +131,100 @@ public class NPRouteManager {
 		// routeParams.sets
 	}
 
-	private List<CARouteManagerListener> listeners = new ArrayList<NPRouteManager.CARouteManagerListener>();
+	private List<NPRouteManagerListener> listeners = new ArrayList<NPRouteManager.NPRouteManagerListener>();
 
-	public void addRouteManagerListener(CARouteManagerListener listener) {
+	/**
+	 * 添加路径管理监听接口
+	 * 
+	 * @param listener
+	 *            地图事件监听接口
+	 */
+	public void addRouteManagerListener(NPRouteManagerListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 
-	public void removeRouteManagerListener(CARouteManagerListener listener) {
+	/**
+	 * 移除路径管理监听接口
+	 * 
+	 * @param listener
+	 *            地图事件监听接口
+	 */
+	public void removeRouteManagerListener(NPRouteManagerListener listener) {
 		if (listeners.contains(listener)) {
 			listeners.remove(listener);
 		}
 	}
 
 	private void notifyRetrieveDefaultRouteTaskParameterFailed(Exception e) {
-		for (CARouteManagerListener listener : listeners) {
+		for (NPRouteManagerListener listener : listeners) {
 			listener.didFailRetrieveDefaultRouteTaskParametersWithError(this, e);
 		}
 	}
 
 	private void notifyRouteSolved(Graphic route) {
-		for (CARouteManagerListener listener : listeners) {
+		for (NPRouteManagerListener listener : listeners) {
 			listener.didSolveRouteWithResult(this, route);
 		}
 	}
 
 	private void notifyRouteSolvingFailed(Exception e) {
-		for (CARouteManagerListener listener : listeners) {
+		for (NPRouteManagerListener listener : listeners) {
 			listener.didFailSolveRouteWithError(this, e);
 		}
 	}
 
-	public interface CARouteManagerListener {
+	/**
+	 * 路径管理监听接口
+	 */
+	public interface NPRouteManagerListener {
+		/**
+		 * 获取默认参数失败回调方法
+		 * 
+		 * @param routeManager
+		 *            路径管理实例
+		 * @param e
+		 *            异常信息
+		 */
 		void didFailRetrieveDefaultRouteTaskParametersWithError(
-				NPRouteManager manager, Exception e);
+				NPRouteManager routeManager, Exception e);
 
-		void didSolveRouteWithResult(NPRouteManager manager, Graphic route);
+		/**
+		 * 解决路径规划返回方法
+		 * 
+		 * @param routeManager
+		 *            路径管理实例
+		 * @param routeResultGraphic
+		 *            路径规划结果
+		 */
+		void didSolveRouteWithResult(NPRouteManager routeManager,
+				Graphic routeResultGraphic);
 
-		void didFailSolveRouteWithError(NPRouteManager manager, Exception e);
+		/**
+		 * 路径规划失败回调方法
+		 * 
+		 * @param routeManager
+		 *            路径管理实例
+		 * @param e
+		 *            异常信息
+		 */
+		void didFailSolveRouteWithError(NPRouteManager routeManager, Exception e);
 	}
 
-	public class CARouteException extends Exception {
+	/**
+	 * 路径异常类
+	 * 
+	 */
+	public class NPRouteException extends Exception {
 		private static final long serialVersionUID = 614393163181656501L;
 
-		public CARouteException() {
+		public NPRouteException() {
 			super();
 			// super("Failed to fetch route parameters from server");
 		}
 
-		public CARouteException(String msg) {
+		public NPRouteException(String msg) {
 			super(msg);
 		}
 	}

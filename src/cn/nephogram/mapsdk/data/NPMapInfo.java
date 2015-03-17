@@ -18,6 +18,9 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * 地图信息类：用于表示某一层地图的配置信息，包含地图ID、地图尺寸、地图范围、地图偏转角等
+ */
 public class NPMapInfo implements Parcelable {
 	public static final String JSON_KEY_MAPINFOS = "MapInfo";
 
@@ -156,22 +159,37 @@ public class NPMapInfo implements Parcelable {
 		return jsonObject;
 	}
 
+	/**
+	 * 当前地图的唯一ID，当前与楼层的FloorID一致
+	 */
 	public String getMapID() {
 		return mapID;
 	}
 
+	/**
+	 * 地图尺寸
+	 */
 	public MapSize getMapSize() {
 		return new MapSize(size_x, size_y);
 	}
 
+	/**
+	 * 地图范围
+	 */
 	public MapExtent getMapExtent() {
 		return new MapExtent(xmin, ymin, xmax, ymax);
 	}
 
+	/**
+	 * 当前楼层名称，如F1、B1
+	 */
 	public String getFloorName() {
 		return floorName;
 	}
 
+	/**
+	 * 当前楼层序号,如-1、1
+	 */
 	public int getFloorNumber() {
 		return floorNumber;
 	}
@@ -184,6 +202,9 @@ public class NPMapInfo implements Parcelable {
 		return size_y / (ymax - ymin);
 	}
 
+	/**
+	 * 地图初始偏转角度
+	 */
 	public double getInitAngle() {
 		return initAngle;
 	}
@@ -235,6 +256,9 @@ public class NPMapInfo implements Parcelable {
 				ymin, xmax, ymax);
 	}
 
+	/**
+	 * 地图坐标范围:{xmin, ymin, xmax, ymax}
+	 */
 	public class MapExtent {
 		double xmin;
 		double ymin;
@@ -265,6 +289,9 @@ public class NPMapInfo implements Parcelable {
 		}
 	}
 
+	/**
+	 * 地图尺寸,对应地图所示区域实际大小
+	 */
 	public class MapSize {
 		double x;
 		double y;
@@ -284,8 +311,19 @@ public class NPMapInfo implements Parcelable {
 
 	}
 
+	/**
+	 * 从外部存储目录解析某建筑所有楼层的地图信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param buildingID
+	 *            楼层所在建筑的ID
+	 * @return 所有楼层的地图信息数组:[NPMapInfo]
+	 */
 	public static List<NPMapInfo> parseMapInfoFromFiles(Context context,
-			String path, String marketID) {
+			String path, String buildingID) {
 
 		List<NPMapInfo> mapInfos = new ArrayList<NPMapInfo>();
 
@@ -324,8 +362,19 @@ public class NPMapInfo implements Parcelable {
 		return mapInfos;
 	}
 
+	/**
+	 * 从assets目录解析某建筑所有楼层的地图信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param buildingID
+	 *            楼层所在建筑的ID
+	 * @return 所有楼层的地图信息数组:[NPMapInfo]
+	 */
 	public static List<NPMapInfo> parseMapInfoFromAssets(Context context,
-			String path, String marketID) {
+			String path, String buildingID) {
 
 		List<NPMapInfo> mapInfos = new ArrayList<NPMapInfo>();
 
@@ -364,10 +413,23 @@ public class NPMapInfo implements Parcelable {
 		return mapInfos;
 	}
 
+	/**
+	 * 从外部存储目录解析某楼层地图信息的静态方法
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param buildingID
+	 *            楼层所在建筑的ID
+	 * @param mapID
+	 *            楼层地图ID
+	 * @return 楼层地图信息
+	 */
 	public static NPMapInfo parseMapInfoFromFilesById(Context context,
-			String path, String marketID, String mapID) {
+			String path, String buildingID, String mapID) {
 		List<NPMapInfo> mapInfos = parseMapInfoFromFiles(context, path,
-				marketID);
+				buildingID);
 
 		for (int i = 0; i < mapInfos.size(); i++) {
 			NPMapInfo mapInfo = mapInfos.get(i);
@@ -378,10 +440,23 @@ public class NPMapInfo implements Parcelable {
 		return null;
 	}
 
+	/**
+	 * 从assets目录解析某楼层地图信息的静态方法
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param buildingID
+	 *            楼层所在建筑的ID
+	 * @param mapID
+	 *            楼层地图ID
+	 * @return 楼层地图信息
+	 */
 	public static NPMapInfo parseMapInfoFromAssetsById(Context context,
-			String path, String marketID, String mapID) {
+			String path, String buildingID, String mapID) {
 		List<NPMapInfo> mapInfos = parseMapInfoFromAssets(context, path,
-				marketID);
+				buildingID);
 
 		for (int i = 0; i < mapInfos.size(); i++) {
 			NPMapInfo mapInfo = mapInfos.get(i);

@@ -34,7 +34,6 @@ public class NPLabelLayer extends GraphicsLayer {
 		removeAll();
 
 		JsonFactory factory = new JsonFactory();
-
 		try {
 			JsonParser parser = factory.createJsonParser(new File(path));
 			FeatureSet set = FeatureSet.fromJson(parser);
@@ -66,7 +65,6 @@ public class NPLabelLayer extends GraphicsLayer {
 		removeAll();
 
 		JsonFactory factory = new JsonFactory();
-
 		try {
 			InputStream inStream = context.getAssets().open(path);
 			JsonParser parser = factory.createJsonParser(inStream);

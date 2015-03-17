@@ -18,6 +18,9 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * 城市类
+ */
 public class NPCity implements Parcelable {
 
 	private static final String JSON_KEY_CITIES = "Cities";
@@ -130,26 +133,45 @@ public class NPCity implements Parcelable {
 		return jsonObject;
 	}
 
+	/**
+	 * 城市ID
+	 */
 	public String getCityID() {
 		return cityID;
 	}
 
+	/**
+	 * 城市名称
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * 城市简称
+	 */
 	public String getSname() {
 		return sname;
 	}
 
+	/**
+	 * 城市经度
+	 */
 	public double getLongitude() {
 		return longitude;
 	}
+
+	/**
+	 * 城市纬度
+	 */
 
 	public double getLatitude() {
 		return latitude;
 	}
 
+	/**
+	 * 当前状态
+	 */
 	public int getStatus() {
 		return status;
 	}
@@ -183,6 +205,15 @@ public class NPCity implements Parcelable {
 		return "CityID = " + cityID + ", CityName = " + name;
 	}
 
+	/**
+	 * 从外部存储目录解析所有城市信息信息列表
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @return 城市类数组
+	 */
 	public static List<NPCity> parseCityFromFiles(Context context, String path) {
 		List<NPCity> cities = new ArrayList<NPCity>();
 
@@ -220,6 +251,15 @@ public class NPCity implements Parcelable {
 		return cities;
 	}
 
+	/**
+	 * 从assets目录解析所有城市信息信息列表
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @return 城市类数组
+	 */
 	public static List<NPCity> parseCityFromAssets(Context context, String path) {
 		List<NPCity> cities = new ArrayList<NPCity>();
 
@@ -257,6 +297,18 @@ public class NPCity implements Parcelable {
 		return cities;
 	}
 
+	/**
+	 * 从外部存储目录按ID解析特定城市信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityId
+	 *            城市ID
+	 * 
+	 * @return 城市类
+	 */
 	public static NPCity parseCityFromFilesById(Context context, String path,
 			String cityId) {
 		List<NPCity> cities = parseCityFromFiles(context, path);
@@ -270,6 +322,18 @@ public class NPCity implements Parcelable {
 		return null;
 	}
 
+	/**
+	 * 从assets目录按ID解析特定城市信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityId
+	 *            城市ID
+	 * 
+	 * @return 城市类
+	 */
 	public static NPCity parseCityFromAssetsById(Context context, String path,
 			String cityId) {
 		List<NPCity> cities = parseCityFromAssets(context, path);
@@ -283,6 +347,18 @@ public class NPCity implements Parcelable {
 		return null;
 	}
 
+	/**
+	 * 从外部存储目录按名称解析特定城市信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityName
+	 *            城市名称
+	 * 
+	 * @return 城市类
+	 */
 	public static NPCity parseCityFromFilesByName(Context context, String path,
 			String cityName) {
 		List<NPCity> cities = parseCityFromFiles(context, path);
@@ -296,6 +372,18 @@ public class NPCity implements Parcelable {
 		return null;
 	}
 
+	/**
+	 * 从assets目录按名称解析特定城市信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityName
+	 *            城市名称
+	 * 
+	 * @return 城市类
+	 */
 	public static NPCity parseCityFromAssetsByName(Context context,
 			String path, String cityName) {
 		List<NPCity> cities = parseCityFromAssets(context, path);

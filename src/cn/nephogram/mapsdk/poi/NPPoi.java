@@ -7,78 +7,81 @@ import com.esri.core.geometry.Geometry;
  */
 public class NPPoi {
 
+	private String geoID;
+
+	private String poiID;
+
+	private String floorID;
+
+	private String buildingID;
+
+	private String name;
+
+	private Geometry geometry;
+
+	private int categoryID;
+
+	private POI_TYPE type;
+
 	/**
 	 * POI地理ID
 	 */
-	private String geoID;
-
-	/**
-	 * @brief POI ID
-	 */
-	private String poiID;
-
-	/**
-	 * POI所在楼层ID
-	 */
-	private String floorID;
-
-	/**
-	 * POI所在建筑ID
-	 */
-	private String buildingID;
-
-	/**
-	 * POI名称
-	 */
-	private String name;
-
-	/**
-	 * POI几何数据
-	 */
-	private Geometry geometry;
-
-	/**
-	 * POI分类类型ID
-	 */
-	private int categoryID;
-
-	/**
-	 * POI类型
-	 */
-	private POI_TYPE type;
-
 	public String getGeoID() {
 		return geoID;
 	}
 
+	/**
+	 * @brief POI ID
+	 */
 	public String getPoiID() {
 		return poiID;
 	}
 
+	/**
+	 * POI所在楼层ID
+	 */
 	public String getFloorID() {
 		return floorID;
 	}
 
+	/**
+	 * POI所在建筑ID
+	 */
 	public String getBuildingID() {
 		return buildingID;
 	}
 
+	/**
+	 * POI名称
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * POI几何数据
+	 */
 	public Geometry getGeometry() {
 		return geometry;
 	}
 
+	/**
+	 * POI分类类型ID
+	 */
 	public int getCategoryID() {
 		return categoryID;
 	}
 
+	/**
+	 * POI类型
+	 */
 	public POI_TYPE getType() {
 		return type;
 	}
 
+	/**
+	 * POI类型，当前按层来分类：房间层（ROOM）、资产层（ASSET）、公共设施层（FACILITY）
+	 */
 	public enum POI_TYPE {
 		POI_ROOM, POI_ASSET, POI_FACILITY
 	}
@@ -97,7 +100,28 @@ public class NPPoi {
 
 	@Override
 	public String toString() {
-		return String.format("GeoID: %s, PoiID: %s, Name: %s", geoID, poiID,
-				name);
+		return String.format("GeoID: %s, PoiID: %s, Name: %s TYPE: %s", geoID,
+				poiID, name, typeString(type));
+	}
+
+	private String typeString(POI_TYPE type) {
+		String result = null;
+		switch (type) {
+		case POI_ROOM:
+			result = "ROOM";
+			break;
+
+		case POI_ASSET:
+			result = "ASSET";
+			break;
+
+		case POI_FACILITY:
+			result = "FACILITY";
+			break;
+		default:
+			break;
+		}
+
+		return result;
 	}
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ListView;
 import cn.nephogram.map.R;
+import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.settings.AppSettings;
 
 public class MainListActivity extends HelperListActivity {
@@ -20,6 +21,8 @@ public class MainListActivity extends HelperListActivity {
 		settings.setDefaultBuildingID("002100001");
 
 		setTitle(getResources().getString(R.string.app_name));
+
+		NPMapView.useAsset = false;
 	};
 
 	protected void constructList() {

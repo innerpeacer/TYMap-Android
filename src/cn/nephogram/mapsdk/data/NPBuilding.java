@@ -18,6 +18,9 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * 建筑类
+ */
 public class NPBuilding implements Parcelable {
 	public static final String JSON_KEY_BUILDINGS = "Buildings";
 
@@ -153,26 +156,44 @@ public class NPBuilding implements Parcelable {
 		this.status = status;
 	}
 
+	/**
+	 * 建筑ID
+	 */
 	public String getBuildingID() {
 		return buildingID;
 	}
 
+	/**
+	 * 建筑名称
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * 建筑地址
+	 */
 	public String getAddress() {
 		return address;
 	}
 
+	/**
+	 * 建筑经度
+	 */
 	public double getLongitude() {
 		return longitude;
 	}
 
+	/**
+	 * 建筑纬度
+	 */
 	public double getLatitude() {
 		return latitude;
 	}
 
+	/**
+	 * 建筑状态
+	 */
 	public int getStatus() {
 		return status;
 	}
@@ -182,6 +203,18 @@ public class NPBuilding implements Parcelable {
 		return "MarektID = " + buildingID + ", MarketName = " + name;
 	}
 
+	/**
+	 * 从外部存储目录解析所有建筑信息列表
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityID
+	 *            城市ID
+	 * 
+	 * @return 建筑类数组
+	 */
 	public static List<NPBuilding> parseBuildingFromFiles(Context context,
 			String path, String cityID) {
 
@@ -208,9 +241,7 @@ public class NPBuilding implements Parcelable {
 					buildings.add(building);
 				}
 			}
-
 			inputReader.close();
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -224,6 +255,18 @@ public class NPBuilding implements Parcelable {
 		return buildings;
 	}
 
+	/**
+	 * 从assets目录解析所有建筑信息列表
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityID
+	 *            城市ID
+	 * 
+	 * @return 建筑类数组
+	 */
 	public static List<NPBuilding> parseBuildingFromAssets(Context context,
 			String path, String cityID) {
 
@@ -250,9 +293,7 @@ public class NPBuilding implements Parcelable {
 					buildings.add(building);
 				}
 			}
-
 			inputReader.close();
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -266,6 +307,19 @@ public class NPBuilding implements Parcelable {
 		return buildings;
 	}
 
+	/**
+	 * 从外部存储目录按ID解析特定建筑信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityID
+	 *            城市ID
+	 * @param buildingID
+	 *            建筑ID
+	 * @return 建筑类
+	 */
 	public static NPBuilding parseFromFilesById(Context context, String path,
 			String cityID, String buildingID) {
 		List<NPBuilding> buildings = parseBuildingFromFiles(context, path,
@@ -280,6 +334,19 @@ public class NPBuilding implements Parcelable {
 		return null;
 	}
 
+	/**
+	 * 从assets目录按ID解析特定建筑信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityID
+	 *            城市ID
+	 * @param buildingID
+	 *            建筑ID
+	 * @return 建筑类
+	 */
 	public static NPBuilding parseBuildingFromAssetsById(Context context,
 			String path, String cityID, String buildingID) {
 		List<NPBuilding> buildings = parseBuildingFromAssets(context, path,
@@ -294,20 +361,48 @@ public class NPBuilding implements Parcelable {
 		return null;
 	}
 
+	/**
+	 * 从外部存储目录按名称解析特定建筑信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityID
+	 *            城市ID
+	 * @param buildingName
+	 *            建筑名称
+	 * 
+	 * @return 建筑类
+	 */
 	public static NPBuilding parseBuildingFromFilesByName(Context context,
-			String path, String cityID, String marketName) {
+			String path, String cityID, String buildingName) {
 		List<NPBuilding> buildings = parseBuildingFromFiles(context, path,
 				cityID);
 
 		for (int i = 0; i < buildings.size(); i++) {
 			NPBuilding building = buildings.get(i);
-			if (building.getName().equals(marketName)) {
+			if (building.getName().equals(buildingName)) {
 				return building;
 			}
 		}
 		return null;
 	}
 
+	/**
+	 * 从assets目录按名称解析特定建筑信息
+	 * 
+	 * @param context
+	 *            Context
+	 * @param path
+	 *            文件路径
+	 * @param cityID
+	 *            城市ID
+	 * @param buildingName
+	 *            建筑名称
+	 * 
+	 * @return 建筑类
+	 */
 	public static NPBuilding parseBuildingFromAssetsByName(Context context,
 			String path, String cityID, String buildingName) {
 		List<NPBuilding> buildings = parseBuildingFromAssets(context, path,

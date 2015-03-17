@@ -17,6 +17,5 @@ public class NPPictureSymbol extends PictureMarkerSymbol {
 
 	public void setHeight(float h) {
 		super.setHeight(h);
-
 	}
 }

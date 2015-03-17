@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">NephogramMapProject</string>
+    <string name="app_name">云图地图</string>
     <string name="map_activity_title">云图地图 Demo</string>
     <string name="map_route_activity_title">地图导航 Demo</string>
     <string name="map_callout_activity_title">地图Callout Demo</string>

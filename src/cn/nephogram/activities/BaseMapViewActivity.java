@@ -8,15 +8,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import cn.nephogram.data.NPAssetsManager;
 import cn.nephogram.map.R;
-import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.NPMapEnvironment;
-import cn.nephogram.mapsdk.data.NPAssetsManager;
+import cn.nephogram.mapsdk.NPMapView;
+import cn.nephogram.mapsdk.NPMapView.NPMapViewListenser;
+import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
+import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.settings.AppSettings;
 
-public abstract class BaseMapViewActivity extends Activity {
+import com.esri.core.geometry.Point;
+
+public abstract class BaseMapViewActivity extends Activity implements
+		NPMapViewListenser {
 	static final String TAG = BaseMapViewActivity.class.getSimpleName();
 
 	NPMapView mapView;
@@ -29,6 +35,8 @@ public abstract class BaseMapViewActivity extends Activity {
 	int currentFloorIndex;
 
 	int contentViewID;
+
+	NPRenderingScheme renderingScheme;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +59,10 @@ public abstract class BaseMapViewActivity extends Activity {
 		String cityID = pref.getDefaultCityID();
 		String buildingID = pref.getDefaultBuildingID();
 
-		currentBuilding = NPBuilding.parseBuildingFromAssetsById(this,
-				NPAssetsManager.getBuildingJsonPath(cityID), cityID, buildingID);
+		currentBuilding = NPBuilding
+				.parseBuildingFromAssetsById(this,
+						NPAssetsManager.getBuildingJsonPath(cityID), cityID,
+						buildingID);
 		mapInfos = NPMapInfo.parseMapInfoFromAssets(this,
 				NPAssetsManager.getMapInfoJsonPath(buildingID), buildingID);
 
@@ -105,7 +115,13 @@ public abstract class BaseMapViewActivity extends Activity {
 
 		setTitle(String.format("%s-%s", currentBuilding.getName(),
 				currentMapInfo.getFloorName()));
+
+		renderingScheme = new NPRenderingScheme(this,
+				NPAssetsManager.getRenderingSchemeFilePath(), true);
+		mapView.init(renderingScheme);
 		mapView.setFloor(currentMapInfo);
+
+		mapView.addMapListener(this);
 	}
 
 	private void changedToFloor(int index) {
@@ -117,4 +133,13 @@ public abstract class BaseMapViewActivity extends Activity {
 		mapView.setFloor(currentMapInfo);
 	}
 
+	@Override
+	public void onClickAtPoint(Point mappoint) {
+
+	}
+
+	@Override
+	public void onPoiSelected(List<NPPoi> poiList) {
+
+	}
 }
