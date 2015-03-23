@@ -1,8 +1,17 @@
-package cn.nephogram.data;
+package cn.nephogram.datamanager;
 
-public class NPAssetsManager {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
-	private static String MAP_DIR = "MapFiles";
+import android.os.Environment;
+
+public class NPFileManager {
+	public static final String ROOT_DIR = Environment
+			.getExternalStorageDirectory() + "/Nephogram/";
+
+	private static String MAP_DIR = ROOT_DIR + "MapFiles";
 
 	private static String JSON_FILE_FLOOR = MAP_DIR + "/%s_FLOOR.json";
 	private static String JSON_FILE_ROOM = MAP_DIR + "/%s_ROOM.json";
@@ -14,10 +23,23 @@ public class NPAssetsManager {
 			+ "/RenderingScheme.json";
 
 	private static String JSON_FILE_CITY = MAP_DIR + "/Cities.json";
-	private static String JSON_FILE_BUILDING = MAP_DIR
+	private static String JSON_FILE_MARKET = MAP_DIR
 			+ "/Buildings_City_%s.json";
 	private static String JSON_FILE_MAPINFO = MAP_DIR
 			+ "/MapInfo_Building_%s.json";
+
+	public static boolean fileExist(String path) {
+		return new File(path).exists() ? true : false;
+	}
+
+	public static File getFileFromFilePath(String filename) {
+		File file = new File(filename);
+		if (!file.isAbsolute()) {
+			File root = Environment.getExternalStorageDirectory();
+			file = new File(root, filename);
+		}
+		return file;
+	}
 
 	public static String getFloorFilePath(String mapID) {
 		return String.format(JSON_FILE_FLOOR, mapID);
@@ -47,12 +69,37 @@ public class NPAssetsManager {
 		return JSON_FILE_CITY;
 	}
 
-	public static String getBuildingJsonPath(String cityID) {
-		return String.format(JSON_FILE_BUILDING, cityID);
+	public static String getMarketJsonPath(String cityID) {
+		return String.format(JSON_FILE_MARKET, cityID);
 	}
 
 	public static String getMapInfoJsonPath(String marketID) {
 		return String.format(JSON_FILE_MAPINFO, marketID);
 	}
 
+	public static byte[] readByteFromFile(String path) {
+		RandomAccessFile input;
+		try {
+			input = new RandomAccessFile(path, "rw");
+			long filelength = input.length();
+			byte output[] = new byte[(int) filelength];
+			byte buffer[] = new byte[1024];
+
+			int c;
+			int offset = 0;
+			while ((c = input.read(buffer)) != -1) {
+				System.arraycopy(buffer, 0, output, offset, c);
+				offset += c;
+			}
+
+			input.close();
+			return output;
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

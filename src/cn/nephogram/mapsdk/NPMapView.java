@@ -6,8 +6,8 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import cn.nephogram.data.NPAssetsManager;
-import cn.nephogram.data.NPFileManager;
+import cn.nephogram.datamanager.NPAssetsManager;
+import cn.nephogram.datamanager.NPFileManager;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.layer.NPAssetLayer;
 import cn.nephogram.mapsdk.layer.NPFacilityLayer;
@@ -190,6 +190,9 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 					setMinScale(info.getMapSize().getX() / width);
 					setMaxScale(6 / width);
 				}
+
+				boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
+				labelLayer.setVisible(labelVisible);
 
 				notifyFinishLoadingFloor(NPMapView.this, currentMapInfo);
 			}

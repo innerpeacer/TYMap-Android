@@ -1,13 +1,20 @@
 package cn.nephogram.mapsdk.route;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.util.Log;
+import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.NPMapEnvironment;
+import cn.nephogram.mapsdk.data.NPMapInfo;
+import cn.nephogram.mapsdk.data.NPMapSize;
 
 import com.esri.core.geometry.Point;
+import com.esri.core.geometry.Polyline;
 import com.esri.core.io.UserCredentials;
 import com.esri.core.map.Graphic;
 import com.esri.core.tasks.na.NAFeaturesAsFeature;
@@ -20,19 +27,19 @@ import com.esri.core.tasks.na.StopGraphic;
 /**
  * 路径管理类
  */
+@SuppressLint("UseSparseArrays")
 public class NPRouteManager {
 	static final String TAG = NPRouteManager.class.getSimpleName();
 
 	Point startPoint;
 	Point endPoint;
 
-	// private RoutingTask routingTask;
-	// private RoutingParameters routingTaskParams;
-	// private RoutingResult routingResult;
-
 	private RouteTask routeTask;
 	private RouteParameters routeParams;
 	private RouteResult routeResult;
+
+	private NPRoutePointConverter routePointConverter;
+	List<NPMapInfo> allMapInfoArray = new ArrayList<NPMapInfo>();
 
 	private Exception mException;
 	private Handler mHandler = new Handler();
@@ -45,11 +52,76 @@ public class NPRouteManager {
 				notifyRouteSolvingFailed(mException);
 			} else {
 				Route route = routeResult.getRoutes().get(0);
-				notifyRouteSolved(route.getRouteGraphic());
+				// notifyRouteSolved(route.getRouteGraphic());
+				if (route != null) {
+					NPRouteResult result = processRouteResult(route);
+
+					if (result == null) {
+						return;
+					}
+					notifyRouteSolved(result);
+				}
+
 			}
 
 		}
 	};
+
+	private NPRouteResult processRouteResult(Route r) {
+		Map<Integer, List<NPLocalPoint>> pointDict = new HashMap<Integer, List<NPLocalPoint>>();
+
+		List<Integer> floorArray = new ArrayList<Integer>();
+		Map<Integer, Polyline> routeDict = new HashMap<Integer, Polyline>();
+
+		Polyline routeLine = (Polyline) r.getRouteGraphic().getGeometry();
+
+		int pathNum = (int) routeLine.getPathCount();
+		if (pathNum > 0) {
+			int num = routeLine.getPathSize(0);
+
+			for (int i = 0; i < num; ++i) {
+				Point p = routeLine.getPoint(i);
+
+				NPLocalPoint lp = routePointConverter
+						.getLocalPointFromRoutePoint(p);
+				boolean isValid = routePointConverter.checkPointValidity(lp);
+				if (isValid) {
+					if (!pointDict.containsKey(lp.getFloor())) {
+						pointDict.put(lp.getFloor(),
+								new ArrayList<NPLocalPoint>());
+						floorArray.add(lp.getFloor());
+					}
+
+					List<NPLocalPoint> array = pointDict.get(lp.getFloor());
+					array.add(lp);
+				}
+			}
+		}
+
+		for (Integer f : floorArray) {
+			List<NPLocalPoint> array = pointDict.get(f);
+
+			Polyline polyline = new Polyline();
+			int index = 0;
+			for (NPLocalPoint lp : array) {
+				if (index == 0) {
+					polyline.startPath(lp.getX(), lp.getY());
+				} else {
+					polyline.lineTo(lp.getX(), lp.getY());
+				}
+				index++;
+			}
+
+			routeDict.put(f, polyline);
+		}
+
+		if (routeDict.size() < 1) {
+			return null;
+		}
+
+		return new NPRouteResult(routeDict, floorArray);
+
+	}
 
 	/**
 	 * 路径管理类的实例化方法
@@ -60,8 +132,17 @@ public class NPRouteManager {
 	 *            用户访问验证
 	 * 
 	 */
-	public NPRouteManager(String url, UserCredentials credential) {
+	public NPRouteManager(String url, UserCredentials credential,
+			List<NPMapInfo> mapInfoArray) {
 		Log.i(TAG, "url:" + url);
+
+		allMapInfoArray.addAll(mapInfoArray);
+		NPMapInfo info = allMapInfoArray.get(0);
+
+		NPMapSize size = new NPMapSize(200, 0);
+		routePointConverter = new NPRoutePointConverter(info.getMapExtent(),
+				size);
+
 		try {
 			routeTask = RouteTask.createOnlineRouteTask(url, credential);
 		} catch (Exception e1) {
@@ -92,7 +173,7 @@ public class NPRouteManager {
 	 * @param end
 	 *            路径规划终点
 	 */
-	public void requestRoute(final Point start, final Point end) {
+	public void requestRoute(final NPLocalPoint start, final NPLocalPoint end) {
 		if (routeParams == null) {
 			NPRouteException e = new NPRouteException(
 					"route parameters from server not fetched");
@@ -100,14 +181,17 @@ public class NPRouteManager {
 			return;
 		}
 
+		startPoint = routePointConverter.getRoutePointFromLocalPoint(start);
+		endPoint = routePointConverter.getRoutePointFromLocalPoint(end);
+
 		routeResult = null;
 		mException = null;
 
 		Thread t = new Thread() {
 			public void run() {
 				NAFeaturesAsFeature faf = new NAFeaturesAsFeature();
-				StopGraphic p1 = new StopGraphic(start);
-				StopGraphic p2 = new StopGraphic(end);
+				StopGraphic p1 = new StopGraphic(startPoint);
+				StopGraphic p2 = new StopGraphic(endPoint);
 				faf.setFeatures(new Graphic[] { p1, p2 });
 				faf.setCompressedRequest(true);
 
@@ -163,7 +247,7 @@ public class NPRouteManager {
 		}
 	}
 
-	private void notifyRouteSolved(Graphic route) {
+	private void notifyRouteSolved(NPRouteResult route) {
 		for (NPRouteManagerListener listener : listeners) {
 			listener.didSolveRouteWithResult(this, route);
 		}
@@ -195,11 +279,11 @@ public class NPRouteManager {
 		 * 
 		 * @param routeManager
 		 *            路径管理实例
-		 * @param routeResultGraphic
+		 * @param routeResult
 		 *            路径规划结果
 		 */
 		void didSolveRouteWithResult(NPRouteManager routeManager,
-				Graphic routeResultGraphic);
+				NPRouteResult routeResult);
 
 		/**
 		 * 路径规划失败回调方法

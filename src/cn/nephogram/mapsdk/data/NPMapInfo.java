@@ -169,8 +169,8 @@ public class NPMapInfo implements Parcelable {
 	/**
 	 * 地图尺寸
 	 */
-	public MapSize getMapSize() {
-		return new MapSize(size_x, size_y);
+	public NPMapSize getMapSize() {
+		return new NPMapSize(size_x, size_y);
 	}
 
 	/**
@@ -287,28 +287,6 @@ public class NPMapInfo implements Parcelable {
 		public double getYmax() {
 			return ymax;
 		}
-	}
-
-	/**
-	 * 地图尺寸,对应地图所示区域实际大小
-	 */
-	public class MapSize {
-		double x;
-		double y;
-
-		public MapSize(double x, double y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		public double getX() {
-			return x;
-		}
-
-		public double getY() {
-			return y;
-		}
-
 	}
 
 	/**

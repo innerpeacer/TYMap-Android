@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import cn.nephogram.data.NPAssetsManager;
+import cn.nephogram.datamanager.NPAssetsManager;
 import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.NPMapView;
@@ -124,7 +124,7 @@ public abstract class BaseMapViewActivity extends Activity implements
 		mapView.addMapListener(this);
 	}
 
-	private void changedToFloor(int index) {
+	protected void changedToFloor(int index) {
 		currentFloorIndex = index;
 		currentMapInfo = mapInfos.get(index);
 
