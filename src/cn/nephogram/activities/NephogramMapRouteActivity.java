@@ -14,6 +14,7 @@ import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.NPPictureSymbol;
+import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.route.NPRouteLayer;
 import cn.nephogram.mapsdk.route.NPRouteManager;
@@ -45,6 +46,10 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	NPRouteManager routeManager;
 	NPRouteLayer routeLayer;
 
+	NPPictureSymbol startSymbol;
+	NPPictureSymbol endSymbol;
+	NPPictureSymbol switchSymbol;
+
 	boolean isRouting;
 	NPRouteResult routeResult;
 
@@ -64,6 +69,7 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		super.onCreate(savedInstanceState);
 		initLayout();
 		initMapSettings();
+		initSymbols();
 
 		// routeManager = new CARouteManager(ROUTE_TASK_URL,
 		// CloudMapEnvironment.defaultUserCredentials());
@@ -99,17 +105,77 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 			Polyline line = routeResult.getRouteOnFloor(floor);
 			if (line != null) {
 				routeLayer.addGraphic(new Graphic(line, routeSymbol));
+
+				if (routeResult.isFirstFloor(floor)
+						&& routeResult.isLastFloor(floor)) {
+					Log.i(TAG, "Same Floor");
+					return;
+				}
+
+				if (routeResult.isFirstFloor(floor)
+						&& !routeResult.isLastFloor(floor)) {
+					Point p = routeResult.getLastPointOnFloor(floor);
+					if (p != null) {
+						routeLayer.addGraphic(new Graphic(p, switchSymbol));
+					}
+					return;
+
+				}
+
+				if (!routeResult.isFirstFloor(floor)
+						&& routeResult.isLastFloor(floor)) {
+					Point p = routeResult.getFirstPointOnFloor(floor);
+					if (p != null) {
+						routeLayer.addGraphic(new Graphic(p, switchSymbol));
+					}
+					return;
+				}
+
+				if (!routeResult.isFirstFloor(floor)
+						&& !routeResult.isLastFloor(floor)) {
+					Point fp = routeResult.getFirstPointOnFloor(floor);
+					Point lp = routeResult.getLastPointOnFloor(floor);
+					if (fp != null) {
+						routeLayer.addGraphic(new Graphic(fp, switchSymbol));
+					}
+
+					if (lp != null) {
+						routeLayer.addGraphic(new Graphic(lp, switchSymbol));
+					}
+					return;
+				}
 			}
 		}
 	}
 
 	@Override
 	protected void changedToFloor(int index) {
+		startLayer.removeAll();
+		endLayer.removeAll();
+		routeLayer.removeAll();
+
 		super.changedToFloor(index);
+		// if (isRouting) {
+		// showRouteResultOnCurrentFloor();
+		// }
+	}
+
+	public void onFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo) {
+		if (startPoint != null
+				&& startPoint.getFloor() == mapInfo.getFloorNumber()) {
+			startLayer.addGraphic(new Graphic(new Point(startPoint.getX(),
+					startPoint.getY()), startSymbol));
+		}
+
+		if (endPoint != null && endPoint.getFloor() == mapInfo.getFloorNumber()) {
+			endLayer.addGraphic(new Graphic(new Point(endPoint.getX(), endPoint
+					.getY()), startSymbol));
+		}
+
 		if (isRouting) {
 			showRouteResultOnCurrentFloor();
 		}
-	}
+	};
 
 	@Override
 	public void didFailSolveRouteWithError(NPRouteManager routeManager,
@@ -137,19 +203,41 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	}
 
 	private void initMapSettings() {
+		routeLayer = new NPRouteLayer();
+		mapView.addLayer(routeLayer);
+
 		startLayer = new GraphicsLayer();
 		mapView.addLayer(startLayer);
 
 		endLayer = new GraphicsLayer();
 		mapView.addLayer(endLayer);
 
-		routeLayer = new NPRouteLayer();
-		mapView.addLayer(routeLayer);
-
 		hintLayer = new GraphicsLayer();
 		mapView.addLayer(hintLayer);
 
 		mapView.setOnSingleTapListener(this);
+	}
+
+	private void initSymbols() {
+		startSymbol = new NPPictureSymbol(getResources().getDrawable(
+				R.drawable.start));
+		startSymbol.setWidth(34);
+		startSymbol.setHeight(43);
+		startSymbol.setOffsetX(0);
+		startSymbol.setOffsetY(22);
+
+		endSymbol = new NPPictureSymbol(getResources().getDrawable(
+				R.drawable.end));
+		endSymbol.setWidth(34);
+		endSymbol.setHeight(43);
+		endSymbol.setOffsetX(0);
+		endSymbol.setOffsetY(22);
+
+		switchSymbol = new NPPictureSymbol(getResources().getDrawable(
+				R.drawable.nav_exit));
+		switchSymbol.setWidth(37);
+		switchSymbol.setHeight(37);
+
 	}
 
 	@Override
@@ -168,30 +256,14 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		startPoint = new NPLocalPoint(currentPoint.getX(), currentPoint.getY(),
 				currentMapInfo.getFloorNumber());
 		startLayer.removeAll();
-
-		NPPictureSymbol psStart = new NPPictureSymbol(getResources()
-				.getDrawable(R.drawable.green_pushpin));
-		psStart.setWidth(36);
-		psStart.setHeight(36);
-		psStart.setOffsetX(9);
-		psStart.setOffsetY(16);
-
-		startLayer.addGraphic(new Graphic(currentPoint, psStart));
+		startLayer.addGraphic(new Graphic(currentPoint, startSymbol));
 	}
 
 	private void setEndPoint() {
 		endPoint = new NPLocalPoint(currentPoint.getX(), currentPoint.getY(),
 				currentMapInfo.getFloorNumber());
 		endLayer.removeAll();
-
-		NPPictureSymbol psEnd = new NPPictureSymbol(getResources().getDrawable(
-				R.drawable.red_pushpin));
-		psEnd.setWidth(36);
-		psEnd.setHeight(36);
-		psEnd.setOffsetX(9);
-		psEnd.setOffsetY(16);
-
-		endLayer.addGraphic(new Graphic(currentPoint, psEnd));
+		endLayer.addGraphic(new Graphic(currentPoint, endSymbol));
 	}
 
 	private void requestRoute() {

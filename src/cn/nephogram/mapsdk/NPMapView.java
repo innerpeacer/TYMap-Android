@@ -35,13 +35,13 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	static final String TAG = NPMapView.class.getSimpleName();
 
-	static final String GRAPHIC_ATTRIBUTE_GEO_ID = "GEO_ID";
-	static final String GRAPHIC_ATTRIBUTE_POI_ID = "POI_ID";
-	static final String GRAPHIC_ATTRIBUTE_FLOOR_ID = "FLOOR_ID";
-	static final String GRAPHIC_ATTRIBUTE_BUILDING_ID = "BUILDING_ID";
-	static final String GRAPHIC_ATTRIBUTE_NAME = "NAME";
-	static final String GRAPHIC_ATTRIBUTE_CATEGORY_ID = "CATEGORY_ID";
-	static final String GRAPHIC_ATTRIBUTE_FLOOR = "FLOOR";
+	// static final String GRAPHIC_ATTRIBUTE_GEO_ID = "GEO_ID";
+	// static final String GRAPHIC_ATTRIBUTE_POI_ID = "POI_ID";
+	// static final String GRAPHIC_ATTRIBUTE_FLOOR_ID = "FLOOR_ID";
+	// static final String GRAPHIC_ATTRIBUTE_BUILDING_ID = "BUILDING_ID";
+	// static final String GRAPHIC_ATTRIBUTE_NAME = "NAME";
+	// static final String GRAPHIC_ATTRIBUTE_CATEGORY_ID = "CATEGORY_ID";
+	// static final String GRAPHIC_ATTRIBUTE_FLOOR = "FLOOR";
 
 	private static final int DEFAULT_TOLERANCE = 5;
 
@@ -94,7 +94,6 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 */
 	public void init(NPRenderingScheme renderingScheme) {
 		// Log.i(TAG, "init");
-
 		SpatialReference sr = NPMapEnvironment.defaultSpatialReference();
 
 		floorLayer = new NPFloorLayer(context, renderingScheme, sr, null);
@@ -185,7 +184,6 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 					// setMaxResolution(info.getMapSize().getX() * 1.5
 					// / (720 / 2.0));
 					// setMaxResolution(info.getMapSize().getX() * 1.5 / (720));
-
 					double width = 0.06; // 6cm
 					setMinScale(info.getMapSize().getX() / width);
 					setMaxScale(6 / width);
@@ -236,7 +234,6 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		// .getMapExtent().getYmin(), info.getMapExtent().getXmax(), info
 		// .getMapExtent().getYmax());
 		// setExtent(envelope);
-
 	}
 
 	/**
@@ -523,18 +520,18 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 					Graphic g = facilityLayer.getGraphic(gid);
 					NPPoi poi = new NPPoi(
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_GEO_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_POI_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_FLOOR_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_BUILDING_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_NAME),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
 							g.getGeometry(),
 							(Integer) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
 							POI_LAYER.POI_FACILITY);
 					poiList.add(poi);
 				}
@@ -548,18 +545,18 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 					Graphic g = roomLayer.getGraphic(gid);
 					NPPoi poi = new NPPoi(
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_GEO_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_POI_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_FLOOR_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_BUILDING_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_NAME),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
 							g.getGeometry(),
 							(Integer) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
 							POI_LAYER.POI_ROOM);
 					poiList.add(poi);
 				}
@@ -573,18 +570,18 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 					Graphic g = assetLayer.getGraphic(gid);
 					NPPoi poi = new NPPoi(
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_GEO_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_POI_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_FLOOR_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_BUILDING_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 							(String) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_NAME),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
 							g.getGeometry(),
 							(Integer) g
-									.getAttributeValue(GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
 							POI_LAYER.POI_ASSET);
 					poiList.add(poi);
 				}

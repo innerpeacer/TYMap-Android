@@ -4,7 +4,9 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.util.Log;
+import cn.nephogram.datamanager.NPFileManager;
 import cn.nephogram.map.R;
+import cn.nephogram.mapsdk.NPAreaAnalysis;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.poi.NPPoi;
 
@@ -12,11 +14,14 @@ import com.esri.core.geometry.Point;
 
 public class NephogramMapActivity extends BaseMapViewActivity {
 	static final String TAG = NephogramMapActivity.class.getSimpleName();
+	NPAreaAnalysis areaAnalysis;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		areaAnalysis = new NPAreaAnalysis(NPFileManager.getAOIJsonPath());
+		Log.i(TAG, "Area Count: " + areaAnalysis.getAreaCount());
 		// mapView.setHighlightPoiOnSelection(true);
 	}
 
@@ -30,15 +35,21 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 	@Override
 	public void onClickAtPoint(NPMapView mapView, Point mappoint) {
 
-		NPPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
+		// NPPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
+		// mappoint.getY());
+		//
+		// Log.i(TAG, poi + "\n");
+		// if (poi != null) {
+		// mapView.highlightPoi(poi);
+		// }
+		//
+		// Log.i(TAG, mapView.getScale() + "");
+
+		List<NPPoi> poiArray = areaAnalysis.extractAOIs(mappoint.getX(),
 				mappoint.getY());
+		Log.i(TAG, poiArray.size() + " area extracted");
+		Log.i(TAG, poiArray + "");
 
-		Log.i(TAG, poi + "\n");
-		if (poi != null) {
-			mapView.highlightPoi(poi);
-		}
-
-		Log.i(TAG, mapView.getScale() + "");
 	}
 
 	@Override

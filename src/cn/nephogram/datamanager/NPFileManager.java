@@ -9,7 +9,7 @@ import android.os.Environment;
 
 public class NPFileManager {
 	public static final String ROOT_DIR = Environment
-			.getExternalStorageDirectory() + "/Nephogram/";
+			.getExternalStorageDirectory() + "/NephogramTest/";
 
 	private static String MAP_DIR = ROOT_DIR + "MapFiles";
 
@@ -18,6 +18,8 @@ public class NPFileManager {
 	private static String JSON_FILE_ASSET = MAP_DIR + "/%s_ASSET.json";
 	private static String JSON_FILE_FACILITY = MAP_DIR + "/%s_FACILITY.json";
 	private static String JSON_FILE_LABEL = MAP_DIR + "/%s_LABEL.json";
+
+	private static String JSON_FILE_AOI = MAP_DIR + "/AOI.json";
 
 	private static String JSON_FILE_RENDERING_SCHEME = MAP_DIR
 			+ "/RenderingScheme.json";
@@ -75,6 +77,10 @@ public class NPFileManager {
 
 	public static String getMapInfoJsonPath(String marketID) {
 		return String.format(JSON_FILE_MAPINFO, marketID);
+	}
+
+	public static String getAOIJsonPath() {
+		return JSON_FILE_AOI;
 	}
 
 	public static byte[] readByteFromFile(String path) {

@@ -135,6 +135,14 @@
                        "icon": "icon_lift"
                        },
                        {
+                       "colorID": 25075,
+                       "icon": "icon_mens_room"
+                       },
+                       {
+                       "colorID": 25133,
+                       "icon": "icon_womens_room"
+                       },
+                       {
                        "colorID": 25000,
                        "icon": "icon_exit"
                        },
