@@ -2,27 +2,32 @@ package cn.nephogram.activities;
 
 import java.util.List;
 
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
-import cn.nephogram.datamanager.NPFileManager;
 import cn.nephogram.map.R;
-import cn.nephogram.mapsdk.NPAreaAnalysis;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.poi.NPPoi;
 
+import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
+import com.esri.core.map.Graphic;
+import com.esri.core.symbol.SimpleMarkerSymbol;
+import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 
 public class NephogramMapActivity extends BaseMapViewActivity {
 	static final String TAG = NephogramMapActivity.class.getSimpleName();
-	NPAreaAnalysis areaAnalysis;
+
+	GraphicsLayer graphicsLayer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		areaAnalysis = new NPAreaAnalysis(NPFileManager.getAOIJsonPath());
-		Log.i(TAG, "Area Count: " + areaAnalysis.getAreaCount());
 		// mapView.setHighlightPoiOnSelection(true);
+
+		graphicsLayer = new GraphicsLayer();
+		mapView.addLayer(graphicsLayer);
 	}
 
 	@Override
@@ -35,29 +40,27 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 	@Override
 	public void onClickAtPoint(NPMapView mapView, Point mappoint) {
 
-		// NPPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
-		// mappoint.getY());
-		//
-		// Log.i(TAG, poi + "\n");
-		// if (poi != null) {
-		// mapView.highlightPoi(poi);
-		// }
-		//
-		// Log.i(TAG, mapView.getScale() + "");
+		Log.i(TAG, "Clicked Point: " + mappoint.getX() + ", " + mappoint.getY());
+		Log.i(TAG, "Center: " + mapView.getCenter().getX() + ", "
+				+ mapView.getCenter().getY());
 
-		List<NPPoi> poiArray = areaAnalysis.extractAOIs(mappoint.getX(),
-				mappoint.getY());
-		Log.i(TAG, poiArray.size() + " area extracted");
-		Log.i(TAG, poiArray + "");
+		graphicsLayer.removeAll();
+		graphicsLayer.addGraphic(new Graphic(mappoint, new SimpleMarkerSymbol(
+				Color.GREEN, 5, STYLE.CIRCLE)));
+
+		// mapView.translateInMapUnit(5, 5, true);
+		// mapView.translateInScreenUnit(300, 300, true);
+		Rect rect = new Rect(100, 100, 200, 200);
+		// new Rect(left, top, right, bottom)
+
+		Point testPoint = new Point(1.3523012707863146E7, 3662129.5815833337);
+
+		mapView.restrictLocation(testPoint, rect, true);
 
 	}
 
 	@Override
 	public void onPoiSelected(NPMapView mapView, List<NPPoi> poiList) {
-		// Log.i(TAG, "onPoiSelected: ");
-		// for (NPPoi poi : poiList) {
-		// Log.i(TAG, poi + "\n");
-		// }
 
 	}
 }

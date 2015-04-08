@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import cn.nephogram.datamanager.NPAssetsManager;
 import cn.nephogram.datamanager.NPFileManager;
@@ -286,6 +287,50 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		roomHighlightLayer.removeAll();
 		// assetLayer.clearSelection();
 		facilityLayer.clearSelection();
+	}
+
+	public void translateInScreenUnit(double x, double y, boolean animated) {
+		Point centerScreen = toScreenPoint(getCenter());
+		Point newCenterScreen = new Point(centerScreen.getX() - x,
+				centerScreen.getY() - y);
+		Point newCenter = toMapPoint(newCenterScreen);
+		centerAt(newCenter, animated);
+	}
+
+	public void translateInMapUnit(double x, double y, boolean animated) {
+		Point center = getCenter();
+		Point newCenter = new Point(center.getX() - x, center.getY() - y);
+		centerAt(newCenter, animated);
+	}
+
+	public void restrictLocation(Point location, Rect range, boolean animated) {
+		Point locationOnScreen = toScreenPoint(location);
+
+		if (range.contains((int) locationOnScreen.getX(),
+				(int) locationOnScreen.getY())) {
+			return;
+		}
+
+		double xOffset = 0;
+		double yOffset = 0;
+
+		if (locationOnScreen.getX() < range.left) {
+			xOffset = range.left - locationOnScreen.getX();
+		}
+
+		if (locationOnScreen.getX() > range.right) {
+			xOffset = range.right - locationOnScreen.getX();
+		}
+
+		if (locationOnScreen.getY() < range.bottom) {
+			yOffset = range.bottom - locationOnScreen.getY();
+		}
+
+		if (locationOnScreen.getY() > range.top) {
+			yOffset = range.top - locationOnScreen.getY();
+		}
+
+		translateInScreenUnit(xOffset, yOffset, animated);
 	}
 
 	/**
