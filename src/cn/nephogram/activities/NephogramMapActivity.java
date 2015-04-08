@@ -3,7 +3,6 @@ package cn.nephogram.activities;
 import java.util.List;
 
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import cn.nephogram.map.R;
@@ -50,12 +49,12 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 
 		// mapView.translateInMapUnit(5, 5, true);
 		// mapView.translateInScreenUnit(300, 300, true);
-		Rect rect = new Rect(100, 100, 200, 200);
-		// new Rect(left, top, right, bottom)
 
-		Point testPoint = new Point(1.3523012707863146E7, 3662129.5815833337);
+		// Rect rect = new Rect(100, 100, 200, 200);
+		// Point testPoint = new Point(1.3523012707863146E7,
+		// 3662129.5815833337);
 
-		mapView.restrictLocation(testPoint, rect, true);
+		// mapView.restrictLocation(testPoint, rect, true);
 
 	}
 

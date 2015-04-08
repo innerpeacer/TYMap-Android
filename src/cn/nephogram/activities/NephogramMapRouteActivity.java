@@ -13,8 +13,8 @@ import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.NPMapView;
-import cn.nephogram.mapsdk.NPPictureSymbol;
 import cn.nephogram.mapsdk.data.NPMapInfo;
+import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.route.NPRouteLayer;
 import cn.nephogram.mapsdk.route.NPRouteManager;
@@ -46,9 +46,9 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	NPRouteManager routeManager;
 	NPRouteLayer routeLayer;
 
-	NPPictureSymbol startSymbol;
-	NPPictureSymbol endSymbol;
-	NPPictureSymbol switchSymbol;
+	NPPictureMarkerSymbol startSymbol;
+	NPPictureMarkerSymbol endSymbol;
+	NPPictureMarkerSymbol switchSymbol;
 
 	boolean isRouting;
 	NPRouteResult routeResult;
@@ -219,21 +219,21 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	}
 
 	private void initSymbols() {
-		startSymbol = new NPPictureSymbol(getResources().getDrawable(
+		startSymbol = new NPPictureMarkerSymbol(getResources().getDrawable(
 				R.drawable.start));
 		startSymbol.setWidth(34);
 		startSymbol.setHeight(43);
 		startSymbol.setOffsetX(0);
 		startSymbol.setOffsetY(22);
 
-		endSymbol = new NPPictureSymbol(getResources().getDrawable(
+		endSymbol = new NPPictureMarkerSymbol(getResources().getDrawable(
 				R.drawable.end));
 		endSymbol.setWidth(34);
 		endSymbol.setHeight(43);
 		endSymbol.setOffsetX(0);
 		endSymbol.setOffsetY(22);
 
-		switchSymbol = new NPPictureSymbol(getResources().getDrawable(
+		switchSymbol = new NPPictureMarkerSymbol(getResources().getDrawable(
 				R.drawable.nav_exit));
 		switchSymbol.setWidth(37);
 		switchSymbol.setHeight(37);

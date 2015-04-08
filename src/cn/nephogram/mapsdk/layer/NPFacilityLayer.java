@@ -15,8 +15,8 @@ import org.codehaus.jackson.JsonParser;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import cn.nephogram.mapsdk.NPMapType;
-import cn.nephogram.mapsdk.NPPictureSymbol;
 import cn.nephogram.mapsdk.NPRenderingScheme;
+import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
@@ -59,8 +59,8 @@ public class NPFacilityLayer extends GraphicsLayer {
 					.get(colorID);
 			int resourceID = context.getResources().getIdentifier(icon,
 					"drawable", context.getPackageName());
-			NPPictureSymbol ps = new NPPictureSymbol(context.getResources()
-					.getDrawable(resourceID));
+			NPPictureMarkerSymbol ps = new NPPictureMarkerSymbol(context
+					.getResources().getDrawable(resourceID));
 			ps.setWidth(16);
 			ps.setHeight(16);
 

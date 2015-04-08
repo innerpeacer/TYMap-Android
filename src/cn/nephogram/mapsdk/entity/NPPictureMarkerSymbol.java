@@ -1,13 +1,13 @@
-package cn.nephogram.mapsdk;
+package cn.nephogram.mapsdk.entity;
 
 import android.graphics.drawable.Drawable;
 
 import com.esri.core.symbol.PictureMarkerSymbol;
 
-public class NPPictureSymbol extends PictureMarkerSymbol {
+public class NPPictureMarkerSymbol extends PictureMarkerSymbol {
 	private static final long serialVersionUID = 1L;
 
-	public NPPictureSymbol(Drawable d) {
+	public NPPictureMarkerSymbol(Drawable d) {
 		super(d);
 	}
 
