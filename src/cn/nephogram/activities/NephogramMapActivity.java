@@ -55,7 +55,6 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 		// 3662129.5815833337);
 
 		// mapView.restrictLocation(testPoint, rect, true);
-
 	}
 
 	@Override

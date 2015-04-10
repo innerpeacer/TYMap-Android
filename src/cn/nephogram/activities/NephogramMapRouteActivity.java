@@ -71,8 +71,6 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		initMapSettings();
 		initSymbols();
 
-		// routeManager = new CARouteManager(ROUTE_TASK_URL,
-		// CloudMapEnvironment.defaultUserCredentials());
 		routeManager = new NPRouteManager(ROUTE_TASK_URL,
 				NPMapEnvironment.defaultUserCredentials(), mapInfos);
 		routeManager.addRouteManagerListener(this);
@@ -83,11 +81,6 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	public void didSolveRouteWithResult(NPRouteManager routeManager,
 			NPRouteResult rs) {
 		Log.i(TAG, "didSolveRouteWithResult");
-		// routeLayer.addGraphic(new Graphic(routeResultGraphic.getGeometry(),
-		// createRouteSymbol()));
-
-		// routeLayer.addGraphic(new Graphic(routeResultGraphic.getGeometry(),
-		// routeSymbol));
 
 		hintLayer.removeAll();
 
