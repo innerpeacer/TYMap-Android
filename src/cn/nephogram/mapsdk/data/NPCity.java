@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -252,52 +251,6 @@ public class NPCity implements Parcelable {
 	}
 
 	/**
-	 * 从assets目录解析所有城市信息信息列表
-	 * 
-	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
-	 * @return 城市类数组
-	 */
-	public static List<NPCity> parseCityFromAssets(Context context, String path) {
-		List<NPCity> cities = new ArrayList<NPCity>();
-
-		try {
-			InputStream inStream = context.getAssets().open(path);
-			InputStreamReader inputReader = new InputStreamReader(inStream);
-			BufferedReader bufReader = new BufferedReader(inputReader);
-
-			String line = "";
-			StringBuffer jsonStr = new StringBuffer();
-			while ((line = bufReader.readLine()) != null)
-				jsonStr.append(line);
-
-			JSONObject jsonObject = new JSONObject(jsonStr.toString());
-			if (jsonObject != null
-					&& !jsonObject.isNull(NPCity.JSON_KEY_CITIES)) {
-				JSONArray array = jsonObject
-						.getJSONArray(NPCity.JSON_KEY_CITIES);
-				for (int i = 0; i < array.length(); i++) {
-					NPCity city = new NPCity();
-					city.parseJson(array.optJSONObject(i));
-					cities.add(city);
-				}
-			}
-			inputReader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return cities;
-	}
-
-	/**
 	 * 从外部存储目录按ID解析特定城市信息
 	 * 
 	 * @param context
@@ -312,31 +265,6 @@ public class NPCity implements Parcelable {
 	public static NPCity parseCityFromFilesById(Context context, String path,
 			String cityId) {
 		List<NPCity> cities = parseCityFromFiles(context, path);
-
-		for (int i = 0; i < cities.size(); i++) {
-			NPCity city = cities.get(i);
-			if (city.getCityID().equals(cityId)) {
-				return city;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * 从assets目录按ID解析特定城市信息
-	 * 
-	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
-	 * @param cityId
-	 *            城市ID
-	 * 
-	 * @return 城市类
-	 */
-	public static NPCity parseCityFromAssetsById(Context context, String path,
-			String cityId) {
-		List<NPCity> cities = parseCityFromAssets(context, path);
 
 		for (int i = 0; i < cities.size(); i++) {
 			NPCity city = cities.get(i);
@@ -371,30 +299,4 @@ public class NPCity implements Parcelable {
 		}
 		return null;
 	}
-
-	/**
-	 * 从assets目录按名称解析特定城市信息
-	 * 
-	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
-	 * @param cityName
-	 *            城市名称
-	 * 
-	 * @return 城市类
-	 */
-	public static NPCity parseCityFromAssetsByName(Context context,
-			String path, String cityName) {
-		List<NPCity> cities = parseCityFromAssets(context, path);
-
-		for (int i = 0; i < cities.size(); i++) {
-			NPCity city = cities.get(i);
-			if (city.getName().equals(cityName)) {
-				return city;
-			}
-		}
-		return null;
-	}
-
 }

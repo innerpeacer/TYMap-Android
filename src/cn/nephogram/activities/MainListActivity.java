@@ -1,12 +1,16 @@
 package cn.nephogram.activities;
 
+import java.io.File;
 import java.util.Map;
 
 import android.content.Intent;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import cn.nephogram.app.FileHelper;
 import cn.nephogram.map.R;
-import cn.nephogram.mapsdk.NPMapView;
+import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.settings.AppSettings;
 
 public class MainListActivity extends HelperListActivity {
@@ -15,15 +19,35 @@ public class MainListActivity extends HelperListActivity {
 	public void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		String mapRootDir = Environment.getExternalStorageDirectory()
+				+ "/NeophogramMapProject/Map";
+		NPMapEnvironment.setRootDirectoryForMapFiles(mapRootDir);
+
+		copyFileIfNeeded();
+
 		AppSettings settings = new AppSettings(this);
 
-		settings.setDefaultCityID("0021");
-		settings.setDefaultBuildingID("002100002");
+		// settings.setDefaultCityID("0021");
+		// settings.setDefaultBuildingID("002100002");
+
+		settings.setDefaultCityID("H852");
+		settings.setDefaultBuildingID("H85200001");
 
 		setTitle(getResources().getString(R.string.app_name));
 
-		NPMapView.useAsset = false;
 	};
+
+	void copyFileIfNeeded() {
+		String sourcePath = "NephogramMapResource";
+		String targetPath = NPMapEnvironment.getRootDirectoryForMapFiles();
+
+		Log.i(TAG, "source path: " + sourcePath);
+		Log.i(TAG, "target path: " + targetPath);
+
+		FileHelper.deleteFile(new File(targetPath));
+		FileHelper.copyFolderFromAsset(this, sourcePath, targetPath);
+
+	}
 
 	protected void constructList() {
 		intents = new IntentPair[] {

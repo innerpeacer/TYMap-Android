@@ -56,7 +56,7 @@ public class NPFacilityLayer extends GraphicsLayer {
 		for (Integer colorID : renderingScheme.getIconSymbolDictionary()
 				.keySet()) {
 			String icon = renderingScheme.getIconSymbolDictionary()
-					.get(colorID);
+					.get(colorID) + "_normal";
 			int resourceID = context.getResources().getIdentifier(icon,
 					"drawable", context.getPackageName());
 			NPPictureMarkerSymbol ps = new NPPictureMarkerSymbol(context

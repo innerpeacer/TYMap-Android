@@ -14,6 +14,8 @@ public class NPMapEnvironment {
 			.create(3395);
 	private static UserCredentials userCredentials = null;
 
+	private static String mapFileRootDirectory = null;
+
 	/**
 	 * 默认坐标系空间参考
 	 * 
@@ -41,6 +43,14 @@ public class NPMapEnvironment {
 			userCredentials.setUserAccount("arcgis", "666666");
 		}
 		return userCredentials;
+	}
+
+	public static void setRootDirectoryForMapFiles(String dir) {
+		mapFileRootDirectory = dir;
+	}
+
+	public static String getRootDirectoryForMapFiles() {
+		return mapFileRootDirectory;
 	}
 
 }

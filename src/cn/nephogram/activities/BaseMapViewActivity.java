@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import cn.nephogram.datamanager.NPAssetsManager;
+import cn.nephogram.datamanager.NPMapFileManager;
 import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.NPMapView;
@@ -59,13 +59,12 @@ public abstract class BaseMapViewActivity extends Activity implements
 		String cityID = pref.getDefaultCityID();
 		String buildingID = pref.getDefaultBuildingID();
 
-		currentBuilding = NPBuilding
-				.parseBuildingFromAssetsById(this,
-						NPAssetsManager.getBuildingJsonPath(cityID), cityID,
-						buildingID);
-		mapInfos = NPMapInfo.parseMapInfoFromAssets(this,
-				NPAssetsManager.getMapInfoJsonPath(buildingID), buildingID);
-
+		currentBuilding = NPBuilding.parseBuildingFromFilesById(this,
+				NPMapFileManager.getBuildingJsonPath(cityID), cityID,
+				buildingID);
+		mapInfos = NPMapInfo.parseMapInfoFromFiles(this,
+				NPMapFileManager.getMapInfoJsonPath(cityID, buildingID),
+				buildingID);
 	}
 
 	private void initMapLayout() {
@@ -117,8 +116,8 @@ public abstract class BaseMapViewActivity extends Activity implements
 				currentMapInfo.getFloorName()));
 
 		renderingScheme = new NPRenderingScheme(this,
-				NPAssetsManager.getRenderingSchemeFilePath(), true);
-		mapView.init(renderingScheme);
+				NPMapFileManager.getRenderingScheme(currentBuilding));
+		mapView.init(renderingScheme, currentBuilding);
 		mapView.setFloor(currentMapInfo);
 
 		mapView.addMapListener(this);

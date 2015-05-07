@@ -8,8 +8,8 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import cn.nephogram.data.NPLocalPoint;
-import cn.nephogram.datamanager.NPAssetsManager;
-import cn.nephogram.datamanager.NPFileManager;
+import cn.nephogram.datamanager.NPMapFileManager;
+import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.layer.NPAssetLayer;
 import cn.nephogram.mapsdk.layer.NPFacilityLayer;
@@ -43,7 +43,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	private Context context;
 
-	private String buildingID;
+	// private String buildingID;
+	private NPBuilding building;
 	private NPMapInfo currentMapInfo;
 
 	private NPFloorLayer floorLayer;
@@ -60,10 +61,6 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	private NPMapViewMode mapViewMode = NPMapViewMode.NPMapViewModeDefault;
 	private double currentDeviceHeading = 0;
-	/**
-	 * 是否从assets目录读取地图文件，默认为true
-	 */
-	public static boolean useAsset = true;
 
 	private List<NPMapViewListenser> listeners = new ArrayList<NPMapView.NPMapViewListenser>();
 
@@ -92,8 +89,10 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 * @param renderingScheme
 	 *            地图渲染方案
 	 */
-	public void init(NPRenderingScheme renderingScheme) {
+	public void init(NPRenderingScheme renderingScheme, NPBuilding buliding) {
 		// Log.i(TAG, "init");
+		this.building = buliding;
+
 		SpatialReference sr = NPMapEnvironment.defaultSpatialReference();
 
 		floorLayer = new NPFloorLayer(context, renderingScheme, sr, null);
@@ -153,30 +152,17 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 			@Override
 			public void run() {
-				if (useAsset) {
-					floorLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-							.getFloorFilePath(info.getMapID()));
-					roomLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-							.getRoomFilePath(info.getMapID()));
-					assetLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-							.getAssetFilePath(info.getMapID()));
-					facilityLayer
-							.loadContentsFromAssetsWithInfo(NPAssetsManager
-									.getFacilityFilePath(info.getMapID()));
-					labelLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-							.getLabelFilePath(info.getMapID()));
-				} else {
-					floorLayer.loadContentsFromFileWithInfo(NPFileManager
-							.getFloorFilePath(info.getMapID()));
-					roomLayer.loadContentsFromFileWithInfo(NPFileManager
-							.getRoomFilePath(info.getMapID()));
-					assetLayer.loadContentsFromFileWithInfo(NPFileManager
-							.getAssetFilePath(info.getMapID()));
-					facilityLayer.loadContentsFromFileWithInfo(NPFileManager
-							.getFacilityFilePath(info.getMapID()));
-					labelLayer.loadContentsFromFileWithInfo(NPFileManager
-							.getLabelFilePath(info.getMapID()));
-				}
+
+				floorLayer.loadContentsFromFileWithInfo(NPMapFileManager
+						.getFloorFilePath(info));
+				roomLayer.loadContentsFromFileWithInfo(NPMapFileManager
+						.getRoomFilePath(info));
+				assetLayer.loadContentsFromFileWithInfo(NPMapFileManager
+						.getAssetFilePath(info));
+				facilityLayer.loadContentsFromFileWithInfo(NPMapFileManager
+						.getFacilityFilePath(info));
+				labelLayer.loadContentsFromFileWithInfo(NPMapFileManager
+						.getLabelFilePath(info));
 
 				if (initialEnvelope == null) {
 					initialEnvelope = new Envelope(info.getMapExtent()
@@ -240,19 +226,19 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		// setExtent(envelope);
 	}
 
-	/**
-	 * 当前显示的建筑ID
-	 */
-	public String getBuildingID() {
-		return buildingID;
-	}
+	// /**
+	// * 当前显示的建筑ID
+	// */
+	// public String getBuildingID() {
+	// return buildingID;
+	// }
 
-	/**
-	 * 当前显示的建筑ID
-	 */
-	public void setBuildingID(String buildingID) {
-		this.buildingID = buildingID;
-	}
+	// /**
+	// * 当前显示的建筑ID
+	// */
+	// public void setBuildingID(String buildingID) {
+	// this.buildingID = buildingID;
+	// }
 
 	/**
 	 * 当前建筑的当前楼层信息
@@ -277,7 +263,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		if (currentMapInfo.getFloorNumber() == location.getFloor()) {
 			Point pos = new Point(location.getX(), location.getY());
 			locationLayer.showLocation(pos, currentDeviceHeading,
-					currentMapInfo.getInitAngle(), mapViewMode);
+					building.getInitAngle(), mapViewMode);
 		}
 	}
 
@@ -287,8 +273,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	public void processDeviceRotation(double newHeading) {
 		currentDeviceHeading = newHeading;
-		locationLayer.updateDeviceHeading(newHeading,
-				currentMapInfo.getInitAngle(), mapViewMode);
+		locationLayer.updateDeviceHeading(newHeading, building.getInitAngle(),
+				mapViewMode);
 
 		switch (mapViewMode) {
 		case NPMapViewModeDefault:
@@ -296,8 +282,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 			break;
 
 		case NPMapViewModeFollowing:
-			setRotationAngle(currentMapInfo.getInitAngle()
-					+ currentDeviceHeading, false);
+			setRotationAngle(building.getInitAngle() + currentDeviceHeading,
+					false);
 			break;
 
 		default:

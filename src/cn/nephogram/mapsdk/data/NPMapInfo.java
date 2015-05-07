@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,8 @@ import android.os.Parcelable;
 public class NPMapInfo implements Parcelable {
 	public static final String JSON_KEY_MAPINFOS = "MapInfo";
 
+	private static final String KEY_MAPINFO_CITYID = "cityID";
+	private static final String KEY_MAPINFO_BUILDINGID = "buildingID";
 	private static final String KEY_MAP_ID = "mapID";
 	private static final String KEY_FLOOR_NAME = "floorName";
 	private static final String KEY_FLOOR_NUMBER = "floorIndex";
@@ -36,8 +37,8 @@ public class NPMapInfo implements Parcelable {
 	private static final String KEY_Y_MIN = "ymin";
 	private static final String KEY_Y_MAX = "ymax";
 
-	private static final String KEY_INIT_ANGLE = "initAngle";
-
+	private String cityID;
+	private String buildingID;
 	private String mapID;
 
 	private String floorName;
@@ -51,13 +52,13 @@ public class NPMapInfo implements Parcelable {
 	private double ymin;
 	private double ymax;
 
-	private double initAngle;
-
 	public NPMapInfo() {
 		super();
 	}
 
 	NPMapInfo(Parcel in) {
+		cityID = in.readString();
+		buildingID = in.readString();
 		mapID = in.readString();
 		floorName = in.readString();
 
@@ -70,11 +71,11 @@ public class NPMapInfo implements Parcelable {
 		xmax = in.readDouble();
 		ymin = in.readDouble();
 		ymax = in.readDouble();
-
-		initAngle = in.readDouble();
 	}
 
 	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(cityID);
+		dest.writeString(buildingID);
 		dest.writeString(mapID);
 		dest.writeString(floorName);
 
@@ -88,7 +89,6 @@ public class NPMapInfo implements Parcelable {
 		dest.writeDouble(ymin);
 		dest.writeDouble(ymax);
 
-		dest.writeDouble(initAngle);
 	}
 
 	public static final Parcelable.Creator<NPMapInfo> CREATOR = new Creator<NPMapInfo>() {
@@ -107,6 +107,13 @@ public class NPMapInfo implements Parcelable {
 
 	public void parseJson(JSONObject jsonObject) {
 		if (jsonObject != null) {
+			if (!jsonObject.isNull(KEY_MAPINFO_CITYID)) {
+				setCityID(jsonObject.optString(KEY_MAPINFO_CITYID));
+			}
+
+			if (!jsonObject.isNull(KEY_MAPINFO_BUILDINGID)) {
+				setBuildingID(jsonObject.optString(KEY_MAPINFO_BUILDINGID));
+			}
 			if (!jsonObject.isNull(KEY_MAP_ID)) {
 				setMapID(jsonObject.optString(KEY_MAP_ID));
 			}
@@ -134,15 +141,14 @@ public class NPMapInfo implements Parcelable {
 			if (!jsonObject.isNull(KEY_Y_MAX)) {
 				setYmax(jsonObject.optDouble(KEY_Y_MAX));
 			}
-			if (!jsonObject.isNull(KEY_INIT_ANGLE)) {
-				setInitAngle(jsonObject.optDouble(KEY_INIT_ANGLE));
-			}
 		}
 	}
 
 	public JSONObject buildJson() {
 		JSONObject jsonObject = new JSONObject();
 		try {
+			jsonObject.put(KEY_MAPINFO_CITYID, cityID);
+			jsonObject.put(KEY_MAPINFO_BUILDINGID, buildingID);
 			jsonObject.put(KEY_MAP_ID, mapID);
 			jsonObject.put(KEY_FLOOR_NAME, floorName);
 			jsonObject.put(KEY_FLOOR_NUMBER, floorNumber);
@@ -152,11 +158,21 @@ public class NPMapInfo implements Parcelable {
 			jsonObject.put(KEY_X_MAX, xmax);
 			jsonObject.put(KEY_Y_MIN, ymin);
 			jsonObject.put(KEY_Y_MAX, ymax);
-			jsonObject.put(KEY_INIT_ANGLE, initAngle);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return jsonObject;
+	}
+
+	public String getCityID() {
+		return cityID;
+	}
+
+	/**
+	 * 建筑ID
+	 */
+	public String getBuildingID() {
+		return buildingID;
 	}
 
 	/**
@@ -202,11 +218,12 @@ public class NPMapInfo implements Parcelable {
 		return size_y / (ymax - ymin);
 	}
 
-	/**
-	 * 地图初始偏转角度
-	 */
-	public double getInitAngle() {
-		return initAngle;
+	protected void setCityID(String cityID) {
+		this.cityID = cityID;
+	}
+
+	protected void setBuildingID(String buildingID) {
+		this.buildingID = buildingID;
 	}
 
 	protected void setMapID(String mapID) {
@@ -219,10 +236,6 @@ public class NPMapInfo implements Parcelable {
 
 	protected void setFloorNumber(int floorNumber) {
 		this.floorNumber = floorNumber;
-	}
-
-	protected void setInitAngle(double initAngle) {
-		this.initAngle = initAngle;
 	}
 
 	protected void setSize_x(double size_x) {
@@ -341,57 +354,6 @@ public class NPMapInfo implements Parcelable {
 	}
 
 	/**
-	 * 从assets目录解析某建筑所有楼层的地图信息
-	 * 
-	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
-	 * @param buildingID
-	 *            楼层所在建筑的ID
-	 * @return 所有楼层的地图信息数组:[NPMapInfo]
-	 */
-	public static List<NPMapInfo> parseMapInfoFromAssets(Context context,
-			String path, String buildingID) {
-
-		List<NPMapInfo> mapInfos = new ArrayList<NPMapInfo>();
-
-		try {
-			InputStream inStream = context.getAssets().open(path);
-			InputStreamReader inputReader = new InputStreamReader(inStream);
-			BufferedReader bufReader = new BufferedReader(inputReader);
-
-			String line = "";
-			StringBuffer jsonStr = new StringBuffer();
-			while ((line = bufReader.readLine()) != null)
-				jsonStr.append(line);
-
-			JSONObject jsonObject = new JSONObject(jsonStr.toString());
-			if (jsonObject != null
-					&& !jsonObject.isNull(NPMapInfo.JSON_KEY_MAPINFOS)) {
-				JSONArray array = jsonObject
-						.getJSONArray(NPMapInfo.JSON_KEY_MAPINFOS);
-				for (int i = 0; i < array.length(); i++) {
-					NPMapInfo mapInfo = new NPMapInfo();
-					mapInfo.parseJson(array.optJSONObject(i));
-					mapInfos.add(mapInfo);
-				}
-			}
-
-			inputReader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mapInfos;
-	}
-
-	/**
 	 * 从外部存储目录解析某楼层地图信息的静态方法
 	 * 
 	 * @param context
@@ -407,33 +369,6 @@ public class NPMapInfo implements Parcelable {
 	public static NPMapInfo parseMapInfoFromFilesById(Context context,
 			String path, String buildingID, String mapID) {
 		List<NPMapInfo> mapInfos = parseMapInfoFromFiles(context, path,
-				buildingID);
-
-		for (int i = 0; i < mapInfos.size(); i++) {
-			NPMapInfo mapInfo = mapInfos.get(i);
-			if (mapInfo.getMapID().equals(mapID)) {
-				return mapInfo;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * 从assets目录解析某楼层地图信息的静态方法
-	 * 
-	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
-	 * @param buildingID
-	 *            楼层所在建筑的ID
-	 * @param mapID
-	 *            楼层地图ID
-	 * @return 楼层地图信息
-	 */
-	public static NPMapInfo parseMapInfoFromAssetsById(Context context,
-			String path, String buildingID, String mapID) {
-		List<NPMapInfo> mapInfos = parseMapInfoFromAssets(context, path,
 				buildingID);
 
 		for (int i = 0; i < mapInfos.size(); i++) {
