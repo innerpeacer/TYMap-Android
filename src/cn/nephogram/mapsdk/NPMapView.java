@@ -126,6 +126,10 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		setOnZoomListener(this);
 	}
 
+	private boolean isSwitching = false;
+	private boolean isInterupted = false;
+	private boolean isBlocking = false;
+
 	/**
 	 * 切换楼层方法
 	 * 
@@ -137,6 +141,17 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				&& info.getMapID().equalsIgnoreCase(currentMapInfo.getMapID())) {
 			return;
 		}
+
+		if (isSwitching) {
+			isInterupted = true;
+		}
+
+		while (isBlocking) {
+
+		}
+
+		isSwitching = true;
+		isBlocking = true;
 
 		currentMapInfo = info;
 
@@ -152,17 +167,30 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 			@Override
 			public void run() {
+				if (!isInterupted) {
+					floorLayer.loadContentsFromFileWithInfo(NPMapFileManager
+							.getFloorFilePath(info));
+				}
 
-				floorLayer.loadContentsFromFileWithInfo(NPMapFileManager
-						.getFloorFilePath(info));
-				roomLayer.loadContentsFromFileWithInfo(NPMapFileManager
-						.getRoomFilePath(info));
-				assetLayer.loadContentsFromFileWithInfo(NPMapFileManager
-						.getAssetFilePath(info));
-				facilityLayer.loadContentsFromFileWithInfo(NPMapFileManager
-						.getFacilityFilePath(info));
-				labelLayer.loadContentsFromFileWithInfo(NPMapFileManager
-						.getLabelFilePath(info));
+				if (!isInterupted) {
+					roomLayer.loadContentsFromFileWithInfo(NPMapFileManager
+							.getRoomFilePath(info));
+				}
+
+				if (!isInterupted) {
+					assetLayer.loadContentsFromFileWithInfo(NPMapFileManager
+							.getAssetFilePath(info));
+				}
+
+				if (!isInterupted) {
+					facilityLayer.loadContentsFromFileWithInfo(NPMapFileManager
+							.getFacilityFilePath(info));
+				}
+
+				if (!isInterupted) {
+					labelLayer.loadContentsFromFileWithInfo(NPMapFileManager
+							.getLabelFilePath(info));
+				}
 
 				if (initialEnvelope == null) {
 					initialEnvelope = new Envelope(info.getMapExtent()
@@ -170,45 +198,46 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 							.getMapExtent().getXmax(), info.getMapExtent()
 							.getYmax());
 					setExtent(initialEnvelope);
-
-					// setMaxResolution(info.getMapSize().getX() * 1.5
-					// / (720 / 2.0));
-					// setMaxResolution(info.getMapSize().getX() * 1.5 / (720));
 					double width = 0.06; // 6cm
 					setMinScale(info.getMapSize().getX() / width);
 					setMaxScale(6 / width);
 				}
 
-				boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
-				labelLayer.setVisible(labelVisible);
+				if (!isInterupted) {
+					boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
+					labelLayer.setVisible(labelVisible);
+					notifyFinishLoadingFloor(NPMapView.this, currentMapInfo);
+				}
 
-				notifyFinishLoadingFloor(NPMapView.this, currentMapInfo);
+				if (isInterupted) {
+					floorLayer.removeAll();
+					roomLayer.removeAll();
+					roomHighlightLayer.removeAll();
+					assetLayer.removeAll();
+					facilityLayer.removeAll();
+					labelLayer.removeAll();
+					locationLayer.removeAll();
+
+				}
+
+				isSwitching = false;
+				isInterupted = false;
+				isBlocking = false;
 			}
 		}).start();
 
-		// if (useAsset) {
-		// floorLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-		// .getFloorFilePath(info.getMapID()));
-		// roomLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-		// .getRoomFilePath(info.getMapID()));
-		// assetLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-		// .getAssetFilePath(info.getMapID()));
-		// facilityLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-		// .getFacilityFilePath(info.getMapID()));
-		// labelLayer.loadContentsFromAssetsWithInfo(NPAssetsManager
-		// .getLabelFilePath(info.getMapID()));
-		// } else {
-		// floorLayer.loadContentsFromFileWithInfo(NPFileManager
-		// .getFloorFilePath(info.getMapID()));
-		// roomLayer.loadContentsFromFileWithInfo(NPFileManager
-		// .getRoomFilePath(info.getMapID()));
-		// assetLayer.loadContentsFromFileWithInfo(NPFileManager
-		// .getAssetFilePath(info.getMapID()));
-		// facilityLayer.loadContentsFromFileWithInfo(NPFileManager
-		// .getFacilityFilePath(info.getMapID()));
-		// labelLayer.loadContentsFromFileWithInfo(NPFileManager
-		// .getLabelFilePath(info.getMapID()));
-		// }
+		// isSwitching = false;
+
+		// floorLayer.loadContentsFromFileWithInfo(NPMapFileManager
+		// .getFloorFilePath(info));
+		// roomLayer.loadContentsFromFileWithInfo(NPMapFileManager
+		// .getRoomFilePath(info));
+		// assetLayer.loadContentsFromFileWithInfo(NPMapFileManager
+		// .getAssetFilePath(info));
+		// facilityLayer.loadContentsFromFileWithInfo(NPMapFileManager
+		// .getFacilityFilePath(info));
+		// labelLayer.loadContentsFromFileWithInfo(NPMapFileManager
+		// .getLabelFilePath(info));
 		//
 		// if (initialEnvelope == null) {
 		// initialEnvelope = new Envelope(info.getMapExtent().getXmin(), info
@@ -216,8 +245,13 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		// info.getMapExtent().getYmax());
 		// setExtent(initialEnvelope);
 		//
+		// // setMaxResolution(info.getMapSize().getX() * 1.5
+		// // / (720 / 2.0));
+		// // setMaxResolution(info.getMapSize().getX() * 1.5 / (720));
+		// double width = 0.06; // 6cm
+		// setMinScale(info.getMapSize().getX() / width);
+		// setMaxScale(6 / width);
 		// }
-		//
 		// notifyFinishLoadingFloor(this, currentMapInfo);
 
 		// Envelope envelope = new Envelope(info.getMapExtent().getXmin(), info
