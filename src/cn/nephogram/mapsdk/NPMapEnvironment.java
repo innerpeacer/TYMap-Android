@@ -55,11 +55,11 @@ public class NPMapEnvironment {
 		return mapFileRootDirectory;
 	}
 
-	public void setMapLanguage(NPMapLanguage language) {
+	public static void setMapLanguage(NPMapLanguage language) {
 		mapLanguage = language;
 	}
 
-	public NPMapLanguage getMapLanguage() {
+	public static NPMapLanguage getMapLanguage() {
 		return mapLanguage;
 	}
 }

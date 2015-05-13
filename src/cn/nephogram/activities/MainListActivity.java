@@ -11,6 +11,7 @@ import android.widget.ListView;
 import cn.nephogram.app.FileHelper;
 import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapEnvironment;
+import cn.nephogram.mapsdk.NPMapLanguage;
 import cn.nephogram.settings.AppSettings;
 
 public class MainListActivity extends HelperListActivity {
@@ -22,6 +23,8 @@ public class MainListActivity extends HelperListActivity {
 		String mapRootDir = Environment.getExternalStorageDirectory()
 				+ "/NeophogramMapProject/Map";
 		NPMapEnvironment.setRootDirectoryForMapFiles(mapRootDir);
+
+		NPMapEnvironment.setMapLanguage(NPMapLanguage.NPTraditionalChinese);
 
 		copyFileIfNeeded();
 

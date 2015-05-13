@@ -1,5 +1,6 @@
 package cn.nephogram.mapsdk;
 
+
 public class NPMapType {
 	// =========== Graphic Attribute ================
 	public static final String GRAPHIC_ATTRIBUTE_GEO_ID = "GEO_ID";
@@ -9,6 +10,10 @@ public class NPMapType {
 	public static final String GRAPHIC_ATTRIBUTE_NAME = "NAME";
 	public static final String GRAPHIC_ATTRIBUTE_CATEGORY_ID = "CATEGORY_ID";
 	public static final String GRAPHIC_ATTRIBUTE_FLOOR = "FLOOR";
+
+	public static final String NAME_FIELD_TRADITIONAL_CHINESE = "NAME_TC";
+	public static final String NAME_FIELD_SIMPLIFIED_CHINESE = "NAME";
+	public static final String NAME_FIELD_ENGLISH = "NAME_EN";
 
 	// =========== Map Layer Name ===================
 	public static final String LAYER_NAME_FLOOR = "FloorLayer";

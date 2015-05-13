@@ -9,7 +9,7 @@ import cn.nephogram.mapsdk.NPMapType;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.layer.NPFacilityLayer;
-import cn.nephogram.mapsdk.layer.NPLabelLayer;
+import cn.nephogram.mapsdk.layer.NPTextLabelLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
@@ -19,7 +19,7 @@ import com.esri.core.map.Graphic;
 
 public class NPLabelGroupLayer extends GroupLayer {
 	private NPFacilityLayer facilityLayer;
-	private NPLabelLayer labelLayer;
+	private NPTextLabelLayer labelLayer;
 
 	public NPLabelGroupLayer(Context context,
 			NPRenderingScheme renderingScheme, SpatialReference sr) {
@@ -28,7 +28,7 @@ public class NPLabelGroupLayer extends GroupLayer {
 		facilityLayer = new NPFacilityLayer(context, renderingScheme, sr, null);
 		addLayer(facilityLayer);
 
-		labelLayer = new NPLabelLayer(context, sr, null);
+		labelLayer = new NPTextLabelLayer(context, sr, null);
 		addLayer(labelLayer);
 	}
 

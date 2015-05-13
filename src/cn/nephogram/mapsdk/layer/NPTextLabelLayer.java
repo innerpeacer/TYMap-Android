@@ -9,6 +9,9 @@ import org.codehaus.jackson.JsonParser;
 
 import android.content.Context;
 import android.graphics.Color;
+import cn.nephogram.mapsdk.NPMapEnvironment;
+import cn.nephogram.mapsdk.NPMapLanguage;
+import cn.nephogram.mapsdk.NPMapType;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -19,12 +22,12 @@ import com.esri.core.symbol.TextSymbol;
 import com.esri.core.symbol.TextSymbol.HorizontalAlignment;
 import com.esri.core.symbol.TextSymbol.VerticalAlignment;
 
-public class NPLabelLayer extends GraphicsLayer {
-	static final String TAG = NPLabelLayer.class.getSimpleName();
+public class NPTextLabelLayer extends GraphicsLayer {
+	static final String TAG = NPTextLabelLayer.class.getSimpleName();
 
 	Context context;
 
-	public NPLabelLayer(Context context, SpatialReference spatialReference,
+	public NPTextLabelLayer(Context context, SpatialReference spatialReference,
 			Envelope envelope) {
 		super(spatialReference, envelope);
 		this.context = context;
@@ -38,9 +41,13 @@ public class NPLabelLayer extends GraphicsLayer {
 			JsonParser parser = factory.createJsonParser(new File(path));
 			FeatureSet set = FeatureSet.fromJson(parser);
 
+			NPMapLanguage language = NPMapEnvironment.getMapLanguage();
+			String field = getNameFieldForLanguage(language);
+
 			Graphic[] graphics = set.getGraphics();
 			for (Graphic graphic : graphics) {
-				String name = (String) graphic.getAttributeValue("NAME");
+
+				String name = (String) graphic.getAttributeValue(field);
 
 				if (name != null && name.length() > 0) {
 					TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
@@ -61,4 +68,24 @@ public class NPLabelLayer extends GraphicsLayer {
 		}
 	}
 
+	private String getNameFieldForLanguage(NPMapLanguage l) {
+		String result = null;
+		switch (l) {
+		case NPSimplifiedChinese:
+			result = NPMapType.NAME_FIELD_SIMPLIFIED_CHINESE;
+			break;
+
+		case NPTraditionalChinese:
+			result = NPMapType.NAME_FIELD_TRADITIONAL_CHINESE;
+			break;
+
+		case NPEnglish:
+			result = NPMapType.NAME_FIELD_ENGLISH;
+			break;
+
+		default:
+			break;
+		}
+		return result;
+	}
 }
