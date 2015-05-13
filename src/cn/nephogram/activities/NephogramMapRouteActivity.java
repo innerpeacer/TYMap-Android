@@ -37,7 +37,8 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	static final String TAG = NephogramMapRouteActivity.class.getSimpleName();
 
 	private static final long serialVersionUID = 5847083145291274344L;
-	private static String ROUTE_TASK_URL = "http://121.40.16.26:6080/arcgis/rest/services/002100002/NAServer/Route";
+	// private static String ROUTE_TASK_URL =
+	// "http://121.40.16.26:6080/arcgis/rest/services/002100002/NAServer/Route";
 
 	Point currentPoint;
 	NPLocalPoint startPoint;
@@ -71,7 +72,7 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		initMapSettings();
 		initSymbols();
 
-		routeManager = new NPRouteManager(ROUTE_TASK_URL,
+		routeManager = new NPRouteManager(currentBuilding,
 				NPMapEnvironment.defaultUserCredentials(), mapInfos);
 		routeManager.addRouteManagerListener(this);
 		routeSymbol = createRouteSymbol();

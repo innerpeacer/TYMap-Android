@@ -10,8 +10,8 @@ import android.os.Handler;
 import android.util.Log;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.NPMapEnvironment;
+import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
-import cn.nephogram.mapsdk.data.NPMapSize;
 
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
@@ -52,7 +52,6 @@ public class NPRouteManager {
 				notifyRouteSolvingFailed(mException);
 			} else {
 				Route route = routeResult.getRoutes().get(0);
-				// notifyRouteSolved(route.getRouteGraphic());
 				if (route != null) {
 					NPRouteResult result = processRouteResult(route);
 
@@ -66,6 +65,47 @@ public class NPRouteManager {
 
 		}
 	};
+
+	/**
+	 * 路径管理类的实例化方法
+	 * 
+	 * @param url
+	 *            路径服务URL
+	 * @param credential
+	 *            用户访问验证
+	 * 
+	 */
+	public NPRouteManager(NPBuilding building, UserCredentials credential,
+			List<NPMapInfo> mapInfoArray) {
+		Log.i(TAG, "url:" + building.getRouteURL());
+
+		allMapInfoArray.addAll(mapInfoArray);
+		NPMapInfo info = allMapInfoArray.get(0);
+
+		routePointConverter = new NPRoutePointConverter(info.getMapExtent(),
+				building.getOffset());
+
+		try {
+			routeTask = RouteTask.createOnlineRouteTask(building.getRouteURL(),
+					credential);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		Thread t = new Thread() {
+			public void run() {
+				try {
+					routeParams = routeTask
+							.retrieveDefaultRouteTaskParameters();
+					Log.i(TAG, "RouteParams:" + routeParams);
+				} catch (Exception e) {
+					notifyRetrieveDefaultRouteTaskParameterFailed(e);
+					e.printStackTrace();
+				}
+			};
+		};
+		t.start();
+	}
 
 	private NPRouteResult processRouteResult(Route r) {
 		Map<Integer, List<NPLocalPoint>> pointDict = new HashMap<Integer, List<NPLocalPoint>>();
@@ -120,48 +160,6 @@ public class NPRouteManager {
 		}
 
 		return new NPRouteResult(routeDict, floorArray);
-
-	}
-
-	/**
-	 * 路径管理类的实例化方法
-	 * 
-	 * @param url
-	 *            路径服务URL
-	 * @param credential
-	 *            用户访问验证
-	 * 
-	 */
-	public NPRouteManager(String url, UserCredentials credential,
-			List<NPMapInfo> mapInfoArray) {
-		Log.i(TAG, "url:" + url);
-
-		allMapInfoArray.addAll(mapInfoArray);
-		NPMapInfo info = allMapInfoArray.get(0);
-
-		NPMapSize size = new NPMapSize(200, 0);
-		routePointConverter = new NPRoutePointConverter(info.getMapExtent(),
-				size);
-
-		try {
-			routeTask = RouteTask.createOnlineRouteTask(url, credential);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-
-		Thread t = new Thread() {
-			public void run() {
-				try {
-					routeParams = routeTask
-							.retrieveDefaultRouteTaskParameters();
-					Log.i(TAG, "RouteParams:" + routeParams);
-				} catch (Exception e) {
-					notifyRetrieveDefaultRouteTaskParameterFailed(e);
-					e.printStackTrace();
-				}
-			};
-		};
-		t.start();
 
 	}
 
