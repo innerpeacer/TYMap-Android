@@ -8,13 +8,11 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import cn.nephogram.data.NPLocalPoint;
-import cn.nephogram.datamanager.NPMapFileManager;
 import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
-import cn.nephogram.mapsdk.layer.NPFacilityLayer;
-import cn.nephogram.mapsdk.layer.NPLabelLayer;
 import cn.nephogram.mapsdk.layer.NPLocationLayer;
-import cn.nephogram.mapsdk.layer.NPStructureGroupLayer;
+import cn.nephogram.mapsdk.layer.labellayer.NPLabelGroupLayer;
+import cn.nephogram.mapsdk.layer.structurelayer.NPStructureGroupLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
@@ -25,7 +23,6 @@ import com.esri.android.map.event.OnZoomListener;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.Graphic;
 import com.esri.core.symbol.MarkerSymbol;
 
 public class NPMapView extends MapView implements OnSingleTapListener,
@@ -43,9 +40,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	private NPMapInfo currentMapInfo;
 
 	private NPStructureGroupLayer structureGroupLayer;
-
-	private NPFacilityLayer facilityLayer;
-	private NPLabelLayer labelLayer;
+	private NPLabelGroupLayer labelGroupLayer;
 
 	private NPLocationLayer locationLayer;
 
@@ -91,11 +86,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				renderingScheme, sr, null);
 		addLayer(structureGroupLayer);
 
-		facilityLayer = new NPFacilityLayer(context, renderingScheme, sr, null);
-		addLayer(facilityLayer);
-
-		labelLayer = new NPLabelLayer(context, sr, null);
-		addLayer(labelLayer);
+		labelGroupLayer = new NPLabelGroupLayer(context, renderingScheme, sr);
+		addLayer(labelGroupLayer);
 
 		locationLayer = new NPLocationLayer();
 		addLayer(locationLayer);
@@ -135,9 +127,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		currentMapInfo = info;
 
 		structureGroupLayer.removeGraphicsFromSublayers();
+		labelGroupLayer.removeGraphicsFromSublayers();
 
-		facilityLayer.removeAll();
-		labelLayer.removeAll();
 		locationLayer.removeAll();
 
 		new Thread(new Runnable() {
@@ -145,17 +136,23 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 			@Override
 			public void run() {
 				if (!isInterupted) {
-					structureGroupLayer.loadContentsFromFileWithInfo(info);
+					structureGroupLayer.loadFloorContentFromFileWithInfo(info);
 				}
 
 				if (!isInterupted) {
-					facilityLayer.loadContentsFromFileWithInfo(NPMapFileManager
-							.getFacilityFilePath(info));
+					structureGroupLayer.loadRoomContentFromFileWithInfo(info);
 				}
 
 				if (!isInterupted) {
-					labelLayer.loadContentsFromFileWithInfo(NPMapFileManager
-							.getLabelFilePath(info));
+					structureGroupLayer.loadAssetContentFromFileWithInfo(info);
+				}
+
+				if (!isInterupted) {
+					labelGroupLayer.loadFacilityContentsFromFileWithInfo(info);
+				}
+
+				if (!isInterupted) {
+					labelGroupLayer.loadLabelContentsFromFileWithInfo(info);
 				}
 
 				if (initialEnvelope == null) {
@@ -171,17 +168,15 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 				if (!isInterupted) {
 					boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
-					labelLayer.setVisible(labelVisible);
+					labelGroupLayer.setLabelLayerVisible(labelVisible);
 					notifyFinishLoadingFloor(NPMapView.this, currentMapInfo);
 				}
 
 				if (isInterupted) {
 					structureGroupLayer.removeGraphicsFromSublayers();
+					labelGroupLayer.removeGraphicsFromSublayers();
 
-					facilityLayer.removeAll();
-					labelLayer.removeAll();
 					locationLayer.removeAll();
-
 				}
 
 				isSwitching = false;
@@ -265,7 +260,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 * 清除高亮显示的POI
 	 */
 	public void clearSelection() {
-		facilityLayer.clearSelection();
+		structureGroupLayer.clearSelection();
+		labelGroupLayer.clearSelection();
 	}
 
 	public void translateInScreenUnit(double x, double y, boolean animated) {
@@ -335,14 +331,14 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 * @return 公共设施类型数组:[Integer]
 	 */
 	public List<Integer> getAllFacilityCategoryIDOnCurrentFloor() {
-		return facilityLayer.getAllFacilityCategoryIDOnCurrentFloor();
+		return labelGroupLayer.getAllFacilityCategoryIDOnCurrentFloor();
 	}
 
 	/**
 	 * 显示当前楼层的所有公共设施
 	 */
 	public void showAllFacilitiesOnCurrentFloor() {
-		facilityLayer.showAllFacilities();
+		labelGroupLayer.showAllFacilities();
 	}
 
 	/**
@@ -352,7 +348,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 *            公共设施类型ID
 	 */
 	public void showFacilityOnCurrentWithCategory(int categoryID) {
-		facilityLayer.showFacilityWithCategory(categoryID);
+		labelGroupLayer.showFacilityWithCategory(categoryID);
 	}
 
 	/**
@@ -370,13 +366,11 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 		switch (layer) {
 		case POI_ROOM:
-			// result = roomLayer.getPoiWithPoiID(pid);
-			result = structureGroupLayer.getPoiOnCurrentFloorWithPoiID(pid,
-					layer);
+			result = structureGroupLayer.getPoiWithPoiID(pid, layer);
 			break;
 
 		case POI_FACILITY:
-			result = facilityLayer.getPoiWithPoiID(pid);
+			result = labelGroupLayer.getPoiWithPoiID(pid, layer);
 			break;
 
 		default:
@@ -394,17 +388,12 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 */
 	public void highlightPoi(NPPoi poi) {
 		switch (poi.getLayer()) {
-		// case POI_ROOM:
-		// // roomLayer.highlightPoi(poi.getPoiID());
-		// NPPoi roomPoi = roomLayer.getPoiWithPoiID(poi.getPoiID());
-		// if (poi != null) {
-		// roomHighlightLayer.addGraphic(new Graphic(
-		// roomPoi.getGeometry(), null));
-		// }
-		// break;
+		case POI_ROOM:
+			structureGroupLayer.highlightPoi(poi);
+			break;
 
 		case POI_FACILITY:
-			facilityLayer.highlightPoi(poi.getPoiID());
+			labelGroupLayer.highlightPoi(poi);
 			break;
 
 		default:
@@ -516,7 +505,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	@Override
 	public void postAction(float pivotX, float pivotY, double factor) {
 		boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
-		labelLayer.setVisible(labelVisible);
+		labelGroupLayer.setLabelLayerVisible(labelVisible);
 	}
 
 	// 一般按5个字算，屏幕占距1cm，6m的房间内可以显示
@@ -528,113 +517,26 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	}
 
 	private void highlightPoiFeature(float x, float y) {
-		int[] facilityIDs = facilityLayer
-				.getGraphicIDs(x, y, DEFAULT_TOLERANCE);
-		if (facilityIDs != null && facilityIDs.length > 0) {
-			facilityLayer.setSelectedGraphics(facilityIDs, true);
-			return;
+		boolean isHighlighted = false;
+
+		if (!isHighlighted) {
+			isHighlighted = labelGroupLayer.highlightPoiFeature(x, y,
+					DEFAULT_TOLERANCE);
 		}
 
-		// int[] assetIDs = assetLayer.getGraphicIDs(x, y, DEFAULT_TOLERANCE);
-		// if (assetIDs != null && assetIDs.length > 0) {
-		// assetLayer.setSelectedGraphics(assetIDs, true);
-		// return;
-		// }
-
-		// int[] roomIDs = roomLayer.getGraphicIDs(x, y, DEFAULT_TOLERANCE);
-		// if (roomIDs != null && roomIDs.length > 0) {
-		// // roomLayer.setSelectedGraphics(roomIDs, true);
-		// for (int gid : roomIDs) {
-		// Graphic g = roomLayer.getGraphic(gid);
-		// roomHighlightLayer
-		// .addGraphic(new Graphic(g.getGeometry(), null));
-		// }
-		// return;
-		// }
-
-		structureGroupLayer.highlightPoiFeature(x, y, DEFAULT_TOLERANCE);
+		if (!isHighlighted) {
+			isHighlighted = structureGroupLayer.highlightPoiFeature(x, y,
+					DEFAULT_TOLERANCE);
+		}
 	}
 
 	private List<NPPoi> extractSelectedPoi(float x, float y) {
 		List<NPPoi> poiList = new ArrayList<NPPoi>();
-		{
-			int[] facilityIDs = facilityLayer.getGraphicIDs(x, y,
-					DEFAULT_TOLERANCE);
-			if (facilityIDs != null && facilityIDs.length > 0) {
-				for (int gid : facilityIDs) {
-					Graphic g = facilityLayer.getGraphic(gid);
-					NPPoi poi = new NPPoi(
-							(String) g
-									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-							(String) g
-									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-							(String) g
-									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-							(String) g
-									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-							(String) g
-									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
-							g.getGeometry(),
-							(Integer) g
-									.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-							POI_LAYER.POI_FACILITY);
-					poiList.add(poi);
-				}
-			}
-		}
 
+		poiList.addAll(labelGroupLayer.extractSelectedPoi(x, y,
+				DEFAULT_TOLERANCE));
 		poiList.addAll(structureGroupLayer.extractSelectedPoi(x, y,
 				DEFAULT_TOLERANCE));
-
-		// {
-		// int[] roomIDs = roomLayer.getGraphicIDs(x, y, DEFAULT_TOLERANCE);
-		// if (roomIDs != null && roomIDs.length > 0) {
-		// for (int gid : roomIDs) {
-		// Graphic g = roomLayer.getGraphic(gid);
-		// NPPoi poi = new NPPoi(
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
-		// g.getGeometry(),
-		// (Integer) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-		// POI_LAYER.POI_ROOM);
-		// poiList.add(poi);
-		// }
-		// }
-		// }
-
-		// {
-		// int[] assetIDs = assetLayer.getGraphicIDs(x, y, DEFAULT_TOLERANCE);
-		// if (assetIDs != null && assetIDs.length > 0) {
-		// for (int gid : assetIDs) {
-		// Graphic g = assetLayer.getGraphic(gid);
-		// NPPoi poi = new NPPoi(
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-		// (String) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_NAME),
-		// g.getGeometry(),
-		// (Integer) g
-		// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-		// POI_LAYER.POI_ASSET);
-		// poiList.add(poi);
-		// }
-		// }
-		// }
 
 		return poiList;
 	}

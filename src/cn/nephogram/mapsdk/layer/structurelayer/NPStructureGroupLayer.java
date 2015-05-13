@@ -1,4 +1,4 @@
-package cn.nephogram.mapsdk.layer;
+package cn.nephogram.mapsdk.layer.structurelayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +54,29 @@ public class NPStructureGroupLayer extends GroupLayer {
 
 	}
 
-	public void loadContentsFromFileWithInfo(NPMapInfo info) {
+	public void loadFloorContentFromFileWithInfo(NPMapInfo info) {
 		floorLayer.loadContentsFromFileWithInfo(NPMapFileManager
 				.getFloorFilePath(info));
+	}
+
+	public void loadRoomContentFromFileWithInfo(NPMapInfo info) {
 		roomLayer.loadContentsFromFileWithInfo(NPMapFileManager
 				.getRoomFilePath(info));
+	}
+
+	public void loadAssetContentFromFileWithInfo(NPMapInfo info) {
 		assetLayer.loadContentsFromFileWithInfo(NPMapFileManager
 				.getAssetFilePath(info));
-
 	}
+
+	// public void loadContentsFromFileWithInfo(NPMapInfo info) {
+	// floorLayer.loadContentsFromFileWithInfo(NPMapFileManager
+	// .getFloorFilePath(info));
+	// roomLayer.loadContentsFromFileWithInfo(NPMapFileManager
+	// .getRoomFilePath(info));
+	// assetLayer.loadContentsFromFileWithInfo(NPMapFileManager
+	// .getAssetFilePath(info));
+	// }
 
 	public void clearSelection() {
 		roomLayer.clearSelection();
@@ -70,21 +84,16 @@ public class NPStructureGroupLayer extends GroupLayer {
 
 	}
 
-	public NPPoi getPoiOnCurrentFloorWithPoiID(String pid, POI_LAYER layer) {
+	public NPPoi getPoiWithPoiID(String pid, POI_LAYER layer) {
 		NPPoi result = null;
 		switch (layer) {
 		case POI_ROOM:
 			result = roomLayer.getPoiWithPoiID(pid);
 			break;
 
-		// case POI_FACILITY:
-		// result = facilityLayer.getPoiWithPoiID(pid);
-		// break;
-
 		default:
 			break;
 		}
-
 		return result;
 	}
 
@@ -103,10 +112,20 @@ public class NPStructureGroupLayer extends GroupLayer {
 		}
 	}
 
-	public void highlightPoiFeature(float x, float y, int tolerance) {
-
-		highlightRoomPoiFeature(x, y, tolerance);
+	public boolean highlightPoiFeature(float x, float y, int tolerance) {
+		// highlightAssetPoiFeature(x, y, tolerance);
+		return highlightRoomPoiFeature(x, y, tolerance);
 	}
+
+	// private boolean highlightAssetPoiFeature(float x, float y, int tolerance)
+	// {
+	// int[] assetIDs = assetLayer.getGraphicIDs(x, y, tolerance);
+	// if (assetIDs != null && assetIDs.length > 0) {
+	// assetLayer.setSelectedGraphics(assetIDs, true);
+	// return true;
+	// }
+	// return false;
+	// }
 
 	private boolean highlightRoomPoiFeature(float x, float y, int tolerance) {
 		int[] roomIDs = roomLayer.getGraphicIDs(x, y, tolerance);
