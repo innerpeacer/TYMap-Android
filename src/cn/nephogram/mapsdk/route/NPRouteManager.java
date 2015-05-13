@@ -49,7 +49,7 @@ public class NPRouteManager {
 		public void run() {
 			Log.i(TAG, "Route Result back");
 			if (routeResult == null) {
-				notifyRouteSolvingFailed(mException);
+				notifyDidFailSolveRoute(mException);
 			} else {
 				Route route = routeResult.getRoutes().get(0);
 				if (route != null) {
@@ -58,7 +58,7 @@ public class NPRouteManager {
 					if (result == null) {
 						return;
 					}
-					notifyRouteSolved(result);
+					notifyDidSolveRoute(result);
 				}
 
 			}
@@ -97,9 +97,11 @@ public class NPRouteManager {
 				try {
 					routeParams = routeTask
 							.retrieveDefaultRouteTaskParameters();
-					Log.i(TAG, "RouteParams:" + routeParams);
+					// Log.i(TAG, "RouteParams:" + routeParams);
+					notifyDidRetrieveDefaultRouteTaskParameters();
+
 				} catch (Exception e) {
-					notifyRetrieveDefaultRouteTaskParameterFailed(e);
+					notifyDidFailRetrieveDefaultRouteTaskParameter(e);
 					e.printStackTrace();
 				}
 			};
@@ -175,7 +177,7 @@ public class NPRouteManager {
 		if (routeParams == null) {
 			NPRouteException e = new NPRouteException(
 					"route parameters from server not fetched");
-			notifyRouteSolvingFailed(e);
+			notifyDidFailSolveRoute(e);
 			return;
 		}
 
@@ -239,19 +241,25 @@ public class NPRouteManager {
 		}
 	}
 
-	private void notifyRetrieveDefaultRouteTaskParameterFailed(Exception e) {
+	private void notifyDidRetrieveDefaultRouteTaskParameters() {
+		for (NPRouteManagerListener listener : listeners) {
+			listener.didRetrieveDefaultRouteTaskParameters(this);
+		}
+	}
+
+	private void notifyDidFailRetrieveDefaultRouteTaskParameter(Exception e) {
 		for (NPRouteManagerListener listener : listeners) {
 			listener.didFailRetrieveDefaultRouteTaskParametersWithError(this, e);
 		}
 	}
 
-	private void notifyRouteSolved(NPRouteResult route) {
+	private void notifyDidSolveRoute(NPRouteResult route) {
 		for (NPRouteManagerListener listener : listeners) {
 			listener.didSolveRouteWithResult(this, route);
 		}
 	}
 
-	private void notifyRouteSolvingFailed(Exception e) {
+	private void notifyDidFailSolveRoute(Exception e) {
 		for (NPRouteManagerListener listener : listeners) {
 			listener.didFailSolveRouteWithError(this, e);
 		}
@@ -261,6 +269,9 @@ public class NPRouteManager {
 	 * 路径管理监听接口
 	 */
 	public interface NPRouteManagerListener {
+
+		void didRetrieveDefaultRouteTaskParameters(NPRouteManager routeManager);
+
 		/**
 		 * 获取默认参数失败回调方法
 		 * 

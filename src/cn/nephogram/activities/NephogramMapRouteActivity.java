@@ -178,6 +178,12 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	}
 
 	@Override
+	public void didRetrieveDefaultRouteTaskParameters(
+			NPRouteManager routeManager) {
+
+	}
+
+	@Override
 	public void didFailRetrieveDefaultRouteTaskParametersWithError(
 			NPRouteManager routeManager, Exception e) {
 
