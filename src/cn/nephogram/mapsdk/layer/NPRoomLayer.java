@@ -2,7 +2,6 @@ package cn.nephogram.mapsdk.layer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +31,8 @@ import com.esri.core.symbol.SimpleFillSymbol;
 
 public class NPRoomLayer extends GraphicsLayer {
 	static final String TAG = NPRoomLayer.class.getSimpleName();
-	private Context context;
+
+	Context context;
 	private NPRenderingScheme renderingScheme;
 
 	private Map<String, Graphic> roomDict = new HashMap<String, Graphic>();
@@ -88,38 +88,6 @@ public class NPRoomLayer extends GraphicsLayer {
 			}
 
 			// addGraphics(graphics);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void loadContentsFromAssetsWithInfo(String path) {
-		removeAll();
-		roomDict.clear();
-		roomGidDict.clear();
-		JsonFactory factory = new JsonFactory();
-
-		try {
-			InputStream inStream = context.getAssets().open(path);
-			JsonParser parser = factory.createJsonParser(inStream);
-			FeatureSet set = FeatureSet.fromJson(parser);
-
-			Graphic[] graphics = set.getGraphics();
-
-			for (Graphic graphic : graphics) {
-				String poiID = (String) graphic
-						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-				roomDict.put(poiID, graphic);
-
-				int gid = addGraphic(graphic);
-				roomGidDict.put(poiID, gid);
-			}
-
-			addGraphics(graphics);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

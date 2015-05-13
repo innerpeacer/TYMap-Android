@@ -2,7 +2,6 @@ package cn.nephogram.mapsdk.layer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,50 +84,6 @@ public class NPFacilityLayer extends GraphicsLayer {
 
 		try {
 			JsonParser parser = factory.createJsonParser(new File(path));
-			FeatureSet set = FeatureSet.fromJson(parser);
-
-			Graphic[] graphics = set.getGraphics();
-
-			for (Graphic graphic : graphics) {
-				int categoryID = (Integer) graphic.getAttributeValue("COLOR");
-				if (!groupedGraphicDict.keySet().contains(categoryID)) {
-					List<Graphic> graphicList = new ArrayList<Graphic>();
-					groupedGraphicDict.put(categoryID, graphicList);
-				}
-
-				List<Graphic> graphicList = groupedGraphicDict.get(categoryID);
-				graphicList.add(graphic);
-
-				String poiID = (String) graphic
-						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-				facilityDict.put(poiID, graphic);
-
-				int gid = addGraphic(graphic);
-				facilityGidDict.put(poiID, gid);
-			}
-
-			// addGraphics(graphics);
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void loadContentsFromAssetsWithInfo(String path) {
-		removeAll();
-		groupedGraphicDict.clear();
-		facilityDict.clear();
-		facilityGidDict.clear();
-
-		JsonFactory factory = new JsonFactory();
-
-		try {
-			InputStream inStream = context.getAssets().open(path);
-			JsonParser parser = factory.createJsonParser(inStream);
 			FeatureSet set = FeatureSet.fromJson(parser);
 
 			Graphic[] graphics = set.getGraphics();

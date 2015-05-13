@@ -2,7 +2,6 @@ package cn.nephogram.mapsdk.layer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -21,7 +20,8 @@ import com.esri.core.renderer.SimpleRenderer;
 
 public class NPFloorLayer extends GraphicsLayer {
 	static final String TAG = NPFloorLayer.class.getSimpleName();
-	private Context context;
+
+	Context context;
 	private NPRenderingScheme renderingScheme;
 
 	public NPFloorLayer(Context context, NPRenderingScheme renderingScheme,
@@ -55,23 +55,4 @@ public class NPFloorLayer extends GraphicsLayer {
 		}
 	}
 
-	public void loadContentsFromAssetsWithInfo(String path) {
-		removeAll();
-
-		JsonFactory factory = new JsonFactory();
-		try {
-			InputStream inStream = context.getAssets().open(path);
-			JsonParser parser = factory.createJsonParser(inStream);
-			FeatureSet set = FeatureSet.fromJson(parser);
-
-			Graphic[] graphics = set.getGraphics();
-			addGraphics(graphics);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

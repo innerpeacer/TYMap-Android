@@ -2,7 +2,6 @@ package cn.nephogram.mapsdk.layer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -22,7 +21,8 @@ import com.esri.core.symbol.TextSymbol.VerticalAlignment;
 
 public class NPLabelLayer extends GraphicsLayer {
 	static final String TAG = NPLabelLayer.class.getSimpleName();
-	private Context context;
+
+	Context context;
 
 	public NPLabelLayer(Context context, SpatialReference spatialReference,
 			Envelope envelope) {
@@ -61,35 +61,4 @@ public class NPLabelLayer extends GraphicsLayer {
 		}
 	}
 
-	public void loadContentsFromAssetsWithInfo(String path) {
-		removeAll();
-
-		JsonFactory factory = new JsonFactory();
-		try {
-			InputStream inStream = context.getAssets().open(path);
-			JsonParser parser = factory.createJsonParser(inStream);
-			FeatureSet set = FeatureSet.fromJson(parser);
-
-			Graphic[] graphics = set.getGraphics();
-			for (Graphic graphic : graphics) {
-				String name = (String) graphic.getAttributeValue("NAME");
-
-				if (name != null && name.length() > 0) {
-					TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
-					ts.setFontFamily("DroidSansFallback.ttf");
-					ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
-					ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
-
-					Graphic g = new Graphic(graphic.getGeometry(), ts);
-					addGraphic(g);
-				}
-			}
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

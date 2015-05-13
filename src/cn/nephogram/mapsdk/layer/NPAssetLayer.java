@@ -2,7 +2,6 @@ package cn.nephogram.mapsdk.layer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ import com.esri.core.symbol.SimpleFillSymbol;
 public class NPAssetLayer extends GraphicsLayer {
 	static final String TAG = NPAssetLayer.class.getSimpleName();
 
-	private Context context;
+	Context context;
 	private NPRenderingScheme renderingScheme;
 
 	public NPAssetLayer(Context context, NPRenderingScheme renderingScheme,
@@ -77,23 +76,4 @@ public class NPAssetLayer extends GraphicsLayer {
 		}
 	}
 
-	public void loadContentsFromAssetsWithInfo(String path) {
-		removeAll();
-		JsonFactory factory = new JsonFactory();
-
-		try {
-			InputStream inStream = context.getAssets().open(path);
-			JsonParser parser = factory.createJsonParser(inStream);
-			FeatureSet set = FeatureSet.fromJson(parser);
-
-			Graphic[] graphics = set.getGraphics();
-			addGraphics(graphics);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

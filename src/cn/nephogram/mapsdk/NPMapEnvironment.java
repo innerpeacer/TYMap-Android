@@ -16,6 +16,8 @@ public class NPMapEnvironment {
 
 	private static String mapFileRootDirectory = null;
 
+	private static NPMapLanguage mapLanguage = NPMapLanguage.NPSimplifiedChinese;
+
 	/**
 	 * 默认坐标系空间参考
 	 * 
@@ -53,4 +55,11 @@ public class NPMapEnvironment {
 		return mapFileRootDirectory;
 	}
 
+	public void setMapLanguage(NPMapLanguage language) {
+		mapLanguage = language;
+	}
+
+	public NPMapLanguage getMapLanguage() {
+		return mapLanguage;
+	}
 }
