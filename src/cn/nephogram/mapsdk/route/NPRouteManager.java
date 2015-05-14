@@ -109,6 +109,75 @@ public class NPRouteManager {
 		t.start();
 	}
 
+	private NPRouteResultV2 processRouteResultV2(Route r) {
+		List<List<NPLocalPoint>> pointArray = new ArrayList<List<NPLocalPoint>>();
+		List<Integer> floorArray = new ArrayList<Integer>();
+
+		Polyline routeLine = (Polyline) r.getRouteGraphic().getGeometry();
+
+		int currentFloor = 0;
+		List<NPLocalPoint> currentArray = null;
+
+		int pathNum = (int) routeLine.getPathCount();
+		if (pathNum > 0) {
+			int num = routeLine.getPathSize(0);
+			for (int i = 0; i < num; i++) {
+				Point p = routeLine.getPoint(i);
+				NPLocalPoint lp = routePointConverter
+						.getLocalPointFromRoutePoint(p);
+				boolean isValid = routePointConverter.checkPointValidity(lp);
+				if (isValid) {
+					if (lp.getFloor() != currentFloor) {
+						currentFloor = lp.getFloor();
+						currentArray = new ArrayList<NPLocalPoint>();
+						pointArray.add(currentArray);
+						floorArray.add(currentFloor);
+					}
+					currentArray.add(lp);
+				}
+			}
+		}
+
+		if (floorArray.size() < 1) {
+			return null;
+		}
+
+		List<NPRoutePart> routePartArray = new ArrayList<NPRoutePart>();
+		for (int i = 0; i < floorArray.size(); i++) {
+			int floor = floorArray.get(i);
+			Polyline line = new Polyline();
+
+			List<NPLocalPoint> pArray = pointArray.get(i);
+			for (int j = 0; j < pArray.size(); ++j) {
+				NPLocalPoint lp = pArray.get(j);
+				if (j == 0) {
+					line.startPath(new Point(lp.getX(), lp.getY()));
+				} else {
+					line.lineTo(lp.getX(), lp.getY());
+				}
+			}
+
+			NPMapInfo info = NPMapInfo.searchMapInfoFromArray(allMapInfoArray,
+					floor);
+			NPRoutePart rp = new NPRoutePart(line, info);
+			routePartArray.add(rp);
+		}
+
+		int routePartNum = (int) routePartArray.size();
+		for (int i = 0; i < routePartNum; i++) {
+			NPRoutePart rp = routePartArray.get(i);
+			if (i > 0) {
+				rp.setPreviousPart(routePartArray.get(i - 1));
+			}
+
+			if (i < routePartNum - 1) {
+				rp.setNextPart(routePartArray.get(i + 1));
+			}
+		}
+
+		return new NPRouteResultV2(routePartArray);
+	}
+
 	private NPRouteResult processRouteResult(Route r) {
 		Map<Integer, List<NPLocalPoint>> pointDict = new HashMap<Integer, List<NPLocalPoint>>();
 

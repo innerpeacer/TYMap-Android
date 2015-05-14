@@ -380,4 +380,14 @@ public class NPMapInfo implements Parcelable {
 		return null;
 	}
 
+	public static NPMapInfo searchMapInfoFromArray(List<NPMapInfo> array,
+			int floor) {
+		for (NPMapInfo info : array) {
+			if (floor == info.getFloorNumber()) {
+				return info;
+			}
+		}
+		return null;
+	}
+
 }
