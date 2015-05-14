@@ -18,6 +18,10 @@ public class NPMapFileManager {
 	private static String JSON_FILE_FACILITY = "%s_FACILITY.json";
 	private static String JSON_FILE_LABEL = "%s_LABEL.json";
 
+	private static String JSON_FILE_LANDMARK = "%s_LANDMARK.json";
+
+	// #define FILE_LAYER_PATH_LANDMARK @"%@_LANDMARK.json"
+
 	// private static String JSON_FILE_AOI = "AOI.json";
 
 	private static String JSON_FILE_RENDERING_SCHEME = "%s_RenderingScheme.json";
@@ -101,6 +105,14 @@ public class NPMapFileManager {
 		File cityDir = new File(mapRootDir, info.getCityID());
 		File buildingDir = new File(cityDir, info.getBuildingID());
 		String fileName = String.format(JSON_FILE_LABEL, info.getMapID());
+		return (new File(buildingDir, fileName).toString());
+	}
+
+	public static String getLandmarkJsonPath(NPMapInfo info) {
+		String mapRootDir = NPMapEnvironment.getRootDirectoryForMapFiles();
+		File cityDir = new File(mapRootDir, info.getCityID());
+		File buildingDir = new File(cityDir, info.getBuildingID());
+		String fileName = String.format(JSON_FILE_LANDMARK, info.getMapID());
 		return (new File(buildingDir, fileName).toString());
 	}
 
