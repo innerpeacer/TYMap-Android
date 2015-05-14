@@ -1,4 +1,4 @@
-package cn.nephogram.mapsdk.layer;
+package cn.nephogram.mapsdk.layer.labellayer;
 
 import java.io.File;
 import java.io.IOException;

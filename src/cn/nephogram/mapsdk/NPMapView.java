@@ -10,11 +10,14 @@ import android.util.AttributeSet;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
+import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.layer.NPLocationLayer;
+import cn.nephogram.mapsdk.layer.functionlayer.NPRouteLayer;
 import cn.nephogram.mapsdk.layer.labellayer.NPLabelGroupLayer;
 import cn.nephogram.mapsdk.layer.structurelayer.NPStructureGroupLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
+import cn.nephogram.mapsdk.route.NPRouteResult;
 
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
@@ -41,7 +44,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	private NPStructureGroupLayer structureGroupLayer;
 	private NPLabelGroupLayer labelGroupLayer;
-
+	private NPRouteLayer routeLayer;
 	private NPLocationLayer locationLayer;
 
 	private Envelope initialEnvelope;
@@ -89,6 +92,9 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		labelGroupLayer = new NPLabelGroupLayer(context, renderingScheme, sr);
 		addLayer(labelGroupLayer);
 
+		routeLayer = new NPRouteLayer(this);
+		addLayer(routeLayer);
+
 		locationLayer = new NPLocationLayer();
 		addLayer(locationLayer);
 
@@ -129,6 +135,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		structureGroupLayer.removeGraphicsFromSublayers();
 		labelGroupLayer.removeGraphicsFromSublayers();
 
+		routeLayer.removeAll();
 		locationLayer.removeAll();
 
 		new Thread(new Runnable() {
@@ -203,6 +210,50 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 */
 	public void setCurrentMapInfo(NPMapInfo currentMapInfo) {
 		this.currentMapInfo = currentMapInfo;
+	}
+
+	public void showRouteResultOnCurrentFloor() {
+		routeLayer.showRouteResultOnFloor(currentMapInfo.getFloorNumber());
+	}
+
+	public void showRouteStartSymbolOnCurrentFloor(NPLocalPoint start) {
+		routeLayer.showStartSymbol(start);
+	}
+
+	public void showRouteEndSymbolOnCurrentFloor(NPLocalPoint end) {
+		routeLayer.showEndSymbol(end);
+	}
+
+	public void setRouteResult(NPRouteResult rs) {
+		routeLayer.setRouteResult(rs);
+	}
+
+	public void setStartSymbol(NPPictureMarkerSymbol pms) {
+		routeLayer.setStartSymbol(pms);
+	}
+
+	public void setEndSymbol(NPPictureMarkerSymbol pms) {
+		routeLayer.setEndSymbol(pms);
+	}
+
+	public void setSwitchSymbol(NPPictureMarkerSymbol pms) {
+		routeLayer.setSwitchSymbol(pms);
+	}
+
+	public void setRouteStart(NPLocalPoint start) {
+		routeLayer.setStartPoint(start);
+	}
+
+	public void setRouteEnd(NPLocalPoint end) {
+		routeLayer.setEndPoint(end);
+	}
+
+	public void resetRouteLayer() {
+		routeLayer.reset();
+	}
+
+	public void clearRouteLayer() {
+		routeLayer.removeAll();
 	}
 
 	public void setLocationSymbol(MarkerSymbol markerSymbol) {

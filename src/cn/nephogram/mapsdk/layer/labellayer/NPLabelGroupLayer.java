@@ -8,8 +8,6 @@ import cn.nephogram.datamanager.NPMapFileManager;
 import cn.nephogram.mapsdk.NPMapType;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.data.NPMapInfo;
-import cn.nephogram.mapsdk.layer.NPFacilityLayer;
-import cn.nephogram.mapsdk.layer.NPTextLabelLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 

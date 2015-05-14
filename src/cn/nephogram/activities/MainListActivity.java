@@ -26,7 +26,7 @@ public class MainListActivity extends HelperListActivity {
 
 		NPMapEnvironment.setMapLanguage(NPMapLanguage.NPTraditionalChinese);
 
-		copyFileIfNeeded();
+		// copyFileIfNeeded();
 
 		AppSettings settings = new AppSettings(this);
 
