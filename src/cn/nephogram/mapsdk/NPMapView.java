@@ -17,7 +17,7 @@ import cn.nephogram.mapsdk.layer.labellayer.NPLabelGroupLayer;
 import cn.nephogram.mapsdk.layer.structurelayer.NPStructureGroupLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
-import cn.nephogram.mapsdk.route.NPRouteResult;
+import cn.nephogram.mapsdk.route.NPRouteResultV2;
 
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
@@ -224,7 +224,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		routeLayer.showEndSymbol(end);
 	}
 
-	public void setRouteResult(NPRouteResult rs) {
+	public void setRouteResult(NPRouteResultV2 rs) {
 		routeLayer.setRouteResult(rs);
 	}
 

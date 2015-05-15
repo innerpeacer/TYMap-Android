@@ -38,13 +38,13 @@ public class NPRouteResultV2 {
 	// return null;
 	// }
 
-	// public List<NPRoutePart> getRoutePartsOnFloor(int floor) {
-	// return allFloorRoutePartDict.get(floor);
-	// }
-	//
-	// public NPRoutePart getRoutePart(int index) {
-	// return allRoutePartArray.get(index);
-	// }
+	public List<NPRoutePart> getRoutePartsOnFloor(int floor) {
+		return allFloorRoutePartDict.get(floor);
+	}
+
+	public NPRoutePart getRoutePart(int index) {
+		return allRoutePartArray.get(index);
+	}
 	//
 	// public List<NPDirectionalHint> getRouteDirectionalHint(NPRoutePart rp) {
 	// return null;

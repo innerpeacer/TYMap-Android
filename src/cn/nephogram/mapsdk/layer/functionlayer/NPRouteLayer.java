@@ -1,11 +1,14 @@
 package cn.nephogram.mapsdk.layer.functionlayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.graphics.Color;
-import android.util.Log;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
-import cn.nephogram.mapsdk.route.NPRouteResult;
+import cn.nephogram.mapsdk.route.NPRoutePart;
+import cn.nephogram.mapsdk.route.NPRouteResultV2;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
@@ -33,7 +36,7 @@ public class NPRouteLayer extends GraphicsLayer {
 
 	Symbol routeSymbol;
 
-	NPRouteResult routeResult;
+	NPRouteResultV2 routeResult;
 
 	public NPRouteLayer(NPMapView mapView) {
 		super();
@@ -52,42 +55,47 @@ public class NPRouteLayer extends GraphicsLayer {
 	public void showRouteResultOnFloor(int floor) {
 		removeAll();
 
+		List<Polyline> linesToReturn = showLinesForRouteResultOnFloor(floor);
+
+		showSwitchSymbolForRouteResultOnFloor(floor);
+
+		showStartSymbol(startPoint);
+		showEndSymbol(endPoint);
+
+	}
+
+	private List<Polyline> showLinesForRouteResultOnFloor(int floor) {
+		List<Polyline> linesToReturn = new ArrayList<Polyline>();
+
 		if (routeResult != null) {
-			Polyline line = routeResult.getRouteOnFloor(floor);
-			if (line != null) {
-				addGraphic(new Graphic(line, routeSymbol));
+			List<NPRoutePart> routePartArray = routeResult
+					.getRoutePartsOnFloor(floor);
+			if (routePartArray != null && routePartArray.size() > 0) {
+				for (NPRoutePart rp : routePartArray) {
+					addGraphic(new Graphic(rp.getRoute(), routeSymbol));
+					linesToReturn.add(rp.getRoute());
+				}
+			}
+		}
+		return linesToReturn;
+	}
 
-				if (routeResult.isFirstFloor(floor)
-						&& routeResult.isLastFloor(floor)) {
-					Log.i(TAG, "Same Floor");
-				} else if (routeResult.isFirstFloor(floor)
-						&& !routeResult.isLastFloor(floor)) {
-					Point p = routeResult.getLastPointOnFloor(floor);
-					if (p != null) {
-						addGraphic(new Graphic(p, switchSymbol));
-					}
-				} else if (!routeResult.isFirstFloor(floor)
-						&& routeResult.isLastFloor(floor)) {
-					Point p = routeResult.getFirstPointOnFloor(floor);
-					if (p != null) {
-						addGraphic(new Graphic(p, switchSymbol));
-					}
-				} else if (!routeResult.isFirstFloor(floor)
-						&& !routeResult.isLastFloor(floor)) {
-					Point fp = routeResult.getFirstPointOnFloor(floor);
-					Point lp = routeResult.getLastPointOnFloor(floor);
-					if (fp != null) {
-						addGraphic(new Graphic(fp, switchSymbol));
-					}
-
-					if (lp != null) {
-						addGraphic(new Graphic(lp, switchSymbol));
+	private void showSwitchSymbolForRouteResultOnFloor(int floor) {
+		if (routeResult != null) {
+			List<NPRoutePart> routePartArray = routeResult
+					.getRoutePartsOnFloor(floor);
+			if (routePartArray != null && routePartArray.size() > 0) {
+				for (NPRoutePart rp : routePartArray) {
+					if (rp.isFirstPart() && !rp.isLastPart()) {
+						addGraphic(new Graphic(rp.getLastPoint(), switchSymbol));
+					} else if (!rp.isFirstPart() && rp.isLastPart()) {
+						addGraphic(new Graphic(rp.getFirstPoint(), switchSymbol));
+					} else if (!rp.isFirstPart() && !rp.isLastPart()) {
+						addGraphic(new Graphic(rp.getFirstPoint(), switchSymbol));
+						addGraphic(new Graphic(rp.getLastPoint(), switchSymbol));
 					}
 				}
 			}
-
-			showStartSymbol(startPoint);
-			showEndSymbol(endPoint);
 		}
 	}
 
@@ -157,11 +165,11 @@ public class NPRouteLayer extends GraphicsLayer {
 		this.endPoint = endPoint;
 	}
 
-	public void setRouteResult(NPRouteResult routeResult) {
+	public void setRouteResult(NPRouteResultV2 routeResult) {
 		this.routeResult = routeResult;
 	}
 
-	public NPRouteResult getRouteResult() {
+	public NPRouteResultV2 getRouteResult() {
 		return routeResult;
 	}
 

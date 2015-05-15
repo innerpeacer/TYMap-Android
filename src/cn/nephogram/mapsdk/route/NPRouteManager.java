@@ -1,9 +1,7 @@
 package cn.nephogram.mapsdk.route;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -53,7 +51,7 @@ public class NPRouteManager {
 			} else {
 				Route route = routeResult.getRoutes().get(0);
 				if (route != null) {
-					NPRouteResult result = processRouteResult(route);
+					NPRouteResultV2 result = processRouteResultV2(route);
 
 					if (result == null) {
 						return;
@@ -178,61 +176,62 @@ public class NPRouteManager {
 		return new NPRouteResultV2(routePartArray);
 	}
 
-	private NPRouteResult processRouteResult(Route r) {
-		Map<Integer, List<NPLocalPoint>> pointDict = new HashMap<Integer, List<NPLocalPoint>>();
-
-		List<Integer> floorArray = new ArrayList<Integer>();
-		Map<Integer, Polyline> routeDict = new HashMap<Integer, Polyline>();
-
-		Polyline routeLine = (Polyline) r.getRouteGraphic().getGeometry();
-
-		int pathNum = (int) routeLine.getPathCount();
-		if (pathNum > 0) {
-			int num = routeLine.getPathSize(0);
-
-			for (int i = 0; i < num; ++i) {
-				Point p = routeLine.getPoint(i);
-
-				NPLocalPoint lp = routePointConverter
-						.getLocalPointFromRoutePoint(p);
-				boolean isValid = routePointConverter.checkPointValidity(lp);
-				if (isValid) {
-					if (!pointDict.containsKey(lp.getFloor())) {
-						pointDict.put(lp.getFloor(),
-								new ArrayList<NPLocalPoint>());
-						floorArray.add(lp.getFloor());
-					}
-
-					List<NPLocalPoint> array = pointDict.get(lp.getFloor());
-					array.add(lp);
-				}
-			}
-		}
-
-		for (Integer f : floorArray) {
-			List<NPLocalPoint> array = pointDict.get(f);
-
-			Polyline polyline = new Polyline();
-			int index = 0;
-			for (NPLocalPoint lp : array) {
-				if (index == 0) {
-					polyline.startPath(lp.getX(), lp.getY());
-				} else {
-					polyline.lineTo(lp.getX(), lp.getY());
-				}
-				index++;
-			}
-
-			routeDict.put(f, polyline);
-		}
-
-		if (routeDict.size() < 1) {
-			return null;
-		}
-
-		return new NPRouteResult(routeDict, floorArray);
-
-	}
+	// private NPRouteResult processRouteResult(Route r) {
+	// Map<Integer, List<NPLocalPoint>> pointDict = new HashMap<Integer,
+	// List<NPLocalPoint>>();
+	//
+	// List<Integer> floorArray = new ArrayList<Integer>();
+	// Map<Integer, Polyline> routeDict = new HashMap<Integer, Polyline>();
+	//
+	// Polyline routeLine = (Polyline) r.getRouteGraphic().getGeometry();
+	//
+	// int pathNum = (int) routeLine.getPathCount();
+	// if (pathNum > 0) {
+	// int num = routeLine.getPathSize(0);
+	//
+	// for (int i = 0; i < num; ++i) {
+	// Point p = routeLine.getPoint(i);
+	//
+	// NPLocalPoint lp = routePointConverter
+	// .getLocalPointFromRoutePoint(p);
+	// boolean isValid = routePointConverter.checkPointValidity(lp);
+	// if (isValid) {
+	// if (!pointDict.containsKey(lp.getFloor())) {
+	// pointDict.put(lp.getFloor(),
+	// new ArrayList<NPLocalPoint>());
+	// floorArray.add(lp.getFloor());
+	// }
+	//
+	// List<NPLocalPoint> array = pointDict.get(lp.getFloor());
+	// array.add(lp);
+	// }
+	// }
+	// }
+	//
+	// for (Integer f : floorArray) {
+	// List<NPLocalPoint> array = pointDict.get(f);
+	//
+	// Polyline polyline = new Polyline();
+	// int index = 0;
+	// for (NPLocalPoint lp : array) {
+	// if (index == 0) {
+	// polyline.startPath(lp.getX(), lp.getY());
+	// } else {
+	// polyline.lineTo(lp.getX(), lp.getY());
+	// }
+	// index++;
+	// }
+	//
+	// routeDict.put(f, polyline);
+	// }
+	//
+	// if (routeDict.size() < 1) {
+	// return null;
+	// }
+	//
+	// return new NPRouteResult(routeDict, floorArray);
+	//
+	// }
 
 	/**
 	 * 请求路径规划，在代理方法获取规划结果
@@ -322,7 +321,7 @@ public class NPRouteManager {
 		}
 	}
 
-	private void notifyDidSolveRoute(NPRouteResult route) {
+	private void notifyDidSolveRoute(NPRouteResultV2 route) {
 		for (NPRouteManagerListener listener : listeners) {
 			listener.didSolveRouteWithResult(this, route);
 		}
@@ -361,7 +360,7 @@ public class NPRouteManager {
 		 *            路径规划结果
 		 */
 		void didSolveRouteWithResult(NPRouteManager routeManager,
-				NPRouteResult routeResult);
+				NPRouteResultV2 routeResult);
 
 		/**
 		 * 路径规划失败回调方法

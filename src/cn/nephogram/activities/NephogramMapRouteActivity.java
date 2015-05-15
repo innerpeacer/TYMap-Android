@@ -18,7 +18,7 @@ import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.route.NPRouteManager;
 import cn.nephogram.mapsdk.route.NPRouteManager.NPRouteManagerListener;
-import cn.nephogram.mapsdk.route.NPRouteResult;
+import cn.nephogram.mapsdk.route.NPRouteResultV2;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.event.OnSingleTapListener;
@@ -38,7 +38,7 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 
 	NPRouteManager routeManager;
 	boolean isRouting;
-	NPRouteResult routeResult;
+	NPRouteResultV2 routeResult;
 
 	GraphicsLayer hintLayer;
 
@@ -61,7 +61,7 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 
 	@Override
 	public void didSolveRouteWithResult(NPRouteManager routeManager,
-			NPRouteResult rs) {
+			NPRouteResultV2 rs) {
 		Log.i(TAG, "didSolveRouteWithResult");
 		hintLayer.removeAll();
 
