@@ -1,12 +1,17 @@
 package cn.nephogram.mapsdk;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.widget.Toast;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
@@ -17,7 +22,7 @@ import cn.nephogram.mapsdk.layer.labellayer.NPLabelGroupLayer;
 import cn.nephogram.mapsdk.layer.structurelayer.NPStructureGroupLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
-import cn.nephogram.mapsdk.route.NPRouteResultV2;
+import cn.nephogram.mapsdk.route.NPRouteResult;
 
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
@@ -114,6 +119,21 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 *            目标楼层的地图信息
 	 */
 	public void setFloor(final NPMapInfo info) {
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date invalidDate = dateFormat.parse("2015-08-11");
+
+			Date now = new Date();
+			boolean isInvalid = now.after(invalidDate);
+			if (isInvalid) {
+				Toast.makeText(getContext(), "抱歉，SDK已过期", Toast.LENGTH_LONG)
+						.show();
+				return;
+			}
+		} catch (ParseException e) {
+			return;
+		}
+
 		if (currentMapInfo != null
 				&& info.getMapID().equalsIgnoreCase(currentMapInfo.getMapID())) {
 			return;
@@ -224,7 +244,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		routeLayer.showEndSymbol(end);
 	}
 
-	public void setRouteResult(NPRouteResultV2 rs) {
+	public void setRouteResult(NPRouteResult rs) {
 		routeLayer.setRouteResult(rs);
 	}
 

@@ -26,7 +26,9 @@ public class MainListActivity extends HelperListActivity {
 
 		NPMapEnvironment.setMapLanguage(NPMapLanguage.NPTraditionalChinese);
 
-		// copyFileIfNeeded();
+		if (!new File(mapRootDir).exists()) {
+			copyFileIfNeeded();
+		}
 
 		AppSettings settings = new AppSettings(this);
 
@@ -37,7 +39,6 @@ public class MainListActivity extends HelperListActivity {
 		settings.setDefaultBuildingID("H85200001");
 
 		setTitle(getResources().getString(R.string.app_name));
-
 	};
 
 	void copyFileIfNeeded() {
@@ -49,7 +50,6 @@ public class MainListActivity extends HelperListActivity {
 
 		FileHelper.deleteFile(new File(targetPath));
 		FileHelper.copyFolderFromAsset(this, sourcePath, targetPath);
-
 	}
 
 	protected void constructList() {

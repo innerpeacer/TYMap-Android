@@ -10,8 +10,8 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 
 import cn.nephogram.data.NPLocalPoint;
-import cn.nephogram.datamanager.NPMapFileManager;
 import cn.nephogram.mapsdk.data.NPMapInfo;
+import cn.nephogram.mapsdk.datamanager.NPMapFileManager;
 
 import com.esri.core.geometry.Point;
 import com.esri.core.map.FeatureSet;

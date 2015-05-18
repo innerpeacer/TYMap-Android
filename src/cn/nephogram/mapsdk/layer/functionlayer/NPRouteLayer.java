@@ -8,7 +8,7 @@ import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.route.NPRoutePart;
-import cn.nephogram.mapsdk.route.NPRouteResultV2;
+import cn.nephogram.mapsdk.route.NPRouteResult;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
@@ -36,7 +36,7 @@ public class NPRouteLayer extends GraphicsLayer {
 
 	Symbol routeSymbol;
 
-	NPRouteResultV2 routeResult;
+	NPRouteResult routeResult;
 
 	public NPRouteLayer(NPMapView mapView) {
 		super();
@@ -52,7 +52,7 @@ public class NPRouteLayer extends GraphicsLayer {
 		endPoint = null;
 	}
 
-	public void showRouteResultOnFloor(int floor) {
+	public List<Polyline> showRouteResultOnFloor(int floor) {
 		removeAll();
 
 		List<Polyline> linesToReturn = showLinesForRouteResultOnFloor(floor);
@@ -62,6 +62,7 @@ public class NPRouteLayer extends GraphicsLayer {
 		showStartSymbol(startPoint);
 		showEndSymbol(endPoint);
 
+		return linesToReturn;
 	}
 
 	private List<Polyline> showLinesForRouteResultOnFloor(int floor) {
@@ -165,11 +166,11 @@ public class NPRouteLayer extends GraphicsLayer {
 		this.endPoint = endPoint;
 	}
 
-	public void setRouteResult(NPRouteResultV2 routeResult) {
+	public void setRouteResult(NPRouteResult routeResult) {
 		this.routeResult = routeResult;
 	}
 
-	public NPRouteResultV2 getRouteResult() {
+	public NPRouteResult getRouteResult() {
 		return routeResult;
 	}
 

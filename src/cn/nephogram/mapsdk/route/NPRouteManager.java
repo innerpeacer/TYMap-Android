@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
-import android.util.Log;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.data.NPBuilding;
@@ -45,22 +44,20 @@ public class NPRouteManager {
 
 		@Override
 		public void run() {
-			Log.i(TAG, "Route Result back");
+			// Log.i(TAG, "Route Result back");
 			if (routeResult == null) {
 				notifyDidFailSolveRoute(mException);
 			} else {
 				Route route = routeResult.getRoutes().get(0);
 				if (route != null) {
-					NPRouteResultV2 result = processRouteResultV2(route);
+					NPRouteResult result = processRouteResultV2(route);
 
 					if (result == null) {
 						return;
 					}
 					notifyDidSolveRoute(result);
 				}
-
 			}
-
 		}
 	};
 
@@ -75,7 +72,7 @@ public class NPRouteManager {
 	 */
 	public NPRouteManager(NPBuilding building, UserCredentials credential,
 			List<NPMapInfo> mapInfoArray) {
-		Log.i(TAG, "url:" + building.getRouteURL());
+		// Log.i(TAG, "url:" + building.getRouteURL());
 
 		allMapInfoArray.addAll(mapInfoArray);
 		NPMapInfo info = allMapInfoArray.get(0);
@@ -107,7 +104,7 @@ public class NPRouteManager {
 		t.start();
 	}
 
-	private NPRouteResultV2 processRouteResultV2(Route r) {
+	private NPRouteResult processRouteResultV2(Route r) {
 		List<List<NPLocalPoint>> pointArray = new ArrayList<List<NPLocalPoint>>();
 		List<Integer> floorArray = new ArrayList<Integer>();
 
@@ -173,7 +170,7 @@ public class NPRouteManager {
 			}
 		}
 
-		return new NPRouteResultV2(routePartArray);
+		return new NPRouteResult(routePartArray);
 	}
 
 	// private NPRouteResult processRouteResult(Route r) {
@@ -321,7 +318,7 @@ public class NPRouteManager {
 		}
 	}
 
-	private void notifyDidSolveRoute(NPRouteResultV2 route) {
+	private void notifyDidSolveRoute(NPRouteResult route) {
 		for (NPRouteManagerListener listener : listeners) {
 			listener.didSolveRouteWithResult(this, route);
 		}
@@ -360,7 +357,7 @@ public class NPRouteManager {
 		 *            路径规划结果
 		 */
 		void didSolveRouteWithResult(NPRouteManager routeManager,
-				NPRouteResultV2 routeResult);
+				NPRouteResult routeResult);
 
 		/**
 		 * 路径规划失败回调方法

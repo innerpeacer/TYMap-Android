@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import cn.nephogram.datamanager.NPMapFileManager;
 import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.NPMapView;
@@ -16,6 +15,7 @@ import cn.nephogram.mapsdk.NPMapView.NPMapViewListenser;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
+import cn.nephogram.mapsdk.datamanager.NPMapFileManager;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.settings.AppSettings;
 

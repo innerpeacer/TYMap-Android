@@ -1,4 +1,4 @@
-package cn.nephogram.datamanager;
+package cn.nephogram.mapsdk.datamanager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,8 +19,6 @@ public class NPMapFileManager {
 	private static String JSON_FILE_LABEL = "%s_LABEL.json";
 
 	private static String JSON_FILE_LANDMARK = "%s_LANDMARK.json";
-
-	// #define FILE_LAYER_PATH_LANDMARK @"%@_LANDMARK.json"
 
 	// private static String JSON_FILE_AOI = "AOI.json";
 
