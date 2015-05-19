@@ -10,6 +10,12 @@
         android:layout_height="match_parent" >
     </cn.nephogram.mapsdk.NPMapView>
 
+    <TextView android:id="@+id/routeHintLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
+    
     <ListView
         android:id="@+id/list_floor"
         android:layout_width="150dp"

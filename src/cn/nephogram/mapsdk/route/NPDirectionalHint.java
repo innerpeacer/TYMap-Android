@@ -43,6 +43,9 @@ public class NPDirectionalHint {
 		length = GeometryEngine.distance(startPoint, endPoint, null);
 		currentAngle = vector.getAngle();
 		this.previousAngle = previousAngle;
+
+		relativeDirection = calculateRelativeDirection(currentAngle,
+				previousAngle);
 	}
 
 	public String getLandmarkString() {

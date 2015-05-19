@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.map.R;
@@ -16,8 +17,10 @@ import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.poi.NPPoi;
+import cn.nephogram.mapsdk.route.NPDirectionalHint;
 import cn.nephogram.mapsdk.route.NPRouteManager;
 import cn.nephogram.mapsdk.route.NPRouteManager.NPRouteManagerListener;
+import cn.nephogram.mapsdk.route.NPRoutePart;
 import cn.nephogram.mapsdk.route.NPRouteResult;
 
 import com.esri.android.map.GraphicsLayer;
@@ -40,12 +43,17 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	boolean isRouting;
 	NPRouteResult routeResult;
 
+	NPRoutePart currentRoutePart;
+	List<NPDirectionalHint> routeGuides;
+
 	GraphicsLayer hintLayer;
 
 	private Button startButton;
 	private Button endButton;
 	private Button requestRouteButton;
 	private Button resetButton;
+
+	private TextView routeHintLabel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +79,16 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		mapView.setRouteEnd(endPoint);
 
 		mapView.showRouteResultOnCurrentFloor();
+
+		List<NPRoutePart> routePartArray = routeResult
+				.getRoutePartsOnFloor(currentMapInfo.getFloorNumber());
+		if (routePartArray != null && routePartArray.size() > 0) {
+			currentRoutePart = routePartArray.get(0);
+		}
+
+		if (currentRoutePart != null) {
+			routeGuides = routeResult.getRouteDirectionalHint(currentRoutePart);
+		}
 	}
 
 	public void onFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo) {
@@ -101,7 +119,7 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		hintLayer = new GraphicsLayer();
 		mapView.addLayer(hintLayer);
 
-		mapView.setOnSingleTapListener(this);
+		// mapView.setOnSingleTapListener(this);
 	}
 
 	private void initSymbols() {
@@ -130,14 +148,14 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 
 	@Override
 	public void onSingleTap(float x, float y) {
-		Point mappoint = mapView.toMapPoint(x, y);
-
-		currentPoint = mappoint;
-
-		SimpleMarkerSymbol sms = new SimpleMarkerSymbol(Color.GREEN, 5,
-				com.esri.core.symbol.SimpleMarkerSymbol.STYLE.CIRCLE);
-		hintLayer.removeAll();
-		hintLayer.addGraphic(new Graphic(mappoint, sms));
+		// Point mappoint = mapView.toMapPoint(x, y);
+		//
+		// currentPoint = mappoint;
+		//
+		// SimpleMarkerSymbol sms = new SimpleMarkerSymbol(Color.GREEN, 5,
+		// com.esri.core.symbol.SimpleMarkerSymbol.STYLE.CIRCLE);
+		// hintLayer.removeAll();
+		// hintLayer.addGraphic(new Graphic(mappoint, sms));
 	}
 
 	private void setStartPoint() {
@@ -200,6 +218,8 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 
 		resetButton = (Button) findViewById(R.id.btn_reset);
 		resetButton.setOnClickListener(this);
+
+		routeHintLabel = (TextView) findViewById(R.id.routeHintLabel);
 	}
 
 	@Override
@@ -230,13 +250,77 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		contentViewID = R.layout.activity_map_route;
 	}
 
+	int index = 0;
+
 	@Override
 	public void onClickAtPoint(NPMapView mapView, Point mappoint) {
 		super.onClickAtPoint(mapView, mappoint);
+
+		// Point mappoint = mapView.toMapPoint(x, y);
+
+		currentPoint = mappoint;
+
+		SimpleMarkerSymbol sms = new SimpleMarkerSymbol(Color.GREEN, 5,
+				com.esri.core.symbol.SimpleMarkerSymbol.STYLE.CIRCLE);
+		hintLayer.removeAll();
+		hintLayer.addGraphic(new Graphic(mappoint, sms));
+
+		Log.i(TAG, "Click: " + mappoint.getX() + ", " + mappoint.getY());
+
+		NPLocalPoint localPoint = new NPLocalPoint(mappoint.getX(),
+				mappoint.getY(), currentMapInfo.getFloorNumber());
+
+		if (routeResult != null) {
+
+			boolean isDeviating = routeResult.isDeviatingFromRoute(localPoint,
+					10.0);
+			if (isDeviating) {
+				Toast.makeText(getBaseContext(), "已经偏离导航线，重新规划！",
+						Toast.LENGTH_LONG).show();
+				routeManager.requestRoute(localPoint, endPoint);
+			} else {
+				mapView.showRemainingRouteResultOnCurrentFloor(localPoint);
+			}
+
+			// NPRoutePart nearestPart = routeResult
+			// .getNearestRoutePart(localPoint);
+			// if (nearestPart != currentRoutePart) {
+			// currentRoutePart = nearestPart;
+			// routeGuides = routeResult
+			// .getRouteDirectionalHint(currentRoutePart);
+			// }
+			//
+			// if (routeGuides != null && routeGuides.size() > 0) {
+			// NPDirectionalHint hint = routeResult
+			// .getDirectionalHintForLocationFromHints(localPoint,
+			// routeGuides);
+			// mapView.showRouteHint(hint, true);
+			//
+			// String hintString = "";
+			// if (hint.hasLandmark()) {
+			// hintString += hint.getLandmarkString();
+			// }
+			// hintString += hint.getDirectionString();
+			//
+			// routeHintLabel.setText(hintString);
+			// }
+
+		}
+
 	}
 
 	@Override
 	public void onPoiSelected(NPMapView mapView, List<NPPoi> poiList) {
 		super.onPoiSelected(mapView, poiList);
 	}
+
+	@Override
+	public void mapViewDidZoomed(NPMapView mapView) {
+		super.mapViewDidZoomed(mapView);
+
+		if (isRouting) {
+			mapView.showRouteResultOnCurrentFloor();
+		}
+	}
+
 }

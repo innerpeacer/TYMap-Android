@@ -11,8 +11,10 @@ import cn.nephogram.mapsdk.route.NPRoutePart;
 import cn.nephogram.mapsdk.route.NPRouteResult;
 
 import com.esri.android.map.GraphicsLayer;
+import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
+import com.esri.core.geometry.Proximity2DResult;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.CompositeSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
@@ -56,13 +58,95 @@ public class NPRouteLayer extends GraphicsLayer {
 		removeAll();
 
 		List<Polyline> linesToReturn = showLinesForRouteResultOnFloor(floor);
-
 		showSwitchSymbolForRouteResultOnFloor(floor);
+		showStartSymbol(startPoint);
+		showEndSymbol(endPoint);
+		return linesToReturn;
+	}
 
+	public List<Polyline> showRemainingRouteResultOnFloor(int floor,
+			NPLocalPoint location) {
+		removeAll();
+
+		List<Polyline> linesToReturn = showRemainingLinesForRouteResultOnFloor(
+				floor, location);
+		showSwitchSymbolForRouteResultOnFloor(floor);
 		showStartSymbol(startPoint);
 		showEndSymbol(endPoint);
 
 		return linesToReturn;
+	}
+
+	public NPRoutePart getNearestRoutePartWithLocation(NPLocalPoint location) {
+		NPRoutePart result = null;
+
+		if (routeResult != null) {
+			List<NPRoutePart> routePartArray = routeResult
+					.getRoutePartsOnFloor(location.getFloor());
+			if (routePartArray != null && routePartArray.size() > 0) {
+				double nearestDistance = Double.MAX_VALUE;
+
+				Point pos = new Point(location.getX(), location.getY());
+				for (NPRoutePart rp : routePartArray) {
+					Proximity2DResult pr = GeometryEngine.getNearestCoordinate(
+							rp.getRoute(), pos, false);
+					double distance = GeometryEngine.distance(
+							pr.getCoordinate(), pos, null);
+					if (distance < nearestDistance) {
+						nearestDistance = distance;
+						result = rp;
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	private List<Polyline> showRemainingLinesForRouteResultOnFloor(int floor,
+			NPLocalPoint location) {
+		List<Polyline> linesToReturn = new ArrayList<Polyline>();
+		NPRoutePart nearestRoutPart = getNearestRoutePartWithLocation(location);
+
+		if (routeResult != null) {
+			List<NPRoutePart> routePartArray = routeResult
+					.getRoutePartsOnFloor(floor);
+			if (routePartArray != null && routePartArray.size() > 0) {
+				for (NPRoutePart rp : routePartArray) {
+					if (rp == nearestRoutPart) {
+						Polyline remainingLine = getRemainLine(rp.getRoute(),
+								new Point(location.getX(), location.getY()));
+						if (remainingLine != null) {
+							addGraphic(new Graphic(remainingLine, routeSymbol));
+							linesToReturn.add(remainingLine);
+						}
+					} else {
+						addGraphic(new Graphic(rp.getRoute(), routeSymbol));
+						linesToReturn.add(rp.getRoute());
+					}
+				}
+			}
+		}
+
+		return linesToReturn;
+	}
+
+	private Polyline getRemainLine(Polyline originalLine, Point point) {
+
+		Polyline result = null;
+
+		Proximity2DResult proximityResult = GeometryEngine
+				.getNearestCoordinate(originalLine, point, false);
+		Point cutPoint = proximityResult.getCoordinate();
+		int index = proximityResult.getVertexIndex();
+
+		for (int i = index + 1; i < originalLine.getPointCount(); ++i) {
+			if (result == null) {
+				result = new Polyline();
+				result.startPath(cutPoint);
+			}
+			result.lineTo(originalLine.getPoint(i));
+		}
+		return result;
 	}
 
 	private List<Polyline> showLinesForRouteResultOnFloor(int floor) {

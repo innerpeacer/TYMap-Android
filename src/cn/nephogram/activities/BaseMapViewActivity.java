@@ -146,4 +146,9 @@ public abstract class BaseMapViewActivity extends Activity implements
 	public void onFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo) {
 		// Log.i(TAG, "" + mapInfo);
 	}
+
+	@Override
+	public void mapViewDidZoomed(NPMapView mapView) {
+
+	}
 }

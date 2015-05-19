@@ -11,17 +11,21 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.Toast;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.layer.NPLocationLayer;
+import cn.nephogram.mapsdk.layer.functionlayer.NPRouteArrowLayer;
+import cn.nephogram.mapsdk.layer.functionlayer.NPRouteHintLayer;
 import cn.nephogram.mapsdk.layer.functionlayer.NPRouteLayer;
 import cn.nephogram.mapsdk.layer.labellayer.NPLabelGroupLayer;
 import cn.nephogram.mapsdk.layer.structurelayer.NPStructureGroupLayer;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
+import cn.nephogram.mapsdk.route.NPDirectionalHint;
 import cn.nephogram.mapsdk.route.NPRouteResult;
 
 import com.esri.android.map.MapView;
@@ -30,6 +34,7 @@ import com.esri.android.map.event.OnSingleTapListener;
 import com.esri.android.map.event.OnZoomListener;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
+import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.symbol.MarkerSymbol;
 
@@ -49,7 +54,11 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	private NPStructureGroupLayer structureGroupLayer;
 	private NPLabelGroupLayer labelGroupLayer;
+
 	private NPRouteLayer routeLayer;
+	private NPRouteArrowLayer routeArrowLayer;
+	private NPRouteHintLayer routeHintLayer;
+
 	private NPLocationLayer locationLayer;
 
 	private Envelope initialEnvelope;
@@ -99,6 +108,12 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 		routeLayer = new NPRouteLayer(this);
 		addLayer(routeLayer);
+
+		routeHintLayer = new NPRouteHintLayer(context);
+		addLayer(routeHintLayer);
+
+		routeArrowLayer = new NPRouteArrowLayer(context, this);
+		addLayer(routeArrowLayer);
 
 		locationLayer = new NPLocationLayer();
 		addLayer(locationLayer);
@@ -156,6 +171,9 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		labelGroupLayer.removeGraphicsFromSublayers();
 
 		routeLayer.removeAll();
+		routeHintLayer.removeAll();
+		routeArrowLayer.removeAll();
+
 		locationLayer.removeAll();
 
 		new Thread(new Runnable() {
@@ -233,7 +251,38 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	}
 
 	public void showRouteResultOnCurrentFloor() {
-		routeLayer.showRouteResultOnFloor(currentMapInfo.getFloorNumber());
+		List<Polyline> linesToShow = routeLayer
+				.showRouteResultOnFloor(currentMapInfo.getFloorNumber());
+		if (linesToShow != null && linesToShow.size() > 0) {
+			Log.i(TAG, "Show Route Arrows");
+			routeArrowLayer.showRouteArrows(linesToShow);
+		}
+	}
+
+	public void showRemainingRouteResultOnCurrentFloor(NPLocalPoint lp) {
+		List<Polyline> linesToShow = routeLayer
+				.showRemainingRouteResultOnFloor(
+						currentMapInfo.getFloorNumber(), lp);
+		if (linesToShow != null && linesToShow.size() > 0) {
+			routeArrowLayer.showRouteArrows(linesToShow);
+		}
+	}
+
+	public void showRouteHint(NPDirectionalHint ds, boolean isCentered) {
+		NPRouteResult routeResult = routeLayer.getRouteResult();
+		if (routeResult != null) {
+			Polyline currentLine = ds.getRoutePart().getRoute();
+			Polyline subLine = NPRouteResult.getSubPolyline(currentLine,
+					ds.getStartPoint(), ds.getEndPoint());
+			routeHintLayer.showRouteHint(subLine);
+
+			if (isCentered) {
+				Point center = new Point((ds.getStartPoint().getX() + ds
+						.getEndPoint().getX()) * 0.5, (ds.getStartPoint()
+						.getY() + ds.getEndPoint().getY()) * 0.5);
+				centerAt(center, true);
+			}
+		}
 	}
 
 	public void showRouteStartSymbolOnCurrentFloor(NPLocalPoint start) {
@@ -270,10 +319,14 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	public void resetRouteLayer() {
 		routeLayer.reset();
+		routeHintLayer.removeAll();
+		routeArrowLayer.removeAll();
 	}
 
 	public void clearRouteLayer() {
 		routeLayer.removeAll();
+		routeHintLayer.removeAll();
+		routeArrowLayer.removeAll();
 	}
 
 	public void setLocationSymbol(MarkerSymbol markerSymbol) {
@@ -577,6 +630,10 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	public void postAction(float pivotX, float pivotY, double factor) {
 		boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
 		labelGroupLayer.setLabelLayerVisible(labelVisible);
+
+		if (listeners.size() > 0) {
+			notifyMapDidZoomed(this);
+		}
 	}
 
 	// 一般按5个字算，屏幕占距1cm，6m的房间内可以显示
@@ -646,6 +703,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		 */
 		void onFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo);
 
+		void mapViewDidZoomed(NPMapView mapView);
 	}
 
 	/**
@@ -687,6 +745,12 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	private void notifyFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo) {
 		for (NPMapViewListenser listener : listeners) {
 			listener.onFinishLoadingFloor(mapView, mapInfo);
+		}
+	}
+
+	private void notifyMapDidZoomed(NPMapView mapView) {
+		for (NPMapViewListenser listener : listeners) {
+			listener.mapViewDidZoomed(mapView);
 		}
 	}
 
