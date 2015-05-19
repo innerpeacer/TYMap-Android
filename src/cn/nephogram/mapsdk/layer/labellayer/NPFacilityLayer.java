@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.codehaus.jackson.JsonParser;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import cn.nephogram.mapsdk.NPMapType;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
@@ -21,21 +23,23 @@ import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
+import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
-import com.esri.core.renderer.Renderer;
-import com.esri.core.renderer.UniqueValue;
-import com.esri.core.renderer.UniqueValueRenderer;
+import com.esri.core.symbol.Symbol;
 
+@SuppressLint("UseSparseArrays")
 public class NPFacilityLayer extends GraphicsLayer {
 	static final String TAG = NPFacilityLayer.class.getSimpleName();
 	private Context context;
 
-	@SuppressLint("UseSparseArrays")
-	private Map<Integer, List<Graphic>> groupedGraphicDict = new HashMap<Integer, List<Graphic>>();
-	private Map<String, Graphic> facilityDict = new HashMap<String, Graphic>();
-	private Map<String, Integer> facilityGidDict = new HashMap<String, Integer>();
+	Map<Integer, NPPictureMarkerSymbol> allFacilitySymbols = new HashMap<Integer, NPPictureMarkerSymbol>();
+	Map<Integer, NPPictureMarkerSymbol> allHighlightFacilitySymbols = new HashMap<Integer, NPPictureMarkerSymbol>();
+
+	Map<Integer, List<NPFacilityLabel>> groupedFacilityLabelDict = new HashMap<Integer, List<NPFacilityLabel>>();
+	Map<String, NPFacilityLabel> facilityLabelDict = new HashMap<String, NPFacilityLabel>();
+	Map<Graphic, Integer> graphicGidDict = new HashMap<Graphic, Integer>();
 
 	private NPRenderingScheme renderingScheme;
 
@@ -45,40 +49,30 @@ public class NPFacilityLayer extends GraphicsLayer {
 		this.context = context;
 		this.renderingScheme = renderingScheme;
 
-		setRenderer(createFacilityRender());
+		getFacilitySymbols();
 	}
 
-	private Renderer createFacilityRender() {
-		UniqueValueRenderer facilityRenderer = new UniqueValueRenderer();
-		List<UniqueValue> uvInfo = new ArrayList<UniqueValue>();
+	public void updateLabelState() {
+		Log.i(TAG, "updateLabelState");
 
-		for (Integer colorID : renderingScheme.getIconSymbolDictionary()
-				.keySet()) {
-			String icon = renderingScheme.getIconSymbolDictionary()
-					.get(colorID) + "_normal";
-			int resourceID = context.getResources().getIdentifier(icon,
-					"drawable", context.getPackageName());
-			NPPictureMarkerSymbol ps = new NPPictureMarkerSymbol(context
-					.getResources().getDrawable(resourceID));
-			ps.setWidth(16);
-			ps.setHeight(16);
-
-			UniqueValue uv = new UniqueValue();
-			uv.setSymbol(ps);
-			uv.setValue(new Integer[] { colorID });
-			uvInfo.add(uv);
+		for (NPFacilityLabel fl : facilityLabelDict.values()) {
+			if (fl.isHidden()) {
+				Symbol symbol = null;
+				updateGraphic(graphicGidDict.get(fl.getFacilityGraphic()),
+						symbol);
+			} else {
+				updateGraphic(graphicGidDict.get(fl.getFacilityGraphic()),
+						fl.getCurrentSymbol());
+			}
 		}
-
-		facilityRenderer.setField1("COLOR");
-		facilityRenderer.setUniqueValueInfos(uvInfo);
-		return facilityRenderer;
 	}
 
 	public void loadContentsFromFileWithInfo(String path) {
 		removeAll();
-		groupedGraphicDict.clear();
-		facilityDict.clear();
-		facilityGidDict.clear();
+
+		groupedFacilityLabelDict.clear();
+		facilityLabelDict.clear();
+		graphicGidDict.clear();
 
 		JsonFactory factory = new JsonFactory();
 
@@ -89,24 +83,40 @@ public class NPFacilityLayer extends GraphicsLayer {
 			Graphic[] graphics = set.getGraphics();
 
 			for (Graphic graphic : graphics) {
-				int categoryID = (Integer) graphic.getAttributeValue("COLOR");
-				if (!groupedGraphicDict.keySet().contains(categoryID)) {
-					List<Graphic> graphicList = new ArrayList<Graphic>();
-					groupedGraphicDict.put(categoryID, graphicList);
+				Integer categoryID = (Integer) graphic
+						.getAttributeValue("COLOR");
+				if (categoryID == null) {
+					continue;
 				}
 
-				List<Graphic> graphicList = groupedGraphicDict.get(categoryID);
-				graphicList.add(graphic);
+				Point pos = (Point) graphic.getGeometry();
+
+				if (!groupedFacilityLabelDict.keySet().contains(categoryID)) {
+					List<NPFacilityLabel> array = new ArrayList<NPFacilityLabel>();
+					groupedFacilityLabelDict.put(categoryID, array);
+				}
+
+				NPFacilityLabel fLabel = new NPFacilityLabel(categoryID, pos);
+				fLabel.setFacilityGraphic(graphic);
+				fLabel.setNormalFacilitySymbol(allFacilitySymbols
+						.get(categoryID));
+				fLabel.setHighlightedFaciltySymbol(allHighlightFacilitySymbols
+						.get(categoryID));
+				fLabel.setHighlighted(false);
+
+				List<NPFacilityLabel> array = groupedFacilityLabelDict
+						.get(categoryID);
+				array.add(fLabel);
 
 				String poiID = (String) graphic
 						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-				facilityDict.put(poiID, graphic);
+				facilityLabelDict.put(poiID, fLabel);
 
 				int gid = addGraphic(graphic);
-				facilityGidDict.put(poiID, gid);
+				graphicGidDict.put(graphic, gid);
 			}
 
-			// addGraphics(graphics);
+			// updateLabelState();
 
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -117,53 +127,60 @@ public class NPFacilityLayer extends GraphicsLayer {
 		}
 	}
 
-	// - (void)showFacilityWithCategory:(int)categoryID
-	// {
-	// [self removeAllGraphics];
-	// NSArray *array = groupedFacilityDict[@(categoryID)];
-	// [self addGraphics:array];
-	// }
-	//
-	// - (void)showAllFacilities
-	// {
-	// [self removeAllGraphics];
-	// for (NSArray *array in groupedFacilityDict.allValues) {
-	// [self addGraphics:array];
-	// }
-	// }
-	//
-	// - (NSArray *)getAllFacilityCategoryIDOnCurrentFloor
-	// {
-	// return [groupedFacilityDict allKeys];
-	// }
-
 	public void showFacilityWithCategory(int categoryID) {
-		removeAll();
-		if (groupedGraphicDict.keySet().contains(categoryID)) {
-			List<Graphic> graphicList = groupedGraphicDict.get(categoryID);
+		Iterator<Integer> iter = groupedFacilityLabelDict.keySet().iterator();
+		while (iter.hasNext()) {
+			int key = iter.next();
+			List<NPFacilityLabel> array = groupedFacilityLabelDict.get(key);
 
-			Graphic[] graphics = new Graphic[graphicList.size()];
-			graphics = graphicList.toArray(graphics);
-			addGraphics(graphics);
+			if (key == categoryID) {
+				for (NPFacilityLabel fl : array) {
+					fl.setCurrentSymbol(fl.getHighlightedFaciltySymbol());
+				}
+			} else {
+				for (NPFacilityLabel fl : array) {
+					fl.setCurrentSymbol(fl.getNormalFacilitySymbol());
+				}
+			}
 		}
+		updateLabelState();
+	}
+
+	public void showFacilityWithCategories(List<Integer> categoryIDs) {
+		Iterator<Integer> iter = groupedFacilityLabelDict.keySet().iterator();
+		while (iter.hasNext()) {
+			int key = iter.next();
+			List<NPFacilityLabel> array = groupedFacilityLabelDict.get(key);
+			if (categoryIDs.contains(key)) {
+				for (NPFacilityLabel fl : array) {
+					fl.setCurrentSymbol(fl.getHighlightedFaciltySymbol());
+				}
+			} else {
+				for (NPFacilityLabel fl : array) {
+					fl.setCurrentSymbol(fl.getNormalFacilitySymbol());
+				}
+			}
+		}
+		updateLabelState();
 	}
 
 	public void showAllFacilities() {
-		removeAll();
-		for (List<Graphic> graphicList : groupedGraphicDict.values()) {
-			Graphic[] graphics = new Graphic[graphicList.size()];
-			graphics = graphicList.toArray(graphics);
-			addGraphics(graphics);
+		for (List<NPFacilityLabel> array : groupedFacilityLabelDict.values()) {
+			for (NPFacilityLabel fl : array) {
+				fl.setCurrentSymbol(fl.getNormalFacilitySymbol());
+			}
 		}
+		updateLabelState();
 	}
 
 	public List<Integer> getAllFacilityCategoryIDOnCurrentFloor() {
-		return new ArrayList<Integer>(groupedGraphicDict.keySet());
+		return new ArrayList<Integer>(groupedFacilityLabelDict.keySet());
 	}
 
 	public NPPoi getPoiWithPoiID(String pid) {
 		NPPoi result = null;
-		Graphic graphic = facilityDict.get(pid);
+		NPFacilityLabel fl = facilityLabelDict.get(pid);
+		Graphic graphic = fl.getFacilityGraphic();
 		if (graphic != null) {
 			result = new NPPoi(
 					(String) graphic
@@ -185,9 +202,46 @@ public class NPFacilityLayer extends GraphicsLayer {
 	}
 
 	public void highlightPoi(String poiID) {
-		if (facilityGidDict.containsKey(poiID)) {
-			int gid = facilityGidDict.get(poiID);
-			setSelectedGraphics(new int[] { gid }, true);
+		if (facilityLabelDict.containsKey(poiID)) {
+			NPFacilityLabel fl = facilityLabelDict.get(poiID);
+			fl.setCurrentSymbol(fl.getHighlightedFaciltySymbol());
+		}
+
+		updateLabelState();
+	}
+
+	private void getFacilitySymbols() {
+		Map<Integer, String> iconDict = renderingScheme
+				.getIconSymbolDictionary();
+
+		Iterator<Integer> iter = iconDict.keySet().iterator();
+		while (iter.hasNext()) {
+			Integer colorID = iter.next();
+			String icon = iconDict.get(colorID);
+
+			{
+				String iconNormal = icon + "_normal";
+				int resourceIDNormal = context.getResources().getIdentifier(
+						iconNormal, "drawable", context.getPackageName());
+				NPPictureMarkerSymbol psNormal = new NPPictureMarkerSymbol(
+						context.getResources().getDrawable(resourceIDNormal));
+				psNormal.setWidth(16);
+				psNormal.setHeight(16);
+				allFacilitySymbols.put(colorID, psNormal);
+			}
+			{
+				String iconHighlighted = icon + "_highlighted";
+				int resourceIDHighlighted = context.getResources()
+						.getIdentifier(iconHighlighted, "drawable",
+								context.getPackageName());
+				NPPictureMarkerSymbol psHighlighted = new NPPictureMarkerSymbol(
+						context.getResources().getDrawable(
+								resourceIDHighlighted));
+				psHighlighted.setWidth(16);
+				psHighlighted.setHeight(16);
+				allHighlightFacilitySymbols.put(colorID, psHighlighted);
+			}
 		}
 	}
+
 }

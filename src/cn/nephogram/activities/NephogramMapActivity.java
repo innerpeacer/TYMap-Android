@@ -23,7 +23,7 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// mapView.setHighlightPoiOnSelection(true);
+		mapView.setHighlightPoiOnSelection(true);
 
 		graphicsLayer = new GraphicsLayer();
 		mapView.addLayer(graphicsLayer);
@@ -55,6 +55,26 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 		// 3662129.5815833337);
 
 		// mapView.restrictLocation(testPoint, rect, true);
+
+		List<Integer> allFacilitiesIDs = mapView
+				.getAllFacilityCategoryIDOnCurrentFloor();
+
+		// Log.i(TAG, allFacilitiesIDs.toString());
+
+		if (index > allFacilitiesIDs.size()) {
+			index = 0;
+		}
+
+		if (index == allFacilitiesIDs.size()) {
+			mapView.showAllFacilitiesOnCurrentFloor();
+			index++;
+		} else if (allFacilitiesIDs.size() > 0) {
+			Log.i(TAG,
+					"Current Index: " + index + ", "
+							+ allFacilitiesIDs.get(index));
+			mapView.showFacilityOnCurrentWithCategory(allFacilitiesIDs
+					.get(index++));
+		}
 	}
 
 	@Override

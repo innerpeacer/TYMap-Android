@@ -24,16 +24,13 @@ import cn.nephogram.mapsdk.route.NPRoutePart;
 import cn.nephogram.mapsdk.route.NPRouteResult;
 
 import com.esri.android.map.GraphicsLayer;
-import com.esri.android.map.event.OnSingleTapListener;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 
 public class NephogramMapRouteActivity extends BaseMapViewActivity implements
-		OnClickListener, OnSingleTapListener, NPRouteManagerListener {
+		OnClickListener, NPRouteManagerListener {
 	static final String TAG = NephogramMapRouteActivity.class.getSimpleName();
-
-	private static final long serialVersionUID = 5847083145291274344L;
 
 	Point currentPoint;
 	NPLocalPoint startPoint;
@@ -53,7 +50,7 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 	private Button requestRouteButton;
 	private Button resetButton;
 
-	private TextView routeHintLabel;
+	TextView routeHintLabel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -144,18 +141,6 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		switchSymbol.setWidth(37);
 		switchSymbol.setHeight(37);
 		mapView.setSwitchSymbol(switchSymbol);
-	}
-
-	@Override
-	public void onSingleTap(float x, float y) {
-		// Point mappoint = mapView.toMapPoint(x, y);
-		//
-		// currentPoint = mappoint;
-		//
-		// SimpleMarkerSymbol sms = new SimpleMarkerSymbol(Color.GREEN, 5,
-		// com.esri.core.symbol.SimpleMarkerSymbol.STYLE.CIRCLE);
-		// hintLayer.removeAll();
-		// hintLayer.addGraphic(new Graphic(mappoint, sms));
 	}
 
 	private void setStartPoint() {
