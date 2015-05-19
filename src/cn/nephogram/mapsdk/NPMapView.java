@@ -70,6 +70,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	private boolean highlightPoiOnSelection = false;
 
+	private double lastRotationAngle = 0.0;
+
 	// =====================================
 	public NPMapView(Context context) {
 		super(context);
@@ -103,7 +105,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				renderingScheme, sr, null);
 		addLayer(structureGroupLayer);
 
-		labelGroupLayer = new NPLabelGroupLayer(context, renderingScheme, sr);
+		labelGroupLayer = new NPLabelGroupLayer(context, this, renderingScheme,
+				sr);
 		addLayer(labelGroupLayer);
 
 		routeLayer = new NPRouteLayer(this);
@@ -212,8 +215,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				}
 
 				if (!isInterupted) {
-					boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
-					labelGroupLayer.setLabelLayerVisible(labelVisible);
+					labelGroupLayer.updateLabels();
 					notifyFinishLoadingFloor(NPMapView.this, currentMapInfo);
 				}
 
@@ -363,6 +365,11 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 		default:
 			break;
+		}
+
+		if (Math.abs(lastRotationAngle - getRotationAngle()) > 10) {
+			labelGroupLayer.updateLabels();
+			lastRotationAngle = getRotationAngle();
 		}
 	}
 
@@ -560,7 +567,6 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 		if (listeners.size() > 0) {
 			List<NPPoi> poiList = extractSelectedPoi(x, y);
-			// Log.i(TAG, "PoiList: " + poiList.size());
 			if (poiList.size() > 0) {
 				notifyPoiSelected(this, poiList);
 			}
@@ -573,15 +579,10 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	@Override
 	public void postPointerMove(float fromx, float fromy, float tox, float toy) {
-		// Log.i(TAG, "postPointerMove: " + fromx + ", " + fromy + ", " + tox
-		// + ", " + toy);
-		// checkMapCenter();
 	}
 
 	@Override
 	public void postPointerUp(float fromx, float fromy, float tox, float toy) {
-		// Log.i(TAG, "postPointerUp");
-		// checkMapCenter();
 	}
 
 	private long lastTimeCheckCenter = 0;
@@ -616,28 +617,21 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	@Override
 	public void prePointerMove(float fromx, float fromy, float tox, float toy) {
-		// Log.i(TAG, "prePointerMove");
 	}
 
 	@Override
 	public void prePointerUp(float fromx, float fromy, float tox, float toy) {
-		// Log.i(TAG, "prePointerUp");
 		checkMapCenter();
-
 	}
 
 	@Override
 	public void postAction(float pivotX, float pivotY, double factor) {
-		boolean labelVisible = getScale() < DEFAULT_SCALE_THRESHOLD;
-		labelGroupLayer.setLabelLayerVisible(labelVisible);
+		labelGroupLayer.updateLabels();
 
 		if (listeners.size() > 0) {
 			notifyMapDidZoomed(this);
 		}
 	}
-
-	// 一般按5个字算，屏幕占距1cm，6m的房间内可以显示
-	private static final double DEFAULT_SCALE_THRESHOLD = 600;
 
 	@Override
 	public void preAction(float pivotX, float pivotY, double factor) {

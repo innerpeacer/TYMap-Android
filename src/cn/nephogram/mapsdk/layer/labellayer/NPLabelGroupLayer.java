@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import cn.nephogram.mapsdk.NPMapType;
+import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.datamanager.NPMapFileManager;
@@ -16,24 +18,44 @@ import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Graphic;
 
 public class NPLabelGroupLayer extends GroupLayer {
+	static final String TAG = NPLabelGroupLayer.class.getSimpleName();
+
+	private NPMapView mapView;
+
 	private NPFacilityLayer facilityLayer;
 	private NPTextLabelLayer labelLayer;
 
-	public NPLabelGroupLayer(Context context,
+	private List<NPLabelBorder> visiableBorders = new ArrayList<NPLabelBorder>();
+
+	public NPLabelGroupLayer(Context context, NPMapView mapView,
 			NPRenderingScheme renderingScheme, SpatialReference sr) {
 		super();
 
-		facilityLayer = new NPFacilityLayer(context, renderingScheme, sr, null);
+		this.mapView = mapView;
+
+		facilityLayer = new NPFacilityLayer(context, this, renderingScheme, sr,
+				null);
 		addLayer(facilityLayer);
 
-		labelLayer = new NPTextLabelLayer(context, sr, null);
+		labelLayer = new NPTextLabelLayer(context, this, sr, null);
 		addLayer(labelLayer);
+	}
+
+	public NPMapView getMapView() {
+		return mapView;
+	}
+
+	public void updateLabels() {
+		Log.i(TAG, "updateLabels");
+		visiableBorders.clear();
+
+		facilityLayer.updateLabels(visiableBorders);
+		labelLayer.updateLabels(visiableBorders);
 	}
 
 	public void removeGraphicsFromSublayers() {
 		facilityLayer.removeAll();
 		labelLayer.removeAll();
-
 	}
 
 	public void loadFacilityContentsFromFileWithInfo(NPMapInfo info) {
@@ -48,6 +70,7 @@ public class NPLabelGroupLayer extends GroupLayer {
 
 	public void clearSelection() {
 		facilityLayer.clearSelection();
+		facilityLayer.showAllFacilities();
 	}
 
 	public List<Integer> getAllFacilityCategoryIDOnCurrentFloor() {
@@ -137,7 +160,4 @@ public class NPLabelGroupLayer extends GroupLayer {
 		return poiList;
 	}
 
-	public void setLabelLayerVisible(boolean isVisible) {
-		labelLayer.setVisible(isVisible);
-	}
 }

@@ -14,7 +14,6 @@ import org.codehaus.jackson.JsonParser;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import cn.nephogram.mapsdk.NPMapType;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
@@ -33,6 +32,7 @@ import com.esri.core.symbol.Symbol;
 public class NPFacilityLayer extends GraphicsLayer {
 	static final String TAG = NPFacilityLayer.class.getSimpleName();
 	private Context context;
+	private NPLabelGroupLayer groupLayer;
 
 	Map<Integer, NPPictureMarkerSymbol> allFacilitySymbols = new HashMap<Integer, NPPictureMarkerSymbol>();
 	Map<Integer, NPPictureMarkerSymbol> allHighlightFacilitySymbols = new HashMap<Integer, NPPictureMarkerSymbol>();
@@ -43,18 +43,47 @@ public class NPFacilityLayer extends GraphicsLayer {
 
 	private NPRenderingScheme renderingScheme;
 
-	public NPFacilityLayer(Context context, NPRenderingScheme renderingScheme,
+	public NPFacilityLayer(Context context, NPLabelGroupLayer groupLayer,
+			NPRenderingScheme renderingScheme,
 			SpatialReference spatialReference, Envelope envelope) {
 		super(spatialReference, envelope);
 		this.context = context;
+		this.groupLayer = groupLayer;
 		this.renderingScheme = renderingScheme;
 
 		getFacilitySymbols();
 	}
 
-	public void updateLabelState() {
-		Log.i(TAG, "updateLabelState");
+	public void updateLabels(List<NPLabelBorder> array) {
+		updateLabelBorders(array);
+		updateLabelState();
+	}
 
+	private void updateLabelBorders(List<NPLabelBorder> array) {
+		for (NPFacilityLabel fl : facilityLabelDict.values()) {
+			Point screenPoint = groupLayer.getMapView().toScreenPoint(
+					fl.getPosition());
+			NPLabelBorder border = NPLabelBorderCalculator
+					.getFacilityLabelBorder(screenPoint);
+
+			boolean isOverlapping = false;
+			for (NPLabelBorder visibleBorder : array) {
+				if (NPLabelBorder.CheckIntersect(border, visibleBorder)) {
+					isOverlapping = true;
+					break;
+				}
+			}
+
+			if (isOverlapping) {
+				fl.setHidden(true);
+			} else {
+				fl.setHidden(false);
+				array.add(border);
+			}
+		}
+	}
+
+	private void updateLabelState() {
 		for (NPFacilityLabel fl : facilityLabelDict.values()) {
 			if (fl.isHidden()) {
 				Symbol symbol = null;
@@ -225,8 +254,8 @@ public class NPFacilityLayer extends GraphicsLayer {
 						iconNormal, "drawable", context.getPackageName());
 				NPPictureMarkerSymbol psNormal = new NPPictureMarkerSymbol(
 						context.getResources().getDrawable(resourceIDNormal));
-				psNormal.setWidth(16);
-				psNormal.setHeight(16);
+				psNormal.setWidth(26);
+				psNormal.setHeight(26);
 				allFacilitySymbols.put(colorID, psNormal);
 			}
 			{
@@ -237,8 +266,8 @@ public class NPFacilityLayer extends GraphicsLayer {
 				NPPictureMarkerSymbol psHighlighted = new NPPictureMarkerSymbol(
 						context.getResources().getDrawable(
 								resourceIDHighlighted));
-				psHighlighted.setWidth(16);
-				psHighlighted.setHeight(16);
+				psHighlighted.setWidth(26);
+				psHighlighted.setHeight(26);
 				allHighlightFacilitySymbols.put(colorID, psHighlighted);
 			}
 		}

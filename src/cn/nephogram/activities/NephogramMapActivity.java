@@ -47,19 +47,8 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 		graphicsLayer.addGraphic(new Graphic(mappoint, new SimpleMarkerSymbol(
 				Color.GREEN, 5, STYLE.CIRCLE)));
 
-		// mapView.translateInMapUnit(5, 5, true);
-		// mapView.translateInScreenUnit(300, 300, true);
-
-		// Rect rect = new Rect(100, 100, 200, 200);
-		// Point testPoint = new Point(1.3523012707863146E7,
-		// 3662129.5815833337);
-
-		// mapView.restrictLocation(testPoint, rect, true);
-
 		List<Integer> allFacilitiesIDs = mapView
 				.getAllFacilityCategoryIDOnCurrentFloor();
-
-		// Log.i(TAG, allFacilitiesIDs.toString());
 
 		if (index > allFacilitiesIDs.size()) {
 			index = 0;

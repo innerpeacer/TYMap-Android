@@ -87,7 +87,6 @@ public class NPRoomLayer extends GraphicsLayer {
 				roomGidDict.put(poiID, gid);
 			}
 
-			// addGraphics(graphics);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

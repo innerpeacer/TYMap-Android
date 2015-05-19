@@ -44,7 +44,6 @@ public class NPRouteManager {
 
 		@Override
 		public void run() {
-			// Log.i(TAG, "Route Result back");
 			if (routeResult == null) {
 				notifyDidFailSolveRoute(mException);
 			} else {
@@ -72,7 +71,6 @@ public class NPRouteManager {
 	 */
 	public NPRouteManager(NPBuilding building, UserCredentials credential,
 			List<NPMapInfo> mapInfoArray) {
-		// Log.i(TAG, "url:" + building.getRouteURL());
 
 		allMapInfoArray.addAll(mapInfoArray);
 		NPMapInfo info = allMapInfoArray.get(0);
@@ -92,7 +90,6 @@ public class NPRouteManager {
 				try {
 					routeParams = routeTask
 							.retrieveDefaultRouteTaskParameters();
-					// Log.i(TAG, "RouteParams:" + routeParams);
 					notifyDidRetrieveDefaultRouteTaskParameters();
 
 				} catch (Exception e) {
@@ -173,63 +170,6 @@ public class NPRouteManager {
 		return new NPRouteResult(routePartArray);
 	}
 
-	// private NPRouteResult processRouteResult(Route r) {
-	// Map<Integer, List<NPLocalPoint>> pointDict = new HashMap<Integer,
-	// List<NPLocalPoint>>();
-	//
-	// List<Integer> floorArray = new ArrayList<Integer>();
-	// Map<Integer, Polyline> routeDict = new HashMap<Integer, Polyline>();
-	//
-	// Polyline routeLine = (Polyline) r.getRouteGraphic().getGeometry();
-	//
-	// int pathNum = (int) routeLine.getPathCount();
-	// if (pathNum > 0) {
-	// int num = routeLine.getPathSize(0);
-	//
-	// for (int i = 0; i < num; ++i) {
-	// Point p = routeLine.getPoint(i);
-	//
-	// NPLocalPoint lp = routePointConverter
-	// .getLocalPointFromRoutePoint(p);
-	// boolean isValid = routePointConverter.checkPointValidity(lp);
-	// if (isValid) {
-	// if (!pointDict.containsKey(lp.getFloor())) {
-	// pointDict.put(lp.getFloor(),
-	// new ArrayList<NPLocalPoint>());
-	// floorArray.add(lp.getFloor());
-	// }
-	//
-	// List<NPLocalPoint> array = pointDict.get(lp.getFloor());
-	// array.add(lp);
-	// }
-	// }
-	// }
-	//
-	// for (Integer f : floorArray) {
-	// List<NPLocalPoint> array = pointDict.get(f);
-	//
-	// Polyline polyline = new Polyline();
-	// int index = 0;
-	// for (NPLocalPoint lp : array) {
-	// if (index == 0) {
-	// polyline.startPath(lp.getX(), lp.getY());
-	// } else {
-	// polyline.lineTo(lp.getX(), lp.getY());
-	// }
-	// index++;
-	// }
-	//
-	// routeDict.put(f, polyline);
-	// }
-	//
-	// if (routeDict.size() < 1) {
-	// return null;
-	// }
-	//
-	// return new NPRouteResult(routeDict, floorArray);
-	//
-	// }
-
 	/**
 	 * 请求路径规划，在代理方法获取规划结果
 	 * 
@@ -276,8 +216,6 @@ public class NPRouteManager {
 			};
 		};
 		t.start();
-
-		// routeParams.sets
 	}
 
 	private List<NPRouteManagerListener> listeners = new ArrayList<NPRouteManager.NPRouteManagerListener>();
@@ -379,7 +317,6 @@ public class NPRouteManager {
 
 		public NPRouteException() {
 			super();
-			// super("Failed to fetch route parameters from server");
 		}
 
 		public NPRouteException(String msg) {

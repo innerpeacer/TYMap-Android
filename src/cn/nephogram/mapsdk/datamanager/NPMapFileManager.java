@@ -144,12 +144,6 @@ public class NPMapFileManager {
 
 	}
 
-	// + (NSString *)getPrimitiveDBPath:(NPBuilding *)building;
-
-	// public static String getAOIJsonPath() {
-	// return JSON_FILE_AOI;
-	// }
-
 	public static byte[] readByteFromFile(String path) {
 		RandomAccessFile input;
 		try {
