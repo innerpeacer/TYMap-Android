@@ -103,6 +103,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	 * 
 	 * @param renderingScheme
 	 *            地图渲染方案
+	 * @param buliding
+	 *            地图显示的目标建筑
 	 */
 	public void init(NPRenderingScheme renderingScheme, NPBuilding buliding) {
 		// Log.i(TAG, "init");
@@ -272,6 +274,9 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		this.currentMapInfo = currentMapInfo;
 	}
 
+	/**
+	 * 在地图显示当前楼层的导航路径
+	 */
 	public void showRouteResultOnCurrentFloor() {
 		List<Polyline> linesToShow = routeLayer
 				.showRouteResultOnFloor(currentMapInfo.getFloorNumber());
@@ -282,6 +287,12 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		}
 	}
 
+	/**
+	 * 在地图显示当前楼层当前位置的剩余路径，结合定位结果，移除已经经过的路径部分
+	 * 
+	 * @param lp
+	 *            当前位置
+	 */
 	public void showRemainingRouteResultOnCurrentFloor(NPLocalPoint lp) {
 		List<Polyline> linesToShow = routeLayer
 				.showRemainingRouteResultOnFloor(
@@ -292,6 +303,14 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		}
 	}
 
+	/**
+	 * 显示导航提示对应的路径段
+	 * 
+	 * @param ds
+	 *            目标路径提示
+	 * @param isCentered
+	 *            是否移动地图将路径提示段居中
+	 */
 	public void showRouteHint(NPDirectionalHint ds, boolean isCentered) {
 		NPRouteResult routeResult = routeLayer.getRouteResult();
 		if (routeResult != null) {
@@ -309,38 +328,89 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		}
 	}
 
+	/**
+	 * 在地图当前楼层显示起点符号
+	 * 
+	 * @param start
+	 *            起点位置
+	 */
 	public void showRouteStartSymbolOnCurrentFloor(NPLocalPoint start) {
 		routeLayer.showStartSymbol(start);
 	}
 
+	/**
+	 * 在地图当前楼层显示终点符号
+	 * 
+	 * @param end
+	 *            终点位置
+	 */
 	public void showRouteEndSymbolOnCurrentFloor(NPLocalPoint end) {
 		routeLayer.showEndSymbol(end);
 	}
 
+	/**
+	 * 设置导航结果
+	 * 
+	 * @param rs
+	 *            导航结果
+	 */
 	public void setRouteResult(NPRouteResult rs) {
 		routeLayer.setRouteResult(rs);
 	}
 
+	/**
+	 * 设置导航线的起点符号
+	 * 
+	 * @param pms
+	 *            起点标识符号
+	 */
 	public void setStartSymbol(NPPictureMarkerSymbol pms) {
 		routeLayer.setStartSymbol(pms);
 	}
 
+	/**
+	 * 设置导航线的终点符号
+	 * 
+	 * @param pms
+	 *            终点标识符号
+	 */
 	public void setEndSymbol(NPPictureMarkerSymbol pms) {
 		routeLayer.setEndSymbol(pms);
 	}
 
+	/**
+	 * 设置跨层导航切换点符号
+	 * 
+	 * @param pms
+	 *            切换点标识符号
+	 */
 	public void setSwitchSymbol(NPPictureMarkerSymbol pms) {
 		routeLayer.setSwitchSymbol(pms);
 	}
 
+	/**
+	 * 设置导航起点
+	 * 
+	 * @param start
+	 *            导航起点
+	 */
 	public void setRouteStart(NPLocalPoint start) {
 		routeLayer.setStartPoint(start);
 	}
 
+	/**
+	 * 设置导航终点
+	 * 
+	 * @param end
+	 *            导航终点
+	 */
 	public void setRouteEnd(NPLocalPoint end) {
 		routeLayer.setEndPoint(end);
 	}
 
+	/**
+	 * 重置导航层，移除显示的结果，并将导航结果清空
+	 */
 	public void resetRouteLayer() {
 		routeLayer.reset();
 		routeHintLayer.removeAll();
@@ -348,6 +418,9 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
+	/**
+	 * 清除导航层，只在地图上移除相关显示的结果
+	 */
 	public void clearRouteLayer() {
 		routeLayer.removeAll();
 		routeHintLayer.removeAll();
@@ -355,10 +428,22 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
+	/**
+	 * 设置定位点符号，用于标识定位结果
+	 * 
+	 * @param markerSymbol
+	 *            定位点符号
+	 */
 	public void setLocationSymbol(MarkerSymbol markerSymbol) {
 		locationLayer.setLcoationSymbol(markerSymbol);
 	}
 
+	/**
+	 * 在地图上显示定位结果
+	 * 
+	 * @param location
+	 *            定位结果坐标点
+	 */
 	public void showLocation(NPLocalPoint location) {
 		locationLayer.removeAll();
 		if (currentMapInfo.getFloorNumber() == location.getFloor()) {
@@ -368,10 +453,19 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		}
 	}
 
+	/**
+	 * 在地图上移除定位结果
+	 */
 	public void removeLocation() {
 		locationLayer.removeLocation();
 	}
 
+	/**
+	 * 处理设备旋转事件
+	 * 
+	 * @param newHeading
+	 *            设备方向角
+	 */
 	public void processDeviceRotation(double newHeading) {
 		currentDeviceHeading = newHeading;
 		locationLayer.updateDeviceHeading(newHeading, building.getInitAngle(),
@@ -419,7 +513,17 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		labelGroupLayer.clearSelection();
 	}
 
-	public void translateInScreenUnit(double x, double y, boolean animated) {
+	/**
+	 * 以屏幕坐标为单位平移x、y距离
+	 * 
+	 * @param x
+	 *            x平移距离
+	 * @param y
+	 *            y平移距离
+	 * @param animated
+	 *            是否使用动画
+	 */
+	void translateInScreenUnit(double x, double y, boolean animated) {
 		Point centerScreen = toScreenPoint(getCenter());
 		Point newCenterScreen = new Point(centerScreen.getX() - x,
 				centerScreen.getY() - y);
@@ -427,12 +531,32 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		centerAt(newCenter, animated);
 	}
 
-	public void translateInMapUnit(double x, double y, boolean animated) {
+	/**
+	 * 以地图坐标为单位平移x、y距离
+	 * 
+	 * @param x
+	 *            x平移距离
+	 * @param y
+	 *            y平移距离
+	 * @param animated
+	 *            是否使用动画
+	 */
+	void translateInMapUnit(double x, double y, boolean animated) {
 		Point center = getCenter();
 		Point newCenter = new Point(center.getX() - x, center.getY() - y);
 		centerAt(newCenter, animated);
 	}
 
+	/**
+	 * 移动地图将特定坐标限定在特定屏幕范围内
+	 * 
+	 * @param location
+	 *            目标点地图坐标
+	 * @param range
+	 *            目标屏幕范围
+	 * @param animated
+	 *            是否使用动画
+	 */
 	public void restrictLocation(Point location, Rect range, boolean animated) {
 		Point locationOnScreen = toScreenPoint(location);
 
@@ -463,6 +587,12 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		translateInScreenUnit(xOffset, yOffset, animated);
 	}
 
+	/**
+	 * 设置地图模式
+	 * 
+	 * @param mode
+	 *            目标地图模式，包括默认模式和跟随模式
+	 */
 	public void setMapMode(NPMapViewMode mode) {
 		mapViewMode = mode;
 		switch (mapViewMode) {
@@ -721,6 +851,12 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		 */
 		void onFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo);
 
+		/**
+		 * 地图放缩事件回调
+		 * 
+		 * @param mapView
+		 *            地图视图
+		 */
 		void mapViewDidZoomed(NPMapView mapView);
 	}
 
@@ -781,6 +917,9 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		}
 	}
 
+	/**
+	 * 地图模式类型：默认模式和跟随模式
+	 */
 	public enum NPMapViewMode {
 		NPMapViewModeDefault, NPMapViewModeFollowing
 	}

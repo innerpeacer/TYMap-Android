@@ -63,11 +63,12 @@ public class NPRouteManager {
 	/**
 	 * 路径管理类的实例化方法
 	 * 
-	 * @param url
-	 *            路径服务URL
+	 * @param building
+	 *            目标建筑
 	 * @param credential
 	 *            用户访问验证
-	 * 
+	 * @param mapInfoArray
+	 *            目标建筑的所有楼层信息
 	 */
 	public NPRouteManager(NPBuilding building, UserCredentials credential,
 			List<NPMapInfo> mapInfoArray) {
@@ -272,7 +273,12 @@ public class NPRouteManager {
 	 * 路径管理监听接口
 	 */
 	public interface NPRouteManagerListener {
-
+		/**
+		 * 路径规划获取默认参数回调
+		 * 
+		 * @param routeManager
+		 *            路径管理实例
+		 */
 		void didRetrieveDefaultRouteTaskParameters(NPRouteManager routeManager);
 
 		/**

@@ -164,12 +164,15 @@ public class NPMapInfo implements Parcelable {
 		return jsonObject;
 	}
 
+	/**
+	 * 所在城市的ID
+	 */
 	public String getCityID() {
 		return cityID;
 	}
 
 	/**
-	 * 建筑ID
+	 * 所在建筑的ID
 	 */
 	public String getBuildingID() {
 		return buildingID;
@@ -210,10 +213,16 @@ public class NPMapInfo implements Parcelable {
 		return floorNumber;
 	}
 
+	/**
+	 * 地图X方向放缩比例，当前比例为1
+	 */
 	public double getScaleX() {
 		return size_x / (xmax - xmin);
 	}
 
+	/**
+	 * 地图Y方向放缩比例，当前比例为1
+	 */
 	public double getScaleY() {
 		return size_y / (ymax - ymin);
 	}
@@ -380,6 +389,16 @@ public class NPMapInfo implements Parcelable {
 		return null;
 	}
 
+	/**
+	 * 从一组地图信息中搜索特定楼层的地图信息
+	 * 
+	 * @param array
+	 *            目标地图信息数组
+	 * @param floor
+	 *            目标楼层
+	 * 
+	 * @return 目标楼层信息
+	 */
 	public static NPMapInfo searchMapInfoFromArray(List<NPMapInfo> array,
 			int floor) {
 		for (NPMapInfo info : array) {

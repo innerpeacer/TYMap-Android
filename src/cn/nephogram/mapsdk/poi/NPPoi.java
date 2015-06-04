@@ -73,7 +73,7 @@ public class NPPoi {
 	}
 
 	/**
-	 * POI类型
+	 * POI所在层
 	 */
 	public POI_LAYER getLayer() {
 		return layer;

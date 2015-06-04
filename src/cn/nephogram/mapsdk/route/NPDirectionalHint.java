@@ -3,6 +3,9 @@ package cn.nephogram.mapsdk.route;
 import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
 
+/**
+ * 导航方向提示，用于导航结果的展示，表示其中的一段
+ */
 public class NPDirectionalHint {
 
 	private static final String DIRECTIONAL_STRING_STRAIGHT = "直行";
@@ -34,6 +37,16 @@ public class NPDirectionalHint {
 
 	private Vector2 vector;
 
+	/**
+	 * 导航方向提示的初始化方法，一般不需要直接调用，由导航管理类调用生成
+	 * 
+	 * @param start
+	 *            当前导航段的起点
+	 * @param end
+	 *            当前导航段的终点
+	 * @param previousAngle
+	 *            前一导航段的方向角
+	 */
 	public NPDirectionalHint(Point start, Point end, double previousAngle) {
 		this.startPoint = start;
 		this.endPoint = end;
@@ -48,6 +61,11 @@ public class NPDirectionalHint {
 				previousAngle);
 	}
 
+	/**
+	 * 生成当前段的路标提示
+	 * 
+	 * @return 当前的路径提示字符串
+	 */
 	public String getLandmarkString() {
 		String result = null;
 		if (landmark != null) {
@@ -56,11 +74,21 @@ public class NPDirectionalHint {
 		return result;
 	}
 
+	/**
+	 * 生成当前段的方向提示
+	 * 
+	 * @return 当前的方向提示字符串
+	 */
 	public String getDirectionString() {
 		return String.format("%s %.0fm", getDirection(relativeDirection),
 				length);
 	}
 
+	/**
+	 * 判断当前段是否有路标信息
+	 * 
+	 * @return 是否有路标信息
+	 */
 	public boolean hasLandmark() {
 		if (landmark != null) {
 			return true;
@@ -68,34 +96,58 @@ public class NPDirectionalHint {
 		return false;
 	}
 
+	/**
+	 * 当前段的路标信息
+	 */
 	public NPLandmark getLandmark() {
 		return landmark;
 	}
 
+	/**
+	 * 当前段的路标信息
+	 */
 	public void setLandmark(NPLandmark landmark) {
 		this.landmark = landmark;
 	}
 
+	/**
+	 * 包含当前段的路径部分
+	 */
 	public NPRoutePart getRoutePart() {
 		return routePart;
 	}
 
+	/**
+	 * 包含当前段的路径部分
+	 */
 	public void setRoutePart(NPRoutePart routePart) {
 		this.routePart = routePart;
 	}
 
+	/**
+	 * 当前段起点
+	 */
 	public Point getStartPoint() {
 		return startPoint;
 	}
 
+	/**
+	 * 当前段终点
+	 */
 	public Point getEndPoint() {
 		return endPoint;
 	}
 
+	/**
+	 * 当前段的相对方向
+	 */
 	public NPRelativeDirection getRelativeDirection() {
 		return relativeDirection;
 	}
 
+	/**
+	 * 前一段的方向角
+	 */
 	public double getPreviousAngle() {
 		return previousAngle;
 	}
@@ -136,7 +188,6 @@ public class NPDirectionalHint {
 			break;
 		}
 		return result;
-
 	}
 
 	public NPRelativeDirection calculateRelativeDirection(double angle,
@@ -187,14 +238,23 @@ public class NPDirectionalHint {
 		return direction;
 	}
 
+	/**
+	 * 当前段的方向角
+	 */
 	public double getCurrentAngle() {
 		return currentAngle;
 	}
 
+	/**
+	 * 当前段的长度
+	 */
 	public double getLength() {
 		return length;
 	}
 
+	/**
+	 * 相对方向类型，用于导航提示
+	 */
 	public enum NPRelativeDirection {
 		NPStraight, NPTurnRight, NPRightForward, NPLeftForward, NPRightBackward, NPLeftBackward, NPTurnLeft, NPBackward
 	};

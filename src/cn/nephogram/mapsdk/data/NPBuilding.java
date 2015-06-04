@@ -18,7 +18,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * 建筑类
+ * 建筑类，表示整栋建筑的信息
  */
 public class NPBuilding implements Parcelable {
 	public static final String JSON_KEY_BUILDINGS = "Buildings";
@@ -226,6 +226,9 @@ public class NPBuilding implements Parcelable {
 		this.status = status;
 	}
 
+	/**
+	 * 建筑所在城市ID
+	 */
 	public String getCityID() {
 		return cityID;
 	}
@@ -265,14 +268,23 @@ public class NPBuilding implements Parcelable {
 		return latitude;
 	}
 
+	/**
+	 * 地图初始偏转角度
+	 */
 	public double getInitAngle() {
 		return initAngle;
 	}
 
+	/**
+	 * 导航服务地址
+	 */
 	public String getRouteURL() {
 		return routeURL;
 	}
 
+	/**
+	 * 导航偏移量
+	 */
 	public NPMapSize getOffset() {
 		return offset;
 	}
@@ -354,8 +366,8 @@ public class NPBuilding implements Parcelable {
 	 *            建筑ID
 	 * @return 建筑类
 	 */
-	public static NPBuilding parseBuildingFromFilesById(Context context, String path,
-			String cityID, String buildingID) {
+	public static NPBuilding parseBuildingFromFilesById(Context context,
+			String path, String cityID, String buildingID) {
 		List<NPBuilding> buildings = parseBuildingFromFiles(context, path,
 				cityID);
 
