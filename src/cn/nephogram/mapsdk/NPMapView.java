@@ -18,7 +18,7 @@ import cn.nephogram.mapsdk.data.NPBuilding;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.layer.NPLocationLayer;
-import cn.nephogram.mapsdk.layer.functionlayer.NPRouteArrowLayer;
+import cn.nephogram.mapsdk.layer.functionlayer.NPAnimatedRouteArrowLayer;
 import cn.nephogram.mapsdk.layer.functionlayer.NPRouteHintLayer;
 import cn.nephogram.mapsdk.layer.functionlayer.NPRouteLayer;
 import cn.nephogram.mapsdk.layer.labellayer.NPLabelGroupLayer;
@@ -31,6 +31,7 @@ import cn.nephogram.mapsdk.route.NPRouteResult;
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
 import com.esri.android.map.event.OnSingleTapListener;
+import com.esri.android.map.event.OnStatusChangedListener;
 import com.esri.android.map.event.OnZoomListener;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
@@ -39,7 +40,7 @@ import com.esri.core.geometry.SpatialReference;
 import com.esri.core.symbol.MarkerSymbol;
 
 public class NPMapView extends MapView implements OnSingleTapListener,
-		OnPanListener, OnZoomListener {
+		OnPanListener, OnZoomListener, OnStatusChangedListener {
 
 	private static final long serialVersionUID = 7475014088599931549L;
 
@@ -49,6 +50,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	private Context context;
 
+	private boolean isMapInitlized = false;
+
 	private NPBuilding building;
 	private NPMapInfo currentMapInfo;
 
@@ -56,7 +59,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	private NPLabelGroupLayer labelGroupLayer;
 
 	private NPRouteLayer routeLayer;
-	private NPRouteArrowLayer routeArrowLayer;
+	// private NPRouteArrowLayer routeArrowLayer;
+	private NPAnimatedRouteArrowLayer animatedRouteArrowLayer;
 	private NPRouteHintLayer routeHintLayer;
 
 	private NPLocationLayer locationLayer;
@@ -115,8 +119,11 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		routeHintLayer = new NPRouteHintLayer(context);
 		addLayer(routeHintLayer);
 
-		routeArrowLayer = new NPRouteArrowLayer(context, this);
-		addLayer(routeArrowLayer);
+		// routeArrowLayer = new NPRouteArrowLayer(context, this);
+		// addLayer(routeArrowLayer);
+
+		animatedRouteArrowLayer = new NPAnimatedRouteArrowLayer(context, this);
+		addLayer(animatedRouteArrowLayer);
 
 		locationLayer = new NPLocationLayer();
 		addLayer(locationLayer);
@@ -124,6 +131,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		setOnSingleTapListener(this);
 		setOnPanListener(this);
 		setOnZoomListener(this);
+		setOnStatusChangedListener(this);
 	}
 
 	private boolean isSwitching = false;
@@ -175,7 +183,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 		routeLayer.removeAll();
 		routeHintLayer.removeAll();
-		routeArrowLayer.removeAll();
+		// routeArrowLayer.removeAll();
+		animatedRouteArrowLayer.stopShowingArrow();
 
 		locationLayer.removeAll();
 
@@ -196,10 +205,12 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				}
 
 				if (!isInterupted) {
+					Log.i(TAG, "loadFacilityContentsFromFileWithInfo");
 					labelGroupLayer.loadFacilityContentsFromFileWithInfo(info);
 				}
 
 				if (!isInterupted) {
+					Log.i(TAG, "loadLabelContentsFromFileWithInfo");
 					labelGroupLayer.loadLabelContentsFromFileWithInfo(info);
 				}
 
@@ -215,6 +226,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				}
 
 				if (!isInterupted) {
+					while (!isMapInitlized) {
+					}
 					labelGroupLayer.updateLabels();
 					notifyFinishLoadingFloor(NPMapView.this, currentMapInfo);
 				}
@@ -232,10 +245,6 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 			}
 		}).start();
 
-		// Envelope envelope = new Envelope(info.getMapExtent().getXmin(), info
-		// .getMapExtent().getYmin(), info.getMapExtent().getXmax(), info
-		// .getMapExtent().getYmax());
-		// setExtent(envelope);
 	}
 
 	/**
@@ -257,7 +266,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				.showRouteResultOnFloor(currentMapInfo.getFloorNumber());
 		if (linesToShow != null && linesToShow.size() > 0) {
 			Log.i(TAG, "Show Route Arrows");
-			routeArrowLayer.showRouteArrows(linesToShow);
+			// routeArrowLayer.showRouteArrows(linesToShow);
+			animatedRouteArrowLayer.showRouteArrows(linesToShow);
 		}
 	}
 
@@ -266,7 +276,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 				.showRemainingRouteResultOnFloor(
 						currentMapInfo.getFloorNumber(), lp);
 		if (linesToShow != null && linesToShow.size() > 0) {
-			routeArrowLayer.showRouteArrows(linesToShow);
+			// routeArrowLayer.showRouteArrows(linesToShow);
+			animatedRouteArrowLayer.showRouteArrows(linesToShow);
 		}
 	}
 
@@ -322,13 +333,15 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	public void resetRouteLayer() {
 		routeLayer.reset();
 		routeHintLayer.removeAll();
-		routeArrowLayer.removeAll();
+		// routeArrowLayer.removeAll();
+		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
 	public void clearRouteLayer() {
 		routeLayer.removeAll();
 		routeHintLayer.removeAll();
-		routeArrowLayer.removeAll();
+		// routeArrowLayer.removeAll();
+		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
 	public void setLocationSymbol(MarkerSymbol markerSymbol) {
@@ -737,6 +750,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	}
 
 	private void notifyFinishLoadingFloor(NPMapView mapView, NPMapInfo mapInfo) {
+		// labelGroupLayer.updateLabels();
 		for (NPMapViewListenser listener : listeners) {
 			listener.onFinishLoadingFloor(mapView, mapInfo);
 		}
@@ -748,8 +762,40 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		}
 	}
 
+	@Override
+	public void pause() {
+		super.pause();
+		if (animatedRouteArrowLayer != null) {
+			animatedRouteArrowLayer.stopShowingArrow();
+		}
+	}
+
 	public enum NPMapViewMode {
 		NPMapViewModeDefault, NPMapViewModeFollowing
 	}
 
+	@Override
+	public void onStatusChanged(Object source, STATUS status) {
+		switch (status) {
+		case INITIALIZED:
+			// Log.i(TAG, "INITIALIZED");
+			isMapInitlized = true;
+			break;
+
+		case INITIALIZATION_FAILED:
+			// Log.i(TAG, "INITIALIZATION_FAILED");
+			break;
+
+		case LAYER_LOADED:
+			// Log.i(TAG, "LAYER_LOADED");
+			break;
+
+		case LAYER_LOADING_FAILED:
+			// Log.i(TAG, "LAYER_LOADING_FAILED");
+			break;
+
+		default:
+			break;
+		}
+	}
 }

@@ -88,11 +88,13 @@ public abstract class BaseMapViewActivity extends Activity implements
 
 			for (int i = 0; i < mapInfos.size(); i++) {
 				NPMapInfo info = mapInfos.get(i);
-				if (info.getFloorName().equalsIgnoreCase("F1")) {
+				// if (info.getFloorName().equalsIgnoreCase("F1")) {
+				if (info.getFloorNumber() == 7) {
 					currentFloorIndex = i;
 					currentMapInfo = info;
 					break;
 				}
+				// }
 			}
 
 			CAFloorListAdatper fAdatper = new CAFloorListAdatper(this);
@@ -150,5 +152,19 @@ public abstract class BaseMapViewActivity extends Activity implements
 	@Override
 	public void mapViewDidZoomed(NPMapView mapView) {
 
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		mapView.unpause();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		mapView.pause();
 	}
 }

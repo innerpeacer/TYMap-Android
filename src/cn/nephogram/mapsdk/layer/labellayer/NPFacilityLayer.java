@@ -63,6 +63,10 @@ public class NPFacilityLayer extends GraphicsLayer {
 		for (NPFacilityLabel fl : facilityLabelDict.values()) {
 			Point screenPoint = groupLayer.getMapView().toScreenPoint(
 					fl.getPosition());
+			if (screenPoint == null) {
+				continue;
+			}
+
 			NPLabelBorder border = NPLabelBorderCalculator
 					.getFacilityLabelBorder(screenPoint);
 

@@ -3,12 +3,19 @@ package cn.nephogram.mapsdk.layer.labellayer;
 import com.esri.core.geometry.Point;
 
 public class NPLabelBorderCalculator {
+	static final String TAG = NPLabelBorderCalculator.class.getSimpleName();
 
 	private static final double DPI_SCALE = 1.0;
 
 	private static final int FACILITY_LOGO_SIZE = 26;
 
 	public static NPLabelBorder getFacilityLabelBorder(Point screenPoint) {
+		// Log.i(TAG, "getFacilityLabelBorder");
+
+		if (screenPoint == null) {
+			return null;
+		}
+
 		double scale = DPI_SCALE;
 		double halfSize = FACILITY_LOGO_SIZE * 0.5 * scale;
 

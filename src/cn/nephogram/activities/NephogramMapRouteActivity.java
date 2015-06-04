@@ -62,6 +62,9 @@ public class NephogramMapRouteActivity extends BaseMapViewActivity implements
 		routeManager = new NPRouteManager(currentBuilding,
 				NPMapEnvironment.defaultUserCredentials(), mapInfos);
 		routeManager.addRouteManagerListener(this);
+
+		endPoint = new NPLocalPoint(1779.204079, 581.868337, 7);
+		startPoint = new NPLocalPoint(1917, 558, 7);
 	}
 
 	@Override

@@ -53,6 +53,10 @@ public class NPTextLabelLayer extends GraphicsLayer {
 		for (NPTextLabel tl : allTextLabels) {
 			Point screenPoint = groupLayer.getMapView().toScreenPoint(
 					tl.getPosition());
+			if (screenPoint == null) {
+				continue;
+			}
+
 			NPLabelBorder border = NPLabelBorderCalculator.getTextLabelBorder(
 					tl, screenPoint);
 
