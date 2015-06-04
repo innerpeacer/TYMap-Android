@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -23,6 +25,7 @@ import cn.nephogram.mapsdk.layer.functionlayer.NPRouteHintLayer;
 import cn.nephogram.mapsdk.layer.functionlayer.NPRouteLayer;
 import cn.nephogram.mapsdk.layer.labellayer.NPLabelGroupLayer;
 import cn.nephogram.mapsdk.layer.structurelayer.NPStructureGroupLayer;
+import cn.nephogram.mapsdk.poi.NPBrand;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 import cn.nephogram.mapsdk.route.NPDirectionalHint;
@@ -76,6 +79,8 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 	private double lastRotationAngle = 0.0;
 
+	private Map<String, NPBrand> allBrandDict = new HashMap<String, NPBrand>();
+
 	// =====================================
 	public NPMapView(Context context) {
 		super(context);
@@ -103,6 +108,11 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 		// Log.i(TAG, "init");
 		this.building = buliding;
 
+		List<NPBrand> brandArray = NPBrand.parseAllBrands(buliding);
+		for (NPBrand brand : brandArray) {
+			allBrandDict.put(brand.getPoiID(), brand);
+		}
+
 		SpatialReference sr = NPMapEnvironment.defaultSpatialReference();
 
 		structureGroupLayer = new NPStructureGroupLayer(context,
@@ -111,6 +121,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 
 		labelGroupLayer = new NPLabelGroupLayer(context, this, renderingScheme,
 				sr);
+		labelGroupLayer.setBrandDict(allBrandDict);
 		addLayer(labelGroupLayer);
 
 		routeLayer = new NPRouteLayer(this);

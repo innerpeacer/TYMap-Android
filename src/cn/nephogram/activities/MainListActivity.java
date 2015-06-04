@@ -29,6 +29,7 @@ public class MainListActivity extends HelperListActivity {
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
 		}
+		copyFileIfNeeded();
 
 		AppSettings settings = new AppSettings(this);
 

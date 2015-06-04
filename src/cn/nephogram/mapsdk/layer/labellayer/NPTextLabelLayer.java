@@ -16,6 +16,8 @@ import android.graphics.Color;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.NPMapLanguage;
 import cn.nephogram.mapsdk.NPMapType;
+import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
+import cn.nephogram.mapsdk.poi.NPBrand;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -37,11 +39,17 @@ public class NPTextLabelLayer extends GraphicsLayer {
 	List<NPTextLabel> allTextLabels = new ArrayList<NPTextLabel>();
 	Map<Graphic, Integer> graphicGidDict = new HashMap<Graphic, Integer>();
 
+	private Map<String, NPBrand> allBrandDict = new HashMap<String, NPBrand>();
+
 	public NPTextLabelLayer(Context context, NPLabelGroupLayer groupLayer,
 			SpatialReference spatialReference, Envelope envelope) {
 		super(spatialReference, envelope);
 		this.groupLayer = groupLayer;
 		this.context = context;
+	}
+
+	public void setBrandDict(Map<String, NPBrand> dict) {
+		allBrandDict = dict;
 	}
 
 	public void updateLabels(List<NPLabelBorder> array) {
@@ -111,14 +119,33 @@ public class NPTextLabelLayer extends GraphicsLayer {
 					Point pos = (Point) graphic.getGeometry();
 					NPTextLabel textLabel = new NPTextLabel(name, pos);
 
-					TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
-					ts.setFontFamily("DroidSansFallback.ttf");
-					ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
-					ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					String poiID = (String) graphic
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+					if (allBrandDict.containsKey(poiID)) {
+						NPBrand brand = allBrandDict.get(poiID);
+						NPLabelSize logoSize = brand.getLogoSize();
+						String logoName = brand.getLogo();
 
-					textLabel.setTextSymbol(ts);
+						int resourceID = context.getResources().getIdentifier(
+								logoName, "drawable", context.getPackageName());
+						NPPictureMarkerSymbol pms = new NPPictureMarkerSymbol(
+								context.getResources().getDrawable(resourceID));
+						pms.setWidth((float) logoSize.width);
+						pms.setHeight((float) logoSize.height);
+
+						textLabel.setTextSymbol(pms);
+						textLabel.setTextSize(brand.getLogoSize());
+
+					} else {
+						TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
+						ts.setFontFamily("DroidSansFallback.ttf");
+						ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
+						ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
+
+						textLabel.setTextSymbol(ts);
+					}
+
 					textLabel.setTextGraphic(graphic);
-
 					int gid = addGraphic(graphic);
 
 					allTextLabels.add(textLabel);

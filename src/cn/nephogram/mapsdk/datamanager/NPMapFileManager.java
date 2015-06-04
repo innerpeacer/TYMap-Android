@@ -19,6 +19,9 @@ public class NPMapFileManager {
 	private static String JSON_FILE_LABEL = "%s_LABEL.json";
 
 	private static String JSON_FILE_LANDMARK = "%s_LANDMARK.json";
+	private static String JSON_FILE_BRANDS = "Brands_Building_%s.json";
+
+	// #define FILE_BRANDS @"Brands_Building_%@.json"
 
 	// private static String JSON_FILE_AOI = "AOI.json";
 
@@ -111,6 +114,15 @@ public class NPMapFileManager {
 		File cityDir = new File(mapRootDir, info.getCityID());
 		File buildingDir = new File(cityDir, info.getBuildingID());
 		String fileName = String.format(JSON_FILE_LANDMARK, info.getMapID());
+		return (new File(buildingDir, fileName).toString());
+	}
+
+	public static String getBrandJsonPath(NPBuilding building) {
+		String mapRootDir = NPMapEnvironment.getRootDirectoryForMapFiles();
+		File cityDir = new File(mapRootDir, building.getCityID());
+		File buildingDir = new File(cityDir, building.getBuildingID());
+		String fileName = String.format(JSON_FILE_BRANDS,
+				building.getBuildingID());
 		return (new File(buildingDir, fileName).toString());
 	}
 

@@ -4,7 +4,7 @@ import android.text.TextPaint;
 
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
-import com.esri.core.symbol.TextSymbol;
+import com.esri.core.symbol.Symbol;
 
 public class NPTextLabel {
 	private static final int TEXT_SIZE = 10;
@@ -19,7 +19,7 @@ public class NPTextLabel {
 	NPLabelSize textSize;
 
 	Graphic textGraphic;
-	TextSymbol textSymbol;
+	Symbol textSymbol;
 
 	private boolean isHidden;
 
@@ -55,11 +55,11 @@ public class NPTextLabel {
 		this.textGraphic = textGraphic;
 	}
 
-	public TextSymbol getTextSymbol() {
+	public Symbol getTextSymbol() {
 		return textSymbol;
 	}
 
-	public void setTextSymbol(TextSymbol textSymbol) {
+	public void setTextSymbol(Symbol textSymbol) {
 		this.textSymbol = textSymbol;
 	}
 

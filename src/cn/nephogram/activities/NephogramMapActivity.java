@@ -27,6 +27,9 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 
 		graphicsLayer = new GraphicsLayer();
 		mapView.addLayer(graphicsLayer);
+
+		// List<NPBrand> allBrands = NPBrand.parseAllBrands(currentBuilding);
+		// Log.i(TAG, allBrands.toString());
 	}
 
 	@Override

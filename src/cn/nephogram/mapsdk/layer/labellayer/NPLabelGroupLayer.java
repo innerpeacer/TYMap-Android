@@ -2,6 +2,7 @@ package cn.nephogram.mapsdk.layer.labellayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,6 +11,7 @@ import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.data.NPMapInfo;
 import cn.nephogram.mapsdk.datamanager.NPMapFileManager;
+import cn.nephogram.mapsdk.poi.NPBrand;
 import cn.nephogram.mapsdk.poi.NPPoi;
 import cn.nephogram.mapsdk.poi.NPPoi.POI_LAYER;
 
@@ -39,6 +41,10 @@ public class NPLabelGroupLayer extends GroupLayer {
 
 		labelLayer = new NPTextLabelLayer(context, this, sr, null);
 		addLayer(labelLayer);
+	}
+
+	public void setBrandDict(Map<String, NPBrand> dict) {
+		labelLayer.setBrandDict(dict);
 	}
 
 	public NPMapView getMapView() {
