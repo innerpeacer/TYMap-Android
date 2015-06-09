@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.route.Vector2;
@@ -76,6 +75,8 @@ public class NPRouteArrowLayer extends GraphicsLayer {
 			routePointSegmentArray.add(currentSegmentIndex - 1);
 		}
 
+		int resourceIDNormal = context.getResources().getIdentifier(
+				"route_arrow", "drawable", context.getPackageName());
 		for (int i = 1; i < numRoutePoints; ++i) {
 			int currentSegment = routePointSegmentArray.get(i);
 
@@ -95,7 +96,7 @@ public class NPRouteArrowLayer extends GraphicsLayer {
 					currentEnd, currentSegmentLength, i * interval
 							- currentAccumulativeLength);
 			NPPictureMarkerSymbol pms = new NPPictureMarkerSymbol(context
-					.getResources().getDrawable(R.drawable.route_arrow));
+					.getResources().getDrawable(resourceIDNormal));
 			pms.setWidth(6f);
 			pms.setHeight(4.5f);
 			pms.setAngle((float) currentAngle);

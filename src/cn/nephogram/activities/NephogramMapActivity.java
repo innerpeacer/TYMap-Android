@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.NPMapView;
+import cn.nephogram.mapsdk.NPMapView.NPMapViewMode;
 import cn.nephogram.mapsdk.poi.NPPoi;
 
 import com.esri.android.map.GraphicsLayer;
@@ -27,6 +28,8 @@ public class NephogramMapActivity extends BaseMapViewActivity {
 
 		graphicsLayer = new GraphicsLayer();
 		mapView.addLayer(graphicsLayer);
+
+		mapView.setMapMode(NPMapViewMode.NPMapViewModeFollowing);
 
 		// List<NPBrand> allBrands = NPBrand.parseAllBrands(currentBuilding);
 		// Log.i(TAG, allBrands.toString());

@@ -2,7 +2,6 @@ package cn.nephogram.mapsdk.layer.functionlayer;
 
 import android.content.Context;
 import android.graphics.Color;
-import cn.nephogram.map.R;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.route.Vector2;
 
@@ -30,8 +29,10 @@ public class NPRouteHintLayer extends GraphicsLayer {
 		removeAll();
 		addGraphic(new Graphic(line, routeHintSymbol));
 
+		int resourceIDNormal = context.getResources().getIdentifier(
+				"route_hint_arrow", "drawable", context.getPackageName());
 		NPPictureMarkerSymbol pms = new NPPictureMarkerSymbol(context
-				.getResources().getDrawable(R.drawable.route_hint_arrow));
+				.getResources().getDrawable(resourceIDNormal));
 		pms.setWidth(10);
 		pms.setHeight(10);
 		Point start = line.getPoint(0);

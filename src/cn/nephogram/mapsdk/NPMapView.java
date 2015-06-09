@@ -485,7 +485,7 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 			break;
 		}
 
-		if (Math.abs(lastRotationAngle - getRotationAngle()) > 10) {
+		if (Math.abs(lastRotationAngle - getRotationAngle()) > 30) {
 			labelGroupLayer.updateLabels();
 			lastRotationAngle = getRotationAngle();
 		}
