@@ -429,6 +429,13 @@ public class NPMapView extends MapView implements OnSingleTapListener,
 	}
 
 	/**
+	 * 检测标签，对重叠标签进行处理
+	 */
+	public void checkLabels() {
+		labelGroupLayer.updateLabels();
+	}
+
+	/**
 	 * 设置定位点符号，用于标识定位结果
 	 * 
 	 * @param markerSymbol

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
+import android.util.Log;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.NPMapEnvironment;
 import cn.nephogram.mapsdk.data.NPBuilding;
@@ -120,6 +121,11 @@ public class NPRouteManager {
 						.getLocalPointFromRoutePoint(p);
 				boolean isValid = routePointConverter.checkPointValidity(lp);
 				if (isValid) {
+					Log.i(TAG, "Floor: " + lp.getFloor());
+					if (lp.getFloor() == 6) {
+						Log.i(TAG, lp.toString());
+					}
+
 					if (lp.getFloor() != currentFloor) {
 						currentFloor = lp.getFloor();
 						currentArray = new ArrayList<NPLocalPoint>();
@@ -135,12 +141,18 @@ public class NPRouteManager {
 			return null;
 		}
 
+		Log.i(TAG, floorArray + "");
+
 		List<NPRoutePart> routePartArray = new ArrayList<NPRoutePart>();
 		for (int i = 0; i < floorArray.size(); i++) {
 			int floor = floorArray.get(i);
 			Polyline line = new Polyline();
 
 			List<NPLocalPoint> pArray = pointArray.get(i);
+			if (pArray.size() < 2) {
+				continue;
+			}
+
 			for (int j = 0; j < pArray.size(); ++j) {
 				NPLocalPoint lp = pArray.get(j);
 				if (j == 0) {
@@ -167,6 +179,8 @@ public class NPRouteManager {
 				rp.setNextPart(routePartArray.get(i + 1));
 			}
 		}
+
+		Log.i(TAG, routePartArray.size() + "");
 
 		return new NPRouteResult(routePartArray);
 	}

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -37,8 +38,13 @@ public class NPFacilityLayer extends GraphicsLayer {
 	Map<Integer, NPPictureMarkerSymbol> allFacilitySymbols = new HashMap<Integer, NPPictureMarkerSymbol>();
 	Map<Integer, NPPictureMarkerSymbol> allHighlightFacilitySymbols = new HashMap<Integer, NPPictureMarkerSymbol>();
 
-	Map<Integer, List<NPFacilityLabel>> groupedFacilityLabelDict = new HashMap<Integer, List<NPFacilityLabel>>();
-	Map<String, NPFacilityLabel> facilityLabelDict = new HashMap<String, NPFacilityLabel>();
+	// Map<Integer, List<NPFacilityLabel>> groupedFacilityLabelDict = new
+	// HashMap<Integer, List<NPFacilityLabel>>();
+	// Map<String, NPFacilityLabel> facilityLabelDict = new HashMap<String,
+	// NPFacilityLabel>();
+	Map<Integer, List<NPFacilityLabel>> groupedFacilityLabelDict = new ConcurrentHashMap<Integer, List<NPFacilityLabel>>();
+	Map<String, NPFacilityLabel> facilityLabelDict = new ConcurrentHashMap<String, NPFacilityLabel>();
+
 	Map<Graphic, Integer> graphicGidDict = new HashMap<Graphic, Integer>();
 
 	private NPRenderingScheme renderingScheme;
@@ -59,7 +65,7 @@ public class NPFacilityLayer extends GraphicsLayer {
 		updateLabelState();
 	}
 
-	private void updateLabelBorders(List<NPLabelBorder> array) {
+	private synchronized void updateLabelBorders(List<NPLabelBorder> array) {
 		for (NPFacilityLabel fl : facilityLabelDict.values()) {
 			Point screenPoint = groupLayer.getMapView().toScreenPoint(
 					fl.getPosition());
@@ -91,11 +97,17 @@ public class NPFacilityLayer extends GraphicsLayer {
 		for (NPFacilityLabel fl : facilityLabelDict.values()) {
 			if (fl.isHidden()) {
 				Symbol symbol = null;
-				updateGraphic(graphicGidDict.get(fl.getFacilityGraphic()),
-						symbol);
+				Integer gid = graphicGidDict.get(fl.getFacilityGraphic());
+				if (gid != null) {
+					updateGraphic(gid, symbol);
+				}
 			} else {
-				updateGraphic(graphicGidDict.get(fl.getFacilityGraphic()),
-						fl.getCurrentSymbol());
+				// updateGraphic(graphicGidDict.get(fl.getFacilityGraphic()),
+				// fl.getCurrentSymbol());
+				Integer gid = graphicGidDict.get(fl.getFacilityGraphic());
+				if (gid != null) {
+					updateGraphic(gid, fl.getCurrentSymbol());
+				}
 			}
 		}
 	}

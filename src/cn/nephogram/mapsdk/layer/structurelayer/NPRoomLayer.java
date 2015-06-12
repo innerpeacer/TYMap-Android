@@ -12,6 +12,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 
 import android.content.Context;
+import android.util.Log;
 import cn.nephogram.mapsdk.NPMapType;
 import cn.nephogram.mapsdk.NPRenderingScheme;
 import cn.nephogram.mapsdk.poi.NPPoi;
@@ -73,19 +74,45 @@ public class NPRoomLayer extends GraphicsLayer {
 		JsonFactory factory = new JsonFactory();
 
 		try {
+
+			long lastTime = System.currentTimeMillis();
+			long now = System.currentTimeMillis();
+			Log.i(TAG, "Read: ");
+
 			JsonParser parser = factory.createJsonParser(new File(path));
 			FeatureSet set = FeatureSet.fromJson(parser);
 
 			Graphic[] graphics = set.getGraphics();
 
-			for (Graphic graphic : graphics) {
-				String poiID = (String) graphic
-						.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-				roomDict.put(poiID, graphic);
+			// lastTime = now;
+			// now = System.currentTimeMillis();
+			// Log.i(TAG, "Start Add 1: " + (now - lastTime) / 1000.0f);
+			// for (Graphic graphic : graphics) {
+			// String poiID = (String) graphic
+			// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+			// roomDict.put(poiID, graphic);
+			//
+			// int gid = addGraphic(graphic);
+			// roomGidDict.put(poiID, gid);
+			// }
 
-				int gid = addGraphic(graphic);
-				roomGidDict.put(poiID, gid);
+			lastTime = now;
+			now = System.currentTimeMillis();
+			Log.i(TAG, "Start Add 2: " + (now - lastTime) / 1000.0f);
+			if (graphics != null && graphics.length > 0) {
+				int[] gids = addGraphics(graphics);
+
+				for (int i = 0; i < graphics.length; ++i) {
+					String poiID = (String) graphics[i]
+							.getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+					roomDict.put(poiID, graphics[i]);
+					roomGidDict.put(poiID, gids[i]);
+				}
 			}
+
+			lastTime = now;
+			now = System.currentTimeMillis();
+			Log.i(TAG, "End Add: " + (now - lastTime) / 1000.0f);
 
 		} catch (JsonParseException e) {
 			e.printStackTrace();

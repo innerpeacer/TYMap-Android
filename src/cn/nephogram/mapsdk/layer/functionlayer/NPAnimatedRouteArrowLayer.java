@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.route.Vector2;
@@ -76,7 +75,7 @@ public class NPAnimatedRouteArrowLayer extends GraphicsLayer {
 	}
 
 	public void showArrowForLines() {
-		Log.i(TAG, "showArrowForLines");
+		// Log.i(TAG, "showArrowForLines");
 
 		removeAll();
 

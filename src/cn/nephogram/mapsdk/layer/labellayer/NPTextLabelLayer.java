@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -37,7 +38,7 @@ public class NPTextLabelLayer extends GraphicsLayer {
 	private NPLabelGroupLayer groupLayer;
 
 	List<NPTextLabel> allTextLabels = new ArrayList<NPTextLabel>();
-	Map<Graphic, Integer> graphicGidDict = new HashMap<Graphic, Integer>();
+	Map<Graphic, Integer> graphicGidDict = new ConcurrentHashMap<Graphic, Integer>();
 
 	private Map<String, NPBrand> allBrandDict = new HashMap<String, NPBrand>();
 
@@ -57,7 +58,7 @@ public class NPTextLabelLayer extends GraphicsLayer {
 		updateLabelState();
 	}
 
-	private void updateLabelBorders(List<NPLabelBorder> array) {
+	private synchronized void updateLabelBorders(List<NPLabelBorder> array) {
 		for (NPTextLabel tl : allTextLabels) {
 			Point screenPoint = groupLayer.getMapView().toScreenPoint(
 					tl.getPosition());
@@ -139,6 +140,8 @@ public class NPTextLabelLayer extends GraphicsLayer {
 					} else {
 						TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
 						ts.setFontFamily("DroidSansFallback.ttf");
+						// ts.setFontFamily("DroidSans.ttf");
+
 						ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
 						ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
 

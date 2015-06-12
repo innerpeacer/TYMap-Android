@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
+import android.util.Log;
 import cn.nephogram.data.NPLocalPoint;
 import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
@@ -171,11 +172,16 @@ public class NPRouteLayer extends GraphicsLayer {
 					.getRoutePartsOnFloor(floor);
 			if (routePartArray != null && routePartArray.size() > 0) {
 				for (NPRoutePart rp : routePartArray) {
+					if (rp.getRoute().getPointCount() <= 0) {
+						continue;
+					}
+
 					if (rp.isFirstPart() && !rp.isLastPart()) {
 						addGraphic(new Graphic(rp.getLastPoint(), switchSymbol));
 					} else if (!rp.isFirstPart() && rp.isLastPart()) {
 						addGraphic(new Graphic(rp.getFirstPoint(), switchSymbol));
 					} else if (!rp.isFirstPart() && !rp.isLastPart()) {
+						Log.i(TAG, rp.getRoute().getPointCount() + "");
 						addGraphic(new Graphic(rp.getFirstPoint(), switchSymbol));
 						addGraphic(new Graphic(rp.getLastPoint(), switchSymbol));
 					}
