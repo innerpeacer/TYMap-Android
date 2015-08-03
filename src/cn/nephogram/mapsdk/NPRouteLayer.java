@@ -1,4 +1,4 @@
-package cn.nephogram.mapsdk.layer.functionlayer;
+package cn.nephogram.mapsdk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import android.graphics.Color;
 import android.util.Log;
 import cn.nephogram.data.NPLocalPoint;
-import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.route.NPRoutePart;
 import cn.nephogram.mapsdk.route.NPRouteResult;
@@ -25,7 +24,7 @@ import com.esri.core.symbol.Symbol;
 /**
  * 路径导航层，用于显示导航路径
  */
-public class NPRouteLayer extends GraphicsLayer {
+class NPRouteLayer extends GraphicsLayer {
 	static final String TAG = NPRouteLayer.class.getSimpleName();
 
 	NPMapView mapView;

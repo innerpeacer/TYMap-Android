@@ -1,10 +1,9 @@
-package cn.nephogram.mapsdk.layer.functionlayer;
+package cn.nephogram.mapsdk;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import cn.nephogram.mapsdk.NPMapView;
 import cn.nephogram.mapsdk.entity.NPPictureMarkerSymbol;
 import cn.nephogram.mapsdk.route.Vector2;
 
@@ -14,7 +13,7 @@ import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 import com.esri.core.map.Graphic;
 
-public class NPRouteArrowLayer extends GraphicsLayer {
+class NPRouteArrowLayer extends GraphicsLayer {
 	private static final double ARROW_INTERVAL = 0.005;
 
 	NPMapView mapView;

@@ -1,4 +1,4 @@
-package cn.nephogram.mapsdk.layer.functionlayer;
+package cn.nephogram.mapsdk;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,7 +14,7 @@ import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.symbol.SimpleLineSymbol.STYLE;
 import com.esri.core.symbol.Symbol;
 
-public class NPRouteHintLayer extends GraphicsLayer {
+class NPRouteHintLayer extends GraphicsLayer {
 	Context context;
 	Symbol routeHintSymbol;
 
