@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ty.mapproject.R;
-import com.ty.mapsdk.entity.TYMapInfo;
+import com.ty.mapsdk.TYMapInfo;
 
 public class FloorListAdatper extends BaseAdapter {
 	private Context mContext;

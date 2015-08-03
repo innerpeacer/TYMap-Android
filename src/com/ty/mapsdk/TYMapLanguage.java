@@ -10,13 +10,13 @@ public enum TYMapLanguage {
 	/**
 	 * 简体中文
 	 */
-	NPSimplifiedChinese,
+	TYSimplifiedChinese,
 	/**
 	 * 繁体中文
 	 */
-	NPTraditionalChinese,
+	TYTraditionalChinese,
 	/**
 	 * 英文
 	 */
-	NPEnglish
+	TYEnglish
 }

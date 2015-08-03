@@ -12,14 +12,14 @@ import cn.nephogram.settings.AppSettings;
 
 import com.esri.core.geometry.Point;
 import com.ty.mapproject.R;
+import com.ty.mapsdk.IPMapFileManager;
+import com.ty.mapsdk.TYBuilding;
 import com.ty.mapsdk.TYMapEnvironment;
+import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
+import com.ty.mapsdk.TYPoi;
 import com.ty.mapsdk.TYRenderingScheme;
 import com.ty.mapsdk.TYMapView.TYMapViewListenser;
-import com.ty.mapsdk.datamanager.TYMapFileManager;
-import com.ty.mapsdk.entity.TYBuilding;
-import com.ty.mapsdk.entity.TYMapInfo;
-import com.ty.mapsdk.poi.TYPoi;
 
 public abstract class BaseMapViewActivity extends Activity implements
 		TYMapViewListenser {
@@ -60,10 +60,10 @@ public abstract class BaseMapViewActivity extends Activity implements
 		String buildingID = pref.getDefaultBuildingID();
 
 		currentBuilding = TYBuilding.parseBuildingFromFilesById(this,
-				TYMapFileManager.getBuildingJsonPath(cityID), cityID,
+				IPMapFileManager.getBuildingJsonPath(cityID), cityID,
 				buildingID);
 		mapInfos = TYMapInfo.parseMapInfoFromFiles(this,
-				TYMapFileManager.getMapInfoJsonPath(cityID, buildingID),
+				IPMapFileManager.getMapInfoJsonPath(cityID, buildingID),
 				buildingID);
 	}
 
@@ -118,7 +118,7 @@ public abstract class BaseMapViewActivity extends Activity implements
 				currentMapInfo.getFloorName()));
 
 		renderingScheme = new TYRenderingScheme(this,
-				TYMapFileManager.getRenderingScheme(currentBuilding));
+				IPMapFileManager.getRenderingScheme(currentBuilding));
 		mapView.init(renderingScheme, currentBuilding);
 		mapView.setFloor(currentMapInfo);
 

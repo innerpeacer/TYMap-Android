@@ -17,7 +17,7 @@ public class TYMapEnvironment {
 
 	private static String mapFileRootDirectory = null;
 
-	private static TYMapLanguage mapLanguage = TYMapLanguage.NPSimplifiedChinese;
+	private static TYMapLanguage mapLanguage = TYMapLanguage.TYSimplifiedChinese;
 
 	/**
 	 * 默认坐标系空间参考

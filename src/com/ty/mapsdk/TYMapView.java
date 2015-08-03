@@ -26,18 +26,8 @@ import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.symbol.MarkerSymbol;
-import com.ty.mapsdk.data.TYLocalPoint;
-import com.ty.mapsdk.entity.TYBuilding;
-import com.ty.mapsdk.entity.TYMapInfo;
-import com.ty.mapsdk.entity.TYPictureMarkerSymbol;
-import com.ty.mapsdk.layer.TYLocationLayer;
-import com.ty.mapsdk.layer.labellayer.TYLabelGroupLayer;
-import com.ty.mapsdk.layer.structurelayer.TYStructureGroupLayer;
-import com.ty.mapsdk.poi.TYBrand;
-import com.ty.mapsdk.poi.TYPoi;
-import com.ty.mapsdk.poi.TYPoi.POI_LAYER;
-import com.ty.mapsdk.route.TYDirectionalHint;
-import com.ty.mapsdk.route.TYRouteResult;
+import com.ty.mapdata.TYLocalPoint;
+import com.ty.mapsdk.TYPoi.POI_LAYER;
 
 public class TYMapView extends MapView implements OnSingleTapListener,
 		OnPanListener, OnZoomListener, OnStatusChangedListener {
@@ -55,15 +45,15 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private TYBuilding building;
 	private TYMapInfo currentMapInfo;
 
-	private TYStructureGroupLayer structureGroupLayer;
-	private TYLabelGroupLayer labelGroupLayer;
+	private IPStructureGroupLayer structureGroupLayer;
+	private IPLabelGroupLayer labelGroupLayer;
 
-	private TYRouteLayer routeLayer;
+	private IPRouteLayer routeLayer;
 	// private NPRouteArrowLayer routeArrowLayer;
-	private TYAnimatedRouteArrowLayer animatedRouteArrowLayer;
-	private TYRouteHintLayer routeHintLayer;
+	private IPAnimatedRouteArrowLayer animatedRouteArrowLayer;
+	private IPRouteHintLayer routeHintLayer;
 
-	private TYLocationLayer locationLayer;
+	private IPLocationLayer locationLayer;
 
 	private Envelope initialEnvelope;
 
@@ -114,28 +104,28 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		SpatialReference sr = TYMapEnvironment.defaultSpatialReference();
 
-		structureGroupLayer = new TYStructureGroupLayer(context,
+		structureGroupLayer = new IPStructureGroupLayer(context,
 				renderingScheme, sr, null);
 		addLayer(structureGroupLayer);
 
-		labelGroupLayer = new TYLabelGroupLayer(context, this, renderingScheme,
+		labelGroupLayer = new IPLabelGroupLayer(context, this, renderingScheme,
 				sr);
 		labelGroupLayer.setBrandDict(allBrandDict);
 		addLayer(labelGroupLayer);
 
-		routeLayer = new TYRouteLayer(this);
+		routeLayer = new IPRouteLayer(this);
 		addLayer(routeLayer);
 
-		routeHintLayer = new TYRouteHintLayer(context);
+		routeHintLayer = new IPRouteHintLayer(context);
 		addLayer(routeHintLayer);
 
 		// routeArrowLayer = new NPRouteArrowLayer(context, this);
 		// addLayer(routeArrowLayer);
 
-		animatedRouteArrowLayer = new TYAnimatedRouteArrowLayer(context, this);
+		animatedRouteArrowLayer = new IPAnimatedRouteArrowLayer(context, this);
 		addLayer(animatedRouteArrowLayer);
 
-		locationLayer = new TYLocationLayer();
+		locationLayer = new IPLocationLayer();
 		addLayer(locationLayer);
 
 		setOnSingleTapListener(this);

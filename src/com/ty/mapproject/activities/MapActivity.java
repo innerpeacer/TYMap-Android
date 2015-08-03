@@ -13,8 +13,8 @@ import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 import com.ty.mapproject.R;
 import com.ty.mapsdk.TYMapView;
+import com.ty.mapsdk.TYPoi;
 import com.ty.mapsdk.TYMapView.TYMapViewMode;
-import com.ty.mapsdk.poi.TYPoi;
 
 public class MapActivity extends BaseMapViewActivity {
 	static final String TAG = MapActivity.class.getSimpleName();

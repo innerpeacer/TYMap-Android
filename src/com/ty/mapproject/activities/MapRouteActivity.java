@@ -15,21 +15,21 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.SimpleMarkerSymbol;
+import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapproject.R;
+import com.ty.mapsdk.TYDirectionalHint;
 import com.ty.mapsdk.TYMapEnvironment;
+import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
-import com.ty.mapsdk.data.TYLocalPoint;
-import com.ty.mapsdk.entity.TYMapInfo;
-import com.ty.mapsdk.entity.TYPictureMarkerSymbol;
-import com.ty.mapsdk.poi.TYPoi;
-import com.ty.mapsdk.route.TYDirectionalHint;
-import com.ty.mapsdk.route.TYRouteManager;
-import com.ty.mapsdk.route.TYRoutePart;
-import com.ty.mapsdk.route.TYRouteResult;
-import com.ty.mapsdk.route.TYRouteManager.NPRouteManagerListener;
+import com.ty.mapsdk.TYPictureMarkerSymbol;
+import com.ty.mapsdk.TYPoi;
+import com.ty.mapsdk.TYRouteManager;
+import com.ty.mapsdk.TYRoutePart;
+import com.ty.mapsdk.TYRouteResult;
+import com.ty.mapsdk.TYRouteManager.TYRouteManagerListener;
 
 public class MapRouteActivity extends BaseMapViewActivity implements
-		OnClickListener, NPRouteManagerListener {
+		OnClickListener, TYRouteManagerListener {
 	static final String TAG = MapRouteActivity.class.getSimpleName();
 
 	Point currentPoint;

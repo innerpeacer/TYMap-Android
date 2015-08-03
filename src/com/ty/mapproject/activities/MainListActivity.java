@@ -25,7 +25,7 @@ public class MainListActivity extends HelperListActivity {
 				+ "/NeophogramMapProject/Map";
 		TYMapEnvironment.setRootDirectoryForMapFiles(mapRootDir);
 
-		TYMapEnvironment.setMapLanguage(TYMapLanguage.NPTraditionalChinese);
+		TYMapEnvironment.setMapLanguage(TYMapLanguage.TYTraditionalChinese);
 
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
