@@ -147,7 +147,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	public void setFloor(final TYMapInfo info) {
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Date invalidDate = dateFormat.parse("2015-08-11");
+			Date invalidDate = dateFormat.parse("2015-10-11");
 
 			Date now = new Date();
 			boolean isInvalid = now.after(invalidDate);
