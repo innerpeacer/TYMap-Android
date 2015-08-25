@@ -1,5 +1,7 @@
 package com.ty.mapsdk;
 
+import java.io.File;
+
 import com.esri.android.runtime.ArcGISRuntime;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.io.UserCredentials;
@@ -65,6 +67,12 @@ public class TYMapEnvironment {
 	 */
 	public static String getRootDirectoryForMapFiles() {
 		return mapFileRootDirectory;
+	}
+
+	public static String getDirectoryForBuilding(TYBuilding building) {
+		File cityDir = new File(mapFileRootDirectory, building.getCityID());
+		File buildingDir = new File(cityDir, building.getBuildingID());
+		return buildingDir.toString();
 	}
 
 	/**

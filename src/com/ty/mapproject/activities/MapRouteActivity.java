@@ -24,9 +24,9 @@ import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYPictureMarkerSymbol;
 import com.ty.mapsdk.TYPoi;
 import com.ty.mapsdk.TYRouteManager;
+import com.ty.mapsdk.TYRouteManager.TYRouteManagerListener;
 import com.ty.mapsdk.TYRoutePart;
 import com.ty.mapsdk.TYRouteResult;
-import com.ty.mapsdk.TYRouteManager.TYRouteManagerListener;
 
 public class MapRouteActivity extends BaseMapViewActivity implements
 		OnClickListener, TYRouteManagerListener {
@@ -100,12 +100,13 @@ public class MapRouteActivity extends BaseMapViewActivity implements
 	@Override
 	public void didFailSolveRouteWithError(TYRouteManager routeManager,
 			Exception e) {
-
+		Log.i(TAG, "didFailSolveRouteWithError");
 	}
 
 	@Override
 	public void didRetrieveDefaultRouteTaskParameters(
 			TYRouteManager routeManager) {
+		Log.i(TAG, "didRetrieveDefaultRouteTaskParameters");
 
 	}
 
@@ -167,6 +168,8 @@ public class MapRouteActivity extends BaseMapViewActivity implements
 	}
 
 	private void requestRoute() {
+		Log.i(TAG, "requestRoute");
+
 		if (startPoint == null || endPoint == null) {
 			Toast.makeText(getBaseContext(), "需要两个点请求路径！", Toast.LENGTH_LONG)
 					.show();

@@ -149,7 +149,7 @@ public class TYRouteResult {
 	public List<TYDirectionalHint> getRouteDirectionalHint(TYRoutePart rp) {
 		List<TYDirectionalHint> result = new ArrayList<TYDirectionalHint>();
 
-		TYLandmarkManager landmarkManager = TYLandmarkManager.sharedManager();
+		IPLandmarkManager landmarkManager = IPLandmarkManager.sharedManager();
 		landmarkManager.loadLandmark(rp.getMapInfo());
 
 		Polyline line = processPolyline(rp.getRoute());
@@ -165,7 +165,7 @@ public class TYRouteResult {
 
 				TYLocalPoint lp = new TYLocalPoint(p0.getX(), p0.getY(), rp
 						.getMapInfo().getFloorNumber());
-				TYLandmark landmark = landmarkManager.searchLandmark(lp, 10);
+				IPLandmark landmark = landmarkManager.searchLandmark(lp, 10);
 
 				TYDirectionalHint ds = new TYDirectionalHint(p0, p1,
 						currentAngle);

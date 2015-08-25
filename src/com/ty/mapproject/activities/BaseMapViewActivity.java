@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import cn.nephogram.settings.AppSettings;
 
 import com.esri.core.geometry.Point;
 import com.ty.mapproject.R;
+import com.ty.mapproject.settings.AppSettings;
 import com.ty.mapsdk.IPMapFileManager;
 import com.ty.mapsdk.TYBuilding;
 import com.ty.mapsdk.TYMapEnvironment;

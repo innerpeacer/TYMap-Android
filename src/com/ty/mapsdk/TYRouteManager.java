@@ -201,6 +201,9 @@ public class TYRouteManager {
 		startPoint = routePointConverter.getRoutePointFromLocalPoint(start);
 		endPoint = routePointConverter.getRoutePointFromLocalPoint(end);
 
+		Log.i(TAG, "Start: " + startPoint);
+		Log.i(TAG, "End: " + endPoint);
+
 		routeResult = null;
 		mException = null;
 

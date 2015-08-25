@@ -35,7 +35,7 @@ class IPTextLabelLayer extends GraphicsLayer {
 	List<IPTextLabel> allTextLabels = new ArrayList<IPTextLabel>();
 	Map<Graphic, Integer> graphicGidDict = new ConcurrentHashMap<Graphic, Integer>();
 
-	private Map<String, TYBrand> allBrandDict = new HashMap<String, TYBrand>();
+	private Map<String, IPBrand> allBrandDict = new HashMap<String, IPBrand>();
 
 	public IPTextLabelLayer(Context context, IPLabelGroupLayer groupLayer,
 			SpatialReference spatialReference, Envelope envelope) {
@@ -44,7 +44,7 @@ class IPTextLabelLayer extends GraphicsLayer {
 		this.context = context;
 	}
 
-	public void setBrandDict(Map<String, TYBrand> dict) {
+	public void setBrandDict(Map<String, IPBrand> dict) {
 		allBrandDict = dict;
 	}
 
@@ -118,7 +118,7 @@ class IPTextLabelLayer extends GraphicsLayer {
 					String poiID = (String) graphic
 							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
 					if (allBrandDict.containsKey(poiID)) {
-						TYBrand brand = allBrandDict.get(poiID);
+						IPBrand brand = allBrandDict.get(poiID);
 						IPLabelSize logoSize = brand.getLogoSize();
 						String logoName = brand.getLogo();
 
@@ -134,8 +134,8 @@ class IPTextLabelLayer extends GraphicsLayer {
 
 					} else {
 						TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
-						ts.setFontFamily("DroidSansFallback.ttf");
-						// ts.setFontFamily("DroidSans.ttf");
+						// ts.setFontFamily("DroidSansFallback.ttf");
+						ts.setFontFamily("DroidSans.ttf");
 
 						ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
 						ts.setVerticalAlignment(VerticalAlignment.MIDDLE);

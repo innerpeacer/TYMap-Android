@@ -36,7 +36,7 @@ class IPLabelGroupLayer extends GroupLayer {
 		addLayer(labelLayer);
 	}
 
-	public void setBrandDict(Map<String, TYBrand> dict) {
+	public void setBrandDict(Map<String, IPBrand> dict) {
 		labelLayer.setBrandDict(dict);
 	}
 
@@ -123,6 +123,7 @@ class IPLabelGroupLayer extends GroupLayer {
 	}
 
 	public List<TYPoi> extractSelectedPoi(float x, float y, int tolerance) {
+		// Log.i(TAG, "LabelGroupLayer: extractSelectedPoi");
 		List<TYPoi> poiList = new ArrayList<TYPoi>();
 
 		poiList.addAll(extractSelectedFacilityPoi(x, y, tolerance));
@@ -150,8 +151,8 @@ class IPLabelGroupLayer extends GroupLayer {
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
 						g.getGeometry(),
-						(Integer) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+						Integer.parseInt((String) g
+								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
 						POI_LAYER.POI_FACILITY);
 				poiList.add(poi);
 			}

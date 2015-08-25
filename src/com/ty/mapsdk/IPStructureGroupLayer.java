@@ -14,7 +14,7 @@ import com.esri.core.renderer.SimpleRenderer;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
 
 class IPStructureGroupLayer extends GroupLayer {
-
+	static final String TAG = IPStructureGroupLayer.class.getSimpleName();
 	private IPFloorLayer floorLayer;
 	private IPRoomLayer roomLayer;
 	private GraphicsLayer roomHighlightLayer;
@@ -137,6 +137,7 @@ class IPStructureGroupLayer extends GroupLayer {
 	}
 
 	public List<TYPoi> extractSelectedPoi(float x, float y, int tolerance) {
+		// Log.i(TAG, "StructureGroupLayer: extractSelectedPoi");
 		List<TYPoi> poiList = new ArrayList<TYPoi>();
 
 		poiList.addAll(extractSelectedRoomPoi(x, y, tolerance));
@@ -164,8 +165,8 @@ class IPStructureGroupLayer extends GroupLayer {
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
 						g.getGeometry(),
-						(Integer) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+						Integer.parseInt((String) g
+								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
 						POI_LAYER.POI_ROOM);
 				poiList.add(poi);
 			}
@@ -193,8 +194,8 @@ class IPStructureGroupLayer extends GroupLayer {
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
 						g.getGeometry(),
-						(Integer) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+						Integer.parseInt((String) g
+								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
 						POI_LAYER.POI_ASSET);
 				poiList.add(poi);
 			}

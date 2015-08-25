@@ -124,8 +124,8 @@ class IPFacilityLayer extends GraphicsLayer {
 			Graphic[] graphics = set.getGraphics();
 
 			for (Graphic graphic : graphics) {
-				Integer categoryID = (Integer) graphic
-						.getAttributeValue("COLOR");
+				Integer categoryID = Integer.parseInt((String) graphic
+						.getAttributeValue("COLOR"));
 				if (categoryID == null) {
 					continue;
 				}

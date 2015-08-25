@@ -26,13 +26,13 @@ public class TYDirectionalHint {
 	private Point startPoint;
 	private Point endPoint;
 
-	private NPRelativeDirection relativeDirection;
+	private TYRelativeDirection relativeDirection;
 
 	private double previousAngle;
 	private double currentAngle;
 	private double length;
 
-	private TYLandmark landmark;
+	private IPLandmark landmark;
 	private TYRoutePart routePart;
 
 	private IPRouteVector2 vector;
@@ -99,14 +99,14 @@ public class TYDirectionalHint {
 	/**
 	 * 当前段的路标信息
 	 */
-	public TYLandmark getLandmark() {
+	public IPLandmark getLandmark() {
 		return landmark;
 	}
 
 	/**
 	 * 当前段的路标信息
 	 */
-	public void setLandmark(TYLandmark landmark) {
+	public void setLandmark(IPLandmark landmark) {
 		this.landmark = landmark;
 	}
 
@@ -141,7 +141,7 @@ public class TYDirectionalHint {
 	/**
 	 * 当前段的相对方向
 	 */
-	public NPRelativeDirection getRelativeDirection() {
+	public TYRelativeDirection getRelativeDirection() {
 		return relativeDirection;
 	}
 
@@ -152,47 +152,47 @@ public class TYDirectionalHint {
 		return previousAngle;
 	}
 
-	public String getDirection(NPRelativeDirection direction) {
+	public String getDirection(TYRelativeDirection direction) {
 		String result = null;
 		switch (direction) {
-		case NPStraight:
+		case TYStraight:
 			result = DIRECTIONAL_STRING_STRAIGHT;
 			break;
 
-		case NPTurnRight:
+		case TYTurnRight:
 			result = DIRECTIONAL_STRING_TURN_RIGHT;
 			break;
 
-		case NPTurnLeft:
+		case TYTurnLeft:
 			result = DIRECTIONAL_STRING_TURN_LEFT;
 			break;
 
-		case NPLeftForward:
+		case TYLeftForward:
 			result = DIRECTIONAL_STRING_LEFT_FORWARD;
 			break;
 
-		case NPLeftBackward:
+		case TYLeftBackward:
 			result = DIRECTIONAL_STRING_LEFT_BACKWARD;
 			break;
 
-		case NPRightForward:
+		case TYRightForward:
 			result = DIRECTIONAL_STRING_RIGHT_FORWARD;
 			break;
 
-		case NPRightBackward:
+		case TYRightBackward:
 			result = DIRECTIONAL_STRING_RIGHT_BACKWARD;
 			break;
 
-		case NPBackward:
+		case TYBackward:
 			result = DIRECTIONAL_STRING_BACKWARD;
 			break;
 		}
 		return result;
 	}
 
-	public NPRelativeDirection calculateRelativeDirection(double angle,
+	public TYRelativeDirection calculateRelativeDirection(double angle,
 			double preAngle) {
-		NPRelativeDirection direction = null;
+		TYRelativeDirection direction = null;
 
 		double deltaAngle = angle - preAngle;
 
@@ -205,34 +205,34 @@ public class TYDirectionalHint {
 		}
 
 		if (preAngle == INITIAL_EMPTY_ANGLE) {
-			direction = NPRelativeDirection.NPStraight;
+			direction = TYRelativeDirection.TYStraight;
 			return direction;
 		}
 
 		if (deltaAngle < -180 + BACKWARD_REFERENCE_ANGLE
 				|| deltaAngle > 180 - BACKWARD_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPBackward;
+			direction = TYRelativeDirection.TYBackward;
 		} else if (deltaAngle >= -180 + BACKWARD_REFERENCE_ANGLE
 				&& deltaAngle <= -90 - LEFT_RIGHT_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPLeftBackward;
+			direction = TYRelativeDirection.TYLeftBackward;
 		} else if (deltaAngle >= -90 - LEFT_RIGHT_REFERENCE_ANGLE
 				&& deltaAngle <= -90 + LEFT_RIGHT_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPTurnLeft;
+			direction = TYRelativeDirection.TYTurnLeft;
 		} else if (deltaAngle >= -90 + LEFT_RIGHT_REFERENCE_ANGLE
 				&& deltaAngle <= -FORWARD_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPLeftForward;
+			direction = TYRelativeDirection.TYLeftForward;
 		} else if (deltaAngle >= -FORWARD_REFERENCE_ANGLE
 				&& deltaAngle <= FORWARD_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPStraight;
+			direction = TYRelativeDirection.TYStraight;
 		} else if (deltaAngle >= FORWARD_REFERENCE_ANGLE
 				&& deltaAngle <= 90 - LEFT_RIGHT_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPRightForward;
+			direction = TYRelativeDirection.TYRightForward;
 		} else if (deltaAngle >= 90 - LEFT_RIGHT_REFERENCE_ANGLE
 				&& deltaAngle <= 90 + LEFT_RIGHT_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPTurnRight;
+			direction = TYRelativeDirection.TYTurnRight;
 		} else if (deltaAngle >= 90 + LEFT_RIGHT_REFERENCE_ANGLE
 				&& deltaAngle <= 180 - BACKWARD_REFERENCE_ANGLE) {
-			direction = NPRelativeDirection.NPRightBackward;
+			direction = TYRelativeDirection.TYRightBackward;
 		}
 
 		return direction;
@@ -255,7 +255,7 @@ public class TYDirectionalHint {
 	/**
 	 * 相对方向类型，用于导航提示
 	 */
-	public enum NPRelativeDirection {
-		NPStraight, NPTurnRight, NPRightForward, NPLeftForward, NPRightBackward, NPLeftBackward, NPTurnLeft, NPBackward
+	public enum TYRelativeDirection {
+		TYStraight, TYTurnRight, TYRightForward, TYLeftForward, TYRightBackward, TYLeftBackward, TYTurnLeft, TYBackward
 	};
 }

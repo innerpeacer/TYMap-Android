@@ -66,7 +66,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	private double lastRotationAngle = 0.0;
 
-	private Map<String, TYBrand> allBrandDict = new HashMap<String, TYBrand>();
+	private Map<String, IPBrand> allBrandDict = new HashMap<String, IPBrand>();
 
 	// =====================================
 	public TYMapView(Context context) {
@@ -97,8 +97,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		// Log.i(TAG, "init");
 		this.building = buliding;
 
-		List<TYBrand> brandArray = TYBrand.parseAllBrands(buliding);
-		for (TYBrand brand : brandArray) {
+		List<IPBrand> brandArray = IPBrand.parseAllBrands(buliding);
+		for (IPBrand brand : brandArray) {
 			allBrandDict.put(brand.getPoiID(), brand);
 		}
 
@@ -708,6 +708,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	@Override
 	public void onSingleTap(float x, float y) {
+		// Log.i(TAG, "onSingleTap");
+
 		clearSelection();
 
 		Point p = toMapPoint(x, y);
@@ -801,6 +803,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	}
 
 	private List<TYPoi> extractSelectedPoi(float x, float y) {
+		// Log.i(TAG, "extractSelectedPoi");
 		List<TYPoi> poiList = new ArrayList<TYPoi>();
 
 		poiList.addAll(labelGroupLayer.extractSelectedPoi(x, y,

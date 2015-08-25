@@ -8,12 +8,10 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import cn.nephogram.settings.AppSettings;
 
 import com.ty.mapproject.R;
-import com.ty.mapproject.app.FileHelper;
+import com.ty.mapproject.settings.AppSettings;
 import com.ty.mapsdk.TYMapEnvironment;
-import com.ty.mapsdk.TYMapLanguage;
 
 public class MainListActivity extends HelperListActivity {
 	static final String TAG = MainListActivity.class.getSimpleName();
@@ -22,10 +20,10 @@ public class MainListActivity extends HelperListActivity {
 		super.onCreate(savedInstanceState);
 
 		String mapRootDir = Environment.getExternalStorageDirectory()
-				+ "/NeophogramMapProject/Map";
+				+ "/TuYaMap/MapResource";
 		TYMapEnvironment.setRootDirectoryForMapFiles(mapRootDir);
 
-		TYMapEnvironment.setMapLanguage(TYMapLanguage.TYTraditionalChinese);
+		// TYMapEnvironment.setMapLanguage(TYMapLanguage.TYTraditionalChinese);
 
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
@@ -35,16 +33,16 @@ public class MainListActivity extends HelperListActivity {
 		AppSettings settings = new AppSettings(this);
 
 		settings.setDefaultCityID("0021");
-		settings.setDefaultBuildingID("002100002");
+		settings.setDefaultBuildingID("00210100");
 
-		settings.setDefaultCityID("H852");
-		settings.setDefaultBuildingID("H85200001");
+		// settings.setDefaultCityID("H852");
+		// settings.setDefaultBuildingID("H85200001");
 
 		setTitle(getResources().getString(R.string.app_name));
 	};
 
 	void copyFileIfNeeded() {
-		String sourcePath = "NephogramMapResource";
+		String sourcePath = "MapResource";
 		String targetPath = TYMapEnvironment.getRootDirectoryForMapFiles();
 
 		Log.i(TAG, "source path: " + sourcePath);
