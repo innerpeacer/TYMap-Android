@@ -1,18 +1,11 @@
 package com.ty.mapsdk;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-
 import android.content.Context;
-import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -64,38 +57,14 @@ class IPRoomLayer extends GraphicsLayer {
 		return roomRenderer;
 	}
 
-	public void loadContentsFromFileWithInfo(String path) {
+	public void loadContents(FeatureSet set) {
 		removeAll();
 		roomDict.clear();
 		roomGidDict.clear();
-		JsonFactory factory = new JsonFactory();
 
-		try {
-
-			long lastTime = System.currentTimeMillis();
-			long now = System.currentTimeMillis();
-			Log.i(TAG, "Read: ");
-
-			JsonParser parser = factory.createJsonParser(new File(path));
-			FeatureSet set = FeatureSet.fromJson(parser);
-
+		if (set != null) {
 			Graphic[] graphics = set.getGraphics();
 
-			// lastTime = now;
-			// now = System.currentTimeMillis();
-			// Log.i(TAG, "Start Add 1: " + (now - lastTime) / 1000.0f);
-			// for (Graphic graphic : graphics) {
-			// String poiID = (String) graphic
-			// .getAttributeValue(NPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-			// roomDict.put(poiID, graphic);
-			//
-			// int gid = addGraphic(graphic);
-			// roomGidDict.put(poiID, gid);
-			// }
-
-			lastTime = now;
-			now = System.currentTimeMillis();
-			Log.i(TAG, "Start Add 2: " + (now - lastTime) / 1000.0f);
 			if (graphics != null && graphics.length > 0) {
 				int[] gids = addGraphics(graphics);
 
@@ -106,19 +75,41 @@ class IPRoomLayer extends GraphicsLayer {
 					roomGidDict.put(poiID, gids[i]);
 				}
 			}
-
-			lastTime = now;
-			now = System.currentTimeMillis();
-			Log.i(TAG, "End Add: " + (now - lastTime) / 1000.0f);
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
+
+	// public void loadContentsFromFileWithInfo(String path) {
+	// removeAll();
+	// roomDict.clear();
+	// roomGidDict.clear();
+	// JsonFactory factory = new JsonFactory();
+	//
+	// try {
+	//
+	// JsonParser parser = factory.createJsonParser(new File(path));
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	//
+	// Graphic[] graphics = set.getGraphics();
+	//
+	// if (graphics != null && graphics.length > 0) {
+	// int[] gids = addGraphics(graphics);
+	//
+	// for (int i = 0; i < graphics.length; ++i) {
+	// String poiID = (String) graphics[i]
+	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+	// roomDict.put(poiID, graphics[i]);
+	// roomGidDict.put(poiID, gids[i]);
+	// }
+	// }
+	//
+	// } catch (JsonParseException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	public TYPoi getPoiWithPoiID(String pid) {
 		TYPoi result = null;

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.esri.android.map.GroupLayer;
 import com.esri.core.geometry.SpatialReference;
+import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
 
@@ -57,15 +58,23 @@ class IPLabelGroupLayer extends GroupLayer {
 		labelLayer.removeAll();
 	}
 
-	public void loadFacilityContentsFromFileWithInfo(TYMapInfo info) {
-		facilityLayer.loadContentsFromFileWithInfo(IPMapFileManager
-				.getFacilityFilePath(info));
+	public void loadFacilityContents(FeatureSet set) {
+		facilityLayer.loadContents(set);
 	}
 
-	public void loadLabelContentsFromFileWithInfo(TYMapInfo info) {
-		labelLayer.loadContentsFromFileWithInfo(IPMapFileManager
-				.getLabelFilePath(info));
+	public void loadLabelContents(FeatureSet set) {
+		labelLayer.loadContents(set);
 	}
+
+	// public void loadFacilityContentsFromFileWithInfo(TYMapInfo info) {
+	// facilityLayer.loadContentsFromFileWithInfo(IPMapFileManager
+	// .getFacilityFilePath(info));
+	// }
+
+	// public void loadLabelContentsFromFileWithInfo(TYMapInfo info) {
+	// labelLayer.loadContentsFromFileWithInfo(IPMapFileManager
+	// .getLabelFilePath(info));
+	// }
 
 	public void clearSelection() {
 		facilityLayer.clearSelection();

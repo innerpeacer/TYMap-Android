@@ -1,5 +1,11 @@
 package com.ty.mapsdk;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +14,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -25,6 +37,7 @@ import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.SpatialReference;
+import com.esri.core.map.FeatureSet;
 import com.esri.core.symbol.MarkerSymbol;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
@@ -44,6 +57,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	private TYBuilding building;
 	private TYMapInfo currentMapInfo;
+
+	private Map<String, FeatureSet> mapDataDict = new HashMap<String, FeatureSet>();
 
 	private IPStructureGroupLayer structureGroupLayer;
 	private IPLabelGroupLayer labelGroupLayer;
@@ -188,30 +203,108 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		locationLayer.removeAll();
 
+		File file = new File(IPMapFileManager.getMapDataPath(currentMapInfo));
+		if (!file.exists()) {
+			Log.i(TAG, "File not exist: " + file.toString());
+			return;
+		}
+
+		String jsonString = readFile(file.toString());
+		JsonFactory factory = new JsonFactory();
+		mapDataDict.clear();
+		try {
+			JSONObject jsonObject = new JSONObject(jsonString);
+			Object floorObject = jsonObject.get("floor");
+			if (floorObject.getClass() != String.class) {
+				JsonParser parser = factory.createJsonParser(floorObject
+						.toString());
+				FeatureSet set = FeatureSet.fromJson(parser);
+				mapDataDict.put("floor", set);
+				Log.i(TAG, "Load floor: " + set.getGraphics().length);
+			}
+
+			Object roomObject = jsonObject.get("room");
+			if (roomObject.getClass() != String.class) {
+				JsonParser parser = factory.createJsonParser(roomObject
+						.toString());
+				FeatureSet set = FeatureSet.fromJson(parser);
+				mapDataDict.put("room", set);
+				Log.i(TAG, "Load room: " + set.getGraphics().length);
+
+			}
+
+			Object assetObject = jsonObject.get("asset");
+			if (assetObject.getClass() != String.class) {
+				JsonParser parser = factory.createJsonParser(assetObject
+						.toString());
+				FeatureSet set = FeatureSet.fromJson(parser);
+				mapDataDict.put("asset", set);
+				Log.i(TAG, "Load asset: " + set.getGraphics().length);
+
+			}
+
+			Object facilityObject = jsonObject.get("facility");
+			if (facilityObject.getClass() != String.class) {
+				JsonParser parser = factory.createJsonParser(facilityObject
+						.toString());
+				FeatureSet set = FeatureSet.fromJson(parser);
+				mapDataDict.put("facility", set);
+				Log.i(TAG, "Load facility: " + set.getGraphics().length);
+
+			}
+
+			Object labelObject = jsonObject.get("label");
+			if (labelObject.getClass() != String.class) {
+				JsonParser parser = factory.createJsonParser(labelObject
+						.toString());
+				FeatureSet set = FeatureSet.fromJson(parser);
+				mapDataDict.put("label", set);
+				Log.i(TAG, "Load label: " + set.getGraphics().length);
+
+			}
+
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				if (!isInterupted) {
-					structureGroupLayer.loadFloorContentFromFileWithInfo(info);
+					// structureGroupLayer.loadFloorContentFromFileWithInfo(info);
+					structureGroupLayer.loadFloorContent(mapDataDict
+							.get("floor"));
 				}
 
 				if (!isInterupted) {
-					structureGroupLayer.loadRoomContentFromFileWithInfo(info);
+					// structureGroupLayer.loadRoomContentFromFileWithInfo(info);
+					structureGroupLayer.loadRoomContent(mapDataDict.get("room"));
 				}
 
 				if (!isInterupted) {
-					structureGroupLayer.loadAssetContentFromFileWithInfo(info);
+					// structureGroupLayer.loadAssetContentFromFileWithInfo(info);
+					structureGroupLayer.loadAssetContent(mapDataDict
+							.get("asset"));
 				}
 
 				if (!isInterupted) {
-					Log.i(TAG, "loadFacilityContentsFromFileWithInfo");
-					labelGroupLayer.loadFacilityContentsFromFileWithInfo(info);
+					// Log.i(TAG, "loadFacilityContentsFromFileWithInfo");
+					// labelGroupLayer.loadFacilityContentsFromFileWithInfo(info);
+					labelGroupLayer.loadFacilityContents(mapDataDict
+							.get("facility"));
 				}
 
 				if (!isInterupted) {
-					Log.i(TAG, "loadLabelContentsFromFileWithInfo");
-					labelGroupLayer.loadLabelContentsFromFileWithInfo(info);
+					// Log.i(TAG, "loadLabelContentsFromFileWithInfo");
+					// labelGroupLayer.loadLabelContentsFromFileWithInfo(info);
+					labelGroupLayer.loadLabelContents(mapDataDict.get("label"));
 				}
 
 				if (initialEnvelope == null) {
@@ -245,6 +338,27 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 			}
 		}).start();
 
+	}
+
+	String readFile(String file) {
+		String result = "";
+		try {
+			FileInputStream inStream = new FileInputStream(file);
+			InputStreamReader inputReader = new InputStreamReader(inStream);
+			BufferedReader bufReader = new BufferedReader(inputReader);
+
+			String line = "";
+			StringBuffer jsonStr = new StringBuffer();
+			while ((line = bufReader.readLine()) != null)
+				jsonStr.append(line);
+
+			result = jsonStr.toString();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	/**

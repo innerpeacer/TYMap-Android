@@ -9,6 +9,7 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.GroupLayer;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.SpatialReference;
+import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.esri.core.renderer.SimpleRenderer;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
@@ -49,27 +50,30 @@ class IPStructureGroupLayer extends GroupLayer {
 
 	}
 
-	public void loadFloorContentFromFileWithInfo(TYMapInfo info) {
-		floorLayer.loadContentsFromFileWithInfo(IPMapFileManager
-				.getFloorFilePath(info));
+	public void loadFloorContent(FeatureSet set) {
+		floorLayer.loadContents(set);
 	}
 
-	public void loadRoomContentFromFileWithInfo(TYMapInfo info) {
-		roomLayer.loadContentsFromFileWithInfo(IPMapFileManager
-				.getRoomFilePath(info));
+	public void loadRoomContent(FeatureSet set) {
+		roomLayer.loadContents(set);
 	}
 
-	public void loadAssetContentFromFileWithInfo(TYMapInfo info) {
-		assetLayer.loadContentsFromFileWithInfo(IPMapFileManager
-				.getAssetFilePath(info));
+	public void loadAssetContent(FeatureSet set) {
+		assetLayer.loadContents(set);
 	}
 
-	// public void loadContentsFromFileWithInfo(NPMapInfo info) {
-	// floorLayer.loadContentsFromFileWithInfo(NPMapFileManager
+	// public void loadFloorContentFromFileWithInfo(TYMapInfo info) {
+	// floorLayer.loadContentsFromFileWithInfo(IPMapFileManager
 	// .getFloorFilePath(info));
-	// roomLayer.loadContentsFromFileWithInfo(NPMapFileManager
+	// }
+
+	// public void loadRoomContentFromFileWithInfo(TYMapInfo info) {
+	// roomLayer.loadContentsFromFileWithInfo(IPMapFileManager
 	// .getRoomFilePath(info));
-	// assetLayer.loadContentsFromFileWithInfo(NPMapFileManager
+	// }
+
+	// public void loadAssetContentFromFileWithInfo(TYMapInfo info) {
+	// assetLayer.loadContentsFromFileWithInfo(IPMapFileManager
 	// .getAssetFilePath(info));
 	// }
 

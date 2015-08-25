@@ -1,13 +1,7 @@
 package com.ty.mapsdk;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
 
 import android.content.Context;
 
@@ -56,23 +50,32 @@ class IPAssetLayer extends GraphicsLayer {
 		return assetRenderer;
 	}
 
-	public void loadContentsFromFileWithInfo(String path) {
+	public void loadContents(FeatureSet set) {
 		removeAll();
-		JsonFactory factory = new JsonFactory();
 
-		try {
-			JsonParser parser = factory.createJsonParser(new File(path));
-			FeatureSet set = FeatureSet.fromJson(parser);
-
+		if (set != null) {
 			Graphic[] graphics = set.getGraphics();
 			addGraphics(graphics);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
+
+	// public void loadContentsFromFileWithInfo(String path) {
+	// removeAll();
+	// JsonFactory factory = new JsonFactory();
+	//
+	// try {
+	// JsonParser parser = factory.createJsonParser(new File(path));
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	//
+	// Graphic[] graphics = set.getGraphics();
+	// addGraphics(graphics);
+	// } catch (JsonParseException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 }

@@ -1,7 +1,5 @@
 package com.ty.mapsdk;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,12 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -108,19 +103,13 @@ class IPFacilityLayer extends GraphicsLayer {
 		}
 	}
 
-	public void loadContentsFromFileWithInfo(String path) {
+	public void loadContents(FeatureSet set) {
 		removeAll();
 
 		groupedFacilityLabelDict.clear();
 		facilityLabelDict.clear();
 		graphicGidDict.clear();
-
-		JsonFactory factory = new JsonFactory();
-
-		try {
-			JsonParser parser = factory.createJsonParser(new File(path));
-			FeatureSet set = FeatureSet.fromJson(parser);
-
+		if (set != null) {
 			Graphic[] graphics = set.getGraphics();
 
 			for (Graphic graphic : graphics) {
@@ -156,17 +145,69 @@ class IPFacilityLayer extends GraphicsLayer {
 				int gid = addGraphic(graphic);
 				graphicGidDict.put(graphic, gid);
 			}
-
-			// updateLabelState();
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+
 	}
+
+	// public void loadContentsFromFileWithInfo(String path) {
+	// removeAll();
+	//
+	// groupedFacilityLabelDict.clear();
+	// facilityLabelDict.clear();
+	// graphicGidDict.clear();
+	//
+	// JsonFactory factory = new JsonFactory();
+	//
+	// try {
+	// JsonParser parser = factory.createJsonParser(new File(path));
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	//
+	// Graphic[] graphics = set.getGraphics();
+	//
+	// for (Graphic graphic : graphics) {
+	// Integer categoryID = Integer.parseInt((String) graphic
+	// .getAttributeValue("COLOR"));
+	// if (categoryID == null) {
+	// continue;
+	// }
+	//
+	// Point pos = (Point) graphic.getGeometry();
+	//
+	// if (!groupedFacilityLabelDict.keySet().contains(categoryID)) {
+	// List<IPFacilityLabel> array = new ArrayList<IPFacilityLabel>();
+	// groupedFacilityLabelDict.put(categoryID, array);
+	// }
+	//
+	// IPFacilityLabel fLabel = new IPFacilityLabel(categoryID, pos);
+	// fLabel.setFacilityGraphic(graphic);
+	// fLabel.setNormalFacilitySymbol(allFacilitySymbols
+	// .get(categoryID));
+	// fLabel.setHighlightedFaciltySymbol(allHighlightFacilitySymbols
+	// .get(categoryID));
+	// fLabel.setHighlighted(false);
+	//
+	// List<IPFacilityLabel> array = groupedFacilityLabelDict
+	// .get(categoryID);
+	// array.add(fLabel);
+	//
+	// String poiID = (String) graphic
+	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+	// facilityLabelDict.put(poiID, fLabel);
+	//
+	// int gid = addGraphic(graphic);
+	// graphicGidDict.put(graphic, gid);
+	// }
+	//
+	// // updateLabelState();
+	//
+	// } catch (JsonParseException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	public void showFacilityWithCategory(int categoryID) {
 		Iterator<Integer> iter = groupedFacilityLabelDict.keySet().iterator();
@@ -260,6 +301,7 @@ class IPFacilityLayer extends GraphicsLayer {
 			Integer colorID = iter.next();
 			String icon = iconDict.get(colorID);
 
+			Log.i(TAG, colorID + ": " + icon);
 			{
 				String iconNormal = icon + "_normal";
 				int resourceIDNormal = context.getResources().getIdentifier(

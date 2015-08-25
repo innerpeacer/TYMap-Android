@@ -9,27 +9,25 @@ import android.os.Environment;
 
 public class IPMapFileManager {
 
-	private static String JSON_FILE_FLOOR = "%s_FLOOR.json";
-	private static String JSON_FILE_ROOM = "%s_ROOM.json";
-	private static String JSON_FILE_ASSET = "%s_ASSET.json";
-	private static String JSON_FILE_FACILITY = "%s_FACILITY.json";
-	private static String JSON_FILE_LABEL = "%s_LABEL.json";
+	// private static String JSON_FILE_FLOOR = "%s_FLOOR.json";
+	// private static String JSON_FILE_ROOM = "%s_ROOM.json";
+	// private static String JSON_FILE_ASSET = "%s_ASSET.json";
+	// private static String JSON_FILE_FACILITY = "%s_FACILITY.json";
+	// private static String JSON_FILE_LABEL = "%s_LABEL.json";
 
-	private static String JSON_FILE_LANDMARK = "%s_LANDMARK.json";
-	private static String JSON_FILE_BRANDS = "Brands_Building_%s.json";
+	static String JSON_FILE_MAP_DATA = "%s.data";
 
-	// #define FILE_BRANDS @"Brands_Building_%@.json"
+	static String JSON_FILE_LANDMARK = "%s_LANDMARK.json";
+	static String JSON_FILE_BRANDS = "Brands_Building_%s.json";
 
-	// private static String JSON_FILE_AOI = "AOI.json";
+	static String JSON_FILE_RENDERING_SCHEME = "%s_RenderingScheme.json";
+	static String JSON_FILE_DEFAULT_RENDERING_SCHEME = "RenderingScheme.json";
 
-	private static String JSON_FILE_RENDERING_SCHEME = "%s_RenderingScheme.json";
-	private static String JSON_FILE_DEFAULT_RENDERING_SCHEME = "RenderingScheme.json";
+	static String JSON_FILE_CITY = "Cities.json";
+	static String JSON_FILE_BUILDING = "Buildings_City_%s.json";
+	static String JSON_FILE_MAPINFO = "MapInfo_Building_%s.json";
 
-	private static String JSON_FILE_CITY = "Cities.json";
-	private static String JSON_FILE_BUILDING = "Buildings_City_%s.json";
-	private static String JSON_FILE_MAPINFO = "MapInfo_Building_%s.json";
-
-	private static String FILE_POI_DB = "%s_POI.db";
+	static String FILE_POI_DB = "%s_POI.db";
 
 	public static boolean fileExist(String path) {
 		return new File(path).exists() ? true : false;
@@ -65,68 +63,70 @@ public class IPMapFileManager {
 		return (new File(buildingDir, fileName).toString());
 	}
 
-	public static String getFloorFilePath(TYMapInfo info) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, info.getCityID());
-		File buildingDir = new File(cityDir, info.getBuildingID());
-		String fileName = String.format(JSON_FILE_FLOOR, info.getMapID());
+	public static String getMapDataPath(TYMapInfo info) {
+		String buildingDir = getBuildingDir(info.getCityID(),
+				info.getBuildingID());
+		String fileName = String.format(JSON_FILE_MAP_DATA, info.getMapID());
 		return (new File(buildingDir, fileName).toString());
 	}
 
-	public static String getRoomFilePath(TYMapInfo info) {
-
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, info.getCityID());
-		File buildingDir = new File(cityDir, info.getBuildingID());
-		String fileName = String.format(JSON_FILE_ROOM, info.getMapID());
-		return (new File(buildingDir, fileName).toString());
-	}
-
-	public static String getAssetFilePath(TYMapInfo info) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, info.getCityID());
-		File buildingDir = new File(cityDir, info.getBuildingID());
-		String fileName = String.format(JSON_FILE_ASSET, info.getMapID());
-		return (new File(buildingDir, fileName).toString());
-	}
-
-	public static String getFacilityFilePath(TYMapInfo info) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, info.getCityID());
-		File buildingDir = new File(cityDir, info.getBuildingID());
-		String fileName = String.format(JSON_FILE_FACILITY, info.getMapID());
-		return (new File(buildingDir, fileName).toString());
-	}
-
-	public static String getLabelFilePath(TYMapInfo info) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, info.getCityID());
-		File buildingDir = new File(cityDir, info.getBuildingID());
-		String fileName = String.format(JSON_FILE_LABEL, info.getMapID());
-		return (new File(buildingDir, fileName).toString());
-	}
+	// public static String getFloorFilePath(TYMapInfo info) {
+	// String buildingDir = getBuildingDir(building.getCityID(),
+	// building.getCityID());
+	// String fileName = String.format(JSON_FILE_FLOOR, info.getMapID());
+	// return (new File(buildingDir, fileName).toString());
+	// }
+	//
+	// public static String getRoomFilePath(TYMapInfo info) {
+	//
+	// String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
+	// File cityDir = new File(mapRootDir, info.getCityID());
+	// File buildingDir = new File(cityDir, info.getBuildingID());
+	// String fileName = String.format(JSON_FILE_ROOM, info.getMapID());
+	// return (new File(buildingDir, fileName).toString());
+	// }
+	//
+	// public static String getAssetFilePath(TYMapInfo info) {
+	// String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
+	// File cityDir = new File(mapRootDir, info.getCityID());
+	// File buildingDir = new File(cityDir, info.getBuildingID());
+	// String fileName = String.format(JSON_FILE_ASSET, info.getMapID());
+	// return (new File(buildingDir, fileName).toString());
+	// }
+	//
+	// public static String getFacilityFilePath(TYMapInfo info) {
+	// String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
+	// File cityDir = new File(mapRootDir, info.getCityID());
+	// File buildingDir = new File(cityDir, info.getBuildingID());
+	// String fileName = String.format(JSON_FILE_FACILITY, info.getMapID());
+	// return (new File(buildingDir, fileName).toString());
+	// }
+	//
+	// public static String getLabelFilePath(TYMapInfo info) {
+	// String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
+	// File cityDir = new File(mapRootDir, info.getCityID());
+	// File buildingDir = new File(cityDir, info.getBuildingID());
+	// String fileName = String.format(JSON_FILE_LABEL, info.getMapID());
+	// return (new File(buildingDir, fileName).toString());
+	// }
 
 	public static String getLandmarkJsonPath(TYMapInfo info) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, info.getCityID());
-		File buildingDir = new File(cityDir, info.getBuildingID());
+		String buildingDir = getBuildingDir(info.getCityID(), info.getCityID());
 		String fileName = String.format(JSON_FILE_LANDMARK, info.getMapID());
 		return (new File(buildingDir, fileName).toString());
 	}
 
 	public static String getBrandJsonPath(TYBuilding building) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, building.getCityID());
-		File buildingDir = new File(cityDir, building.getBuildingID());
+		String buildingDir = getBuildingDir(building.getCityID(),
+				building.getCityID());
 		String fileName = String.format(JSON_FILE_BRANDS,
 				building.getBuildingID());
 		return (new File(buildingDir, fileName).toString());
 	}
 
 	public static String getRenderingScheme(TYBuilding building) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, building.getCityID());
-		File buildingDir = new File(cityDir, building.getBuildingID());
+		String buildingDir = getBuildingDir(building.getCityID(),
+				building.getCityID());
 		String fileName = String.format(JSON_FILE_RENDERING_SCHEME,
 				building.getBuildingID());
 
@@ -145,11 +145,22 @@ public class IPMapFileManager {
 	}
 
 	public static String getPOIDBPath(TYBuilding building) {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		File cityDir = new File(mapRootDir, building.getCityID());
-		File buildingDir = new File(cityDir, building.getBuildingID());
+		String buildingDir = getBuildingDir(building.getCityID(),
+				building.getCityID());
 		String fileName = String.format(FILE_POI_DB, building.getBuildingID());
 		return (new File(buildingDir, fileName).toString());
+
+	}
+
+	static String getBuildingDir(String cityID, String buildingID) {
+		File cityDir = new File(TYMapEnvironment.getRootDirectoryForMapFiles(),
+				cityID);
+		return (new File(cityDir, buildingID)).toString();
+	}
+
+	static String getCityDir(String cityID) {
+		return (new File(TYMapEnvironment.getRootDirectoryForMapFiles(), cityID))
+				.toString();
 
 	}
 

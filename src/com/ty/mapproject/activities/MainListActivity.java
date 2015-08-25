@@ -23,20 +23,15 @@ public class MainListActivity extends HelperListActivity {
 				+ "/TuYaMap/MapResource";
 		TYMapEnvironment.setRootDirectoryForMapFiles(mapRootDir);
 
-		// TYMapEnvironment.setMapLanguage(TYMapLanguage.TYTraditionalChinese);
-
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
 		}
 		// copyFileIfNeeded();
 
 		AppSettings settings = new AppSettings(this);
-
 		settings.setDefaultCityID("0021");
 		settings.setDefaultBuildingID("00210100");
-
-		// settings.setDefaultCityID("H852");
-		// settings.setDefaultBuildingID("H85200001");
+		// settings.setDefaultBuildingID("002100002");
 
 		setTitle(getResources().getString(R.string.app_name));
 	};

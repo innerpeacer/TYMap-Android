@@ -1,16 +1,10 @@
 package com.ty.mapsdk;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -93,17 +87,12 @@ class IPTextLabelLayer extends GraphicsLayer {
 		}
 	}
 
-	public void loadContentsFromFileWithInfo(String path) {
+	public void loadContents(FeatureSet set) {
 		removeAll();
-
 		allTextLabels.clear();
 		graphicGidDict.clear();
 
-		JsonFactory factory = new JsonFactory();
-		try {
-			JsonParser parser = factory.createJsonParser(new File(path));
-			FeatureSet set = FeatureSet.fromJson(parser);
-
+		if (set != null) {
 			TYMapLanguage language = TYMapEnvironment.getMapLanguage();
 			String field = getNameFieldForLanguage(language);
 
@@ -150,15 +139,75 @@ class IPTextLabelLayer extends GraphicsLayer {
 					graphicGidDict.put(graphic, gid);
 				}
 			}
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
+
+	// public void loadContentsFromFileWithInfo(String path) {
+	// removeAll();
+	//
+	// allTextLabels.clear();
+	// graphicGidDict.clear();
+	//
+	// JsonFactory factory = new JsonFactory();
+	// try {
+	// JsonParser parser = factory.createJsonParser(new File(path));
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	//
+	// TYMapLanguage language = TYMapEnvironment.getMapLanguage();
+	// String field = getNameFieldForLanguage(language);
+	//
+	// Graphic[] graphics = set.getGraphics();
+	// for (Graphic graphic : graphics) {
+	// String name = (String) graphic.getAttributeValue(field);
+	//
+	// if (name != null && name.length() > 0) {
+	// Point pos = (Point) graphic.getGeometry();
+	// IPTextLabel textLabel = new IPTextLabel(name, pos);
+	//
+	// String poiID = (String) graphic
+	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+	// if (allBrandDict.containsKey(poiID)) {
+	// IPBrand brand = allBrandDict.get(poiID);
+	// IPLabelSize logoSize = brand.getLogoSize();
+	// String logoName = brand.getLogo();
+	//
+	// int resourceID = context.getResources().getIdentifier(
+	// logoName, "drawable", context.getPackageName());
+	// TYPictureMarkerSymbol pms = new TYPictureMarkerSymbol(
+	// context.getResources().getDrawable(resourceID));
+	// pms.setWidth((float) logoSize.width);
+	// pms.setHeight((float) logoSize.height);
+	//
+	// textLabel.setTextSymbol(pms);
+	// textLabel.setTextSize(brand.getLogoSize());
+	//
+	// } else {
+	// TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
+	// // ts.setFontFamily("DroidSansFallback.ttf");
+	// ts.setFontFamily("DroidSans.ttf");
+	//
+	// ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
+	// ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
+	//
+	// textLabel.setTextSymbol(ts);
+	// }
+	//
+	// textLabel.setTextGraphic(graphic);
+	// int gid = addGraphic(graphic);
+	//
+	// allTextLabels.add(textLabel);
+	// graphicGidDict.put(graphic, gid);
+	// }
+	// }
+	//
+	// } catch (JsonParseException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	private String getNameFieldForLanguage(TYMapLanguage l) {
 		String result = null;
