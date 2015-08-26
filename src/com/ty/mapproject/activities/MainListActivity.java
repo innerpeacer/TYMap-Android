@@ -60,7 +60,10 @@ public class MainListActivity extends HelperListActivity {
 						MapCalloutActivity.class)),
 				new IntentPair(getResources().getString(
 						R.string.location_activity_title), new Intent(this,
-						MapLocationActivity.class)) };
+						MapLocationActivity.class)),
+				new IntentPair(getResources().getString(
+						R.string.city_activity_title), new Intent(this,
+						AllCityListActivity.class)) };
 	}
 
 	@Override

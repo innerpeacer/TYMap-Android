@@ -1,10 +1,12 @@
 <resources>
 
-     <string name="app_name">图呀地图</string>
+    <string name="app_name">图呀地图</string>
     <string name="map_activity_title">图呀地图 Demo</string>
     <string name="map_route_activity_title">地图导航 Demo</string>
     <string name="map_callout_activity_title">地图Callout Demo</string>
     <string name="location_activity_title">图呀定位</string>
+    <string name="city_activity_title">城市列表</string>
+    <string name="building_activity_title">建筑列表</string>
     <string name="btn_set_start">设为起点</string>
     <string name="btn_set_end">设为终点</string>
     <string name="btn_request_route">请求导航</string>
