@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.esri.android.map.GroupLayer;
 import com.esri.core.geometry.SpatialReference;
@@ -46,7 +45,7 @@ class IPLabelGroupLayer extends GroupLayer {
 	}
 
 	public void updateLabels() {
-		Log.i(TAG, "updateLabels");
+		// Log.i(TAG, "updateLabels");
 		visiableBorders.clear();
 
 		facilityLayer.updateLabels(visiableBorders);
@@ -65,16 +64,6 @@ class IPLabelGroupLayer extends GroupLayer {
 	public void loadLabelContents(FeatureSet set) {
 		labelLayer.loadContents(set);
 	}
-
-	// public void loadFacilityContentsFromFileWithInfo(TYMapInfo info) {
-	// facilityLayer.loadContentsFromFileWithInfo(IPMapFileManager
-	// .getFacilityFilePath(info));
-	// }
-
-	// public void loadLabelContentsFromFileWithInfo(TYMapInfo info) {
-	// labelLayer.loadContentsFromFileWithInfo(IPMapFileManager
-	// .getLabelFilePath(info));
-	// }
 
 	public void clearSelection() {
 		facilityLayer.clearSelection();
@@ -148,6 +137,30 @@ class IPLabelGroupLayer extends GroupLayer {
 		if (facilityIDs != null && facilityIDs.length > 0) {
 			for (int gid : facilityIDs) {
 				Graphic g = facilityLayer.getGraphic(gid);
+				// TYPoi poi = new TYPoi(
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+				// g.getGeometry(),
+				// Integer.parseInt((String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
+				// POI_LAYER.POI_FACILITY);
+				int categoryID;
+				Object categoryObj = g
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
+				if (categoryObj.getClass() == String.class) {
+					categoryID = Integer.parseInt((String) categoryObj);
+				} else {
+					categoryID = (Integer) categoryObj;
+				}
+
 				TYPoi poi = new TYPoi(
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -159,10 +172,7 @@ class IPLabelGroupLayer extends GroupLayer {
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-						g.getGeometry(),
-						Integer.parseInt((String) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
-						POI_LAYER.POI_FACILITY);
+						g.getGeometry(), categoryID, POI_LAYER.POI_FACILITY);
 				poiList.add(poi);
 			}
 		}

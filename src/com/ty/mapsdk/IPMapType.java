@@ -8,6 +8,7 @@ class IPMapType {
 	public static final String GRAPHIC_ATTRIBUTE_BUILDING_ID = "BUILDING_ID";
 	public static final String GRAPHIC_ATTRIBUTE_NAME = "NAME";
 	public static final String GRAPHIC_ATTRIBUTE_CATEGORY_ID = "CATEGORY_ID";
+
 	public static final String GRAPHIC_ATTRIBUTE_FLOOR = "FLOOR";
 
 	public static final String NAME_FIELD_TRADITIONAL_CHINESE = "NAME_TC";

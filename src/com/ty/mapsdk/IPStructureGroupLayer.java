@@ -62,21 +62,6 @@ class IPStructureGroupLayer extends GroupLayer {
 		assetLayer.loadContents(set);
 	}
 
-	// public void loadFloorContentFromFileWithInfo(TYMapInfo info) {
-	// floorLayer.loadContentsFromFileWithInfo(IPMapFileManager
-	// .getFloorFilePath(info));
-	// }
-
-	// public void loadRoomContentFromFileWithInfo(TYMapInfo info) {
-	// roomLayer.loadContentsFromFileWithInfo(IPMapFileManager
-	// .getRoomFilePath(info));
-	// }
-
-	// public void loadAssetContentFromFileWithInfo(TYMapInfo info) {
-	// assetLayer.loadContentsFromFileWithInfo(IPMapFileManager
-	// .getAssetFilePath(info));
-	// }
-
 	public void clearSelection() {
 		roomLayer.clearSelection();
 		roomHighlightLayer.removeAll();
@@ -157,6 +142,33 @@ class IPStructureGroupLayer extends GroupLayer {
 		if (roomIDs != null && roomIDs.length > 0) {
 			for (int gid : roomIDs) {
 				Graphic g = roomLayer.getGraphic(gid);
+				// TYPoi poi = new TYPoi(
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+				// g.getGeometry(),
+				// Integer.parseInt((String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
+				// POI_LAYER.POI_ROOM);
+
+				// 兼容老数据，CategoryID为整数
+
+				int categoryID;
+				Object categoryObj = g
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
+				if (categoryObj.getClass() == String.class) {
+					categoryID = Integer.parseInt((String) categoryObj);
+				} else {
+					categoryID = (Integer) categoryObj;
+				}
+
 				TYPoi poi = new TYPoi(
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -168,10 +180,8 @@ class IPStructureGroupLayer extends GroupLayer {
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-						g.getGeometry(),
-						Integer.parseInt((String) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
-						POI_LAYER.POI_ROOM);
+						g.getGeometry(), categoryID, POI_LAYER.POI_ROOM);
+
 				poiList.add(poi);
 			}
 		}
@@ -186,6 +196,31 @@ class IPStructureGroupLayer extends GroupLayer {
 		if (assetIDs != null && assetIDs.length > 0) {
 			for (int gid : assetIDs) {
 				Graphic g = assetLayer.getGraphic(gid);
+				// TYPoi poi = new TYPoi(
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+				// g.getGeometry(),
+				// Integer.parseInt((String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
+				// POI_LAYER.POI_ASSET);
+
+				int categoryID;
+				Object categoryObj = g
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
+				if (categoryObj.getClass() == String.class) {
+					categoryID = Integer.parseInt((String) categoryObj);
+				} else {
+					categoryID = (Integer) categoryObj;
+				}
+
 				TYPoi poi = new TYPoi(
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -197,10 +232,7 @@ class IPStructureGroupLayer extends GroupLayer {
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-						g.getGeometry(),
-						Integer.parseInt((String) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
-						POI_LAYER.POI_ASSET);
+						g.getGeometry(), categoryID, POI_LAYER.POI_ASSET);
 				poiList.add(poi);
 			}
 		}

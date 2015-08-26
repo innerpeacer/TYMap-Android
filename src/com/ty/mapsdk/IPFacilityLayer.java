@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -108,8 +107,18 @@ class IPFacilityLayer extends GraphicsLayer {
 			Graphic[] graphics = set.getGraphics();
 
 			for (Graphic graphic : graphics) {
-				Integer categoryID = Integer.parseInt((String) graphic
-						.getAttributeValue("COLOR"));
+
+				// Integer categoryID = Integer.parseInt((String) graphic
+				// .getAttributeValue("COLOR"));
+
+				Integer categoryID;
+				Object categoryObj = graphic.getAttributeValue("COLOR");
+				if (categoryObj.getClass() == String.class) {
+					categoryID = Integer.parseInt((String) categoryObj);
+				} else {
+					categoryID = (Integer) categoryObj;
+				}
+
 				if (categoryID == null) {
 					continue;
 				}
@@ -199,6 +208,30 @@ class IPFacilityLayer extends GraphicsLayer {
 		IPFacilityLabel fl = facilityLabelDict.get(pid);
 		Graphic graphic = fl.getFacilityGraphic();
 		if (graphic != null) {
+			// result = new TYPoi(
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+			// graphic.getGeometry(),
+			// (Integer) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+			// POI_LAYER.POI_FACILITY);
+			int categoryID;
+			Object categoryObj = graphic
+					.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
+			if (categoryObj.getClass() == String.class) {
+				categoryID = Integer.parseInt((String) categoryObj);
+			} else {
+				categoryID = (Integer) categoryObj;
+			}
+
 			result = new TYPoi(
 					(String) graphic
 							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -210,10 +243,7 @@ class IPFacilityLayer extends GraphicsLayer {
 							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 					(String) graphic
 							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-					graphic.getGeometry(),
-					(Integer) graphic
-							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-					POI_LAYER.POI_FACILITY);
+					graphic.getGeometry(), categoryID, POI_LAYER.POI_FACILITY);
 		}
 		return result;
 	}
@@ -236,7 +266,6 @@ class IPFacilityLayer extends GraphicsLayer {
 			Integer colorID = iter.next();
 			String icon = iconDict.get(colorID);
 
-			Log.i(TAG, colorID + ": " + icon);
 			{
 				String iconNormal = icon + "_normal";
 				int resourceIDNormal = context.getResources().getIdentifier(

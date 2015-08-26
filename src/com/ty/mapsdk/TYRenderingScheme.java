@@ -227,7 +227,6 @@ public class TYRenderingScheme {
 								.getString(JSON_FIELD_LEAVE_ICON);
 						iconSymbolDictionary.put(colorID, icon);
 
-						Log.i(TAG, icon);
 					}
 				}
 			}

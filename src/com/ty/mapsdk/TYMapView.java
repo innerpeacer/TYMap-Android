@@ -220,7 +220,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
 				mapDataDict.put("floor", set);
-				Log.i(TAG, "Load floor: " + set.getGraphics().length);
 			}
 
 			Object roomObject = jsonObject.get("room");
@@ -229,8 +228,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
 				mapDataDict.put("room", set);
-				Log.i(TAG, "Load room: " + set.getGraphics().length);
-
 			}
 
 			Object assetObject = jsonObject.get("asset");
@@ -239,8 +236,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
 				mapDataDict.put("asset", set);
-				Log.i(TAG, "Load asset: " + set.getGraphics().length);
-
 			}
 
 			Object facilityObject = jsonObject.get("facility");
@@ -249,8 +244,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
 				mapDataDict.put("facility", set);
-				Log.i(TAG, "Load facility: " + set.getGraphics().length);
-
 			}
 
 			Object labelObject = jsonObject.get("label");
@@ -259,8 +252,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
 				mapDataDict.put("label", set);
-				Log.i(TAG, "Load label: " + set.getGraphics().length);
-
 			}
 
 		} catch (JsonParseException e) {

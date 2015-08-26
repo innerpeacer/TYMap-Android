@@ -83,6 +83,31 @@ class IPRoomLayer extends GraphicsLayer {
 		Graphic graphic = roomDict.get(pid);
 
 		if (graphic != null) {
+			// result = new TYPoi(
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+			// (String) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+			// graphic.getGeometry(),
+			// (Integer) graphic
+			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+			// POI_LAYER.POI_ROOM);
+
+			int categoryID;
+			Object categoryObj = graphic
+					.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
+			if (categoryObj.getClass() == String.class) {
+				categoryID = Integer.parseInt((String) categoryObj);
+			} else {
+				categoryID = (Integer) categoryObj;
+			}
+
 			result = new TYPoi(
 					(String) graphic
 							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -94,10 +119,7 @@ class IPRoomLayer extends GraphicsLayer {
 							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 					(String) graphic
 							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-					graphic.getGeometry(),
-					(Integer) graphic
-							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-					POI_LAYER.POI_ROOM);
+					graphic.getGeometry(), categoryID, POI_LAYER.POI_ROOM);
 		}
 		return result;
 	}
@@ -116,6 +138,30 @@ class IPRoomLayer extends GraphicsLayer {
 			Graphic graphic = roomDict.get(poiID);
 			if (GeometryEngine.contains(graphic.getGeometry(), new Point(x, y),
 					getSpatialReference())) {
+				// poi = new TYPoi(
+				// (String) graphic
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+				// (String) graphic
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+				// (String) graphic
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+				// (String) graphic
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+				// (String) graphic
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+				// graphic.getGeometry(),
+				// (Integer) graphic
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+				// POI_LAYER.POI_ROOM);
+				int categoryID;
+				Object categoryObj = graphic
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
+				if (categoryObj.getClass() == String.class) {
+					categoryID = Integer.parseInt((String) categoryObj);
+				} else {
+					categoryID = (Integer) categoryObj;
+				}
+
 				poi = new TYPoi(
 						(String) graphic
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -127,10 +173,7 @@ class IPRoomLayer extends GraphicsLayer {
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 						(String) graphic
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-						graphic.getGeometry(),
-						(Integer) graphic
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-						POI_LAYER.POI_ROOM);
+						graphic.getGeometry(), categoryID, POI_LAYER.POI_ROOM);
 				break;
 			}
 		}

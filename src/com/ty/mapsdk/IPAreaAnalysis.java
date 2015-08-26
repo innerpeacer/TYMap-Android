@@ -34,6 +34,30 @@ class IPAreaAnalysis {
 			Graphic[] graphics = set.getGraphics();
 
 			for (Graphic g : graphics) {
+				// TYPoi poi = new TYPoi(
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
+				// (String) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+				// g.getGeometry(),
+				// (Integer) g
+				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
+				// POI_LAYER.POI_ASSET);
+				int categoryID;
+				Object categoryObj = g
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
+				if (categoryObj.getClass() == String.class) {
+					categoryID = Integer.parseInt((String) categoryObj);
+				} else {
+					categoryID = (Integer) categoryObj;
+				}
+
 				TYPoi poi = new TYPoi(
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -45,10 +69,8 @@ class IPAreaAnalysis {
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-						g.getGeometry(),
-						(Integer) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-						POI_LAYER.POI_ASSET);
+						g.getGeometry(), categoryID, POI_LAYER.POI_ASSET);
+
 				featureArray.add(poi);
 			}
 			areaCount = featureArray.size();

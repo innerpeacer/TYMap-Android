@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import android.os.Environment;
+import android.util.Log;
 
 public class IPMapFileManager {
 
@@ -80,14 +81,17 @@ public class IPMapFileManager {
 
 	public static String getRenderingScheme(TYBuilding building) {
 		String buildingDir = getBuildingDir(building.getCityID(),
-				building.getCityID());
+				building.getBuildingID());
 		String fileName = String.format(JSON_FILE_RENDERING_SCHEME,
 				building.getBuildingID());
 
 		File result = new File(buildingDir, fileName);
 		if (result.exists()) {
+			Log.i("IPMapFileManager", "Use: " + result.toString());
 			return result.toString();
 		} else {
+			Log.i("IPMapFileManager", "Use: " + getDefaultRenderingScheme());
+			Log.i("IPMapFileManager", "Not Use: " + result.toString());
 			return getDefaultRenderingScheme();
 		}
 	}
