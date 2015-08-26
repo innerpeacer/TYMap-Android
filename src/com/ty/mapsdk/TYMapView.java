@@ -1,7 +1,5 @@
 package com.ty.mapsdk;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,12 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -33,7 +25,6 @@ import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.MarkerSymbol;
 import com.ty.mapdata.TYLocalPoint;
@@ -56,6 +47,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private TYMapInfo currentMapInfo;
 
 	private Map<String, Graphic[]> mapDataDictionary = new HashMap<String, Graphic[]>();
+	private Map<String, Map<String, Graphic[]>> mapDataCache = new HashMap<String, Map<String, Graphic[]>>();
 
 	private IPStructureGroupLayer structureGroupLayer;
 	private IPLabelGroupLayer labelGroupLayer;
@@ -150,75 +142,75 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private boolean isInterupted = false;
 	private boolean isBlocking = false;
 
-	Map<String, Graphic[]> parserMapData(String file) {
-		Map<String, Graphic[]> result = new HashMap<String, Graphic[]>();
-
-		if (!(new File(file).exists())) {
-			return result;
-		}
-
-		String jsonString = IPFileUtils.readStringFromFile(file.toString());
-		JsonFactory factory = new JsonFactory();
-
-		try {
-			JSONObject jsonObject = new JSONObject(jsonString);
-
-			Object floorObject = jsonObject.get("floor");
-			if (floorObject.getClass() != String.class) {
-				JsonParser parser = factory.createJsonParser(floorObject
-						.toString());
-				FeatureSet set = FeatureSet.fromJson(parser);
-				result.put("floor", set.getGraphics());
-			}
-
-			Object roomObject = jsonObject.get("room");
-			if (roomObject.getClass() != String.class) {
-				JsonParser parser = factory.createJsonParser(roomObject
-						.toString());
-				FeatureSet set = FeatureSet.fromJson(parser);
-				result.put("room", set.getGraphics());
-
-			}
-
-			Object assetObject = jsonObject.get("asset");
-			if (assetObject.getClass() != String.class) {
-				JsonParser parser = factory.createJsonParser(assetObject
-						.toString());
-				FeatureSet set = FeatureSet.fromJson(parser);
-				result.put("asset", set.getGraphics());
-
-			}
-
-			Object facilityObject = jsonObject.get("facility");
-			if (facilityObject.getClass() != String.class) {
-				JsonParser parser = factory.createJsonParser(facilityObject
-						.toString());
-				FeatureSet set = FeatureSet.fromJson(parser);
-				result.put("facility", set.getGraphics());
-
-			}
-
-			Object labelObject = jsonObject.get("label");
-			if (labelObject.getClass() != String.class) {
-				JsonParser parser = factory.createJsonParser(labelObject
-						.toString());
-				FeatureSet set = FeatureSet.fromJson(parser);
-				result.put("label", set.getGraphics());
-
-			}
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
+	// Map<String, Graphic[]> parserMapData(String file) {
+	// Map<String, Graphic[]> result = new HashMap<String, Graphic[]>();
+	//
+	// if (!(new File(file).exists())) {
+	// return result;
+	// }
+	//
+	// String jsonString = IPFileUtils.readStringFromFile(file.toString());
+	// JsonFactory factory = new JsonFactory();
+	//
+	// try {
+	// JSONObject jsonObject = new JSONObject(jsonString);
+	//
+	// Object floorObject = jsonObject.get("floor");
+	// if (floorObject.getClass() != String.class) {
+	// JsonParser parser = factory.createJsonParser(floorObject
+	// .toString());
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	// result.put("floor", set.getGraphics());
+	// }
+	//
+	// Object roomObject = jsonObject.get("room");
+	// if (roomObject.getClass() != String.class) {
+	// JsonParser parser = factory.createJsonParser(roomObject
+	// .toString());
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	// result.put("room", set.getGraphics());
+	//
+	// }
+	//
+	// Object assetObject = jsonObject.get("asset");
+	// if (assetObject.getClass() != String.class) {
+	// JsonParser parser = factory.createJsonParser(assetObject
+	// .toString());
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	// result.put("asset", set.getGraphics());
+	//
+	// }
+	//
+	// Object facilityObject = jsonObject.get("facility");
+	// if (facilityObject.getClass() != String.class) {
+	// JsonParser parser = factory.createJsonParser(facilityObject
+	// .toString());
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	// result.put("facility", set.getGraphics());
+	//
+	// }
+	//
+	// Object labelObject = jsonObject.get("label");
+	// if (labelObject.getClass() != String.class) {
+	// JsonParser parser = factory.createJsonParser(labelObject
+	// .toString());
+	// FeatureSet set = FeatureSet.fromJson(parser);
+	// result.put("label", set.getGraphics());
+	//
+	// }
+	//
+	// } catch (JsonParseException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return result;
+	// }
 
 	/**
 	 * 切换楼层方法
@@ -271,12 +263,24 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		locationLayer.removeAll();
 
-		long loadStart = System.currentTimeMillis();
-		mapDataDictionary = IPFeatureSetParser
-				.parseMapDataFile(IPMapFileManager
-						.getMapDataPath(currentMapInfo));
-		long loadEnd = System.currentTimeMillis();
-		Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
+		// long loadStart = System.currentTimeMillis();
+		// mapDataDictionary = IPFeatureSetParser
+		// .parseMapDataFile(IPMapFileManager
+		// .getMapDataPath(currentMapInfo));
+		// long loadEnd = System.currentTimeMillis();
+		// Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
+
+		if (!mapDataCache.containsKey(currentMapInfo.getMapID())) {
+			long loadStart = System.currentTimeMillis();
+			Map<String, Graphic[]> mapData = IPFeatureSetParser
+					.parseMapDataFile(IPMapFileManager
+							.getMapDataPath(currentMapInfo));
+			long loadEnd = System.currentTimeMillis();
+			Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
+
+			mapDataCache.put(currentMapInfo.getMapID(), mapData);
+		}
+		mapDataDictionary = mapDataCache.get(currentMapInfo.getMapID());
 
 		new Thread(new Runnable() {
 
