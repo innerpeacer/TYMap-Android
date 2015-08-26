@@ -8,23 +8,48 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 
 public class IPFeatureSetParser {
+	static final String TAG = IPFeatureSetParser.class.getSimpleName();
 
-	public static Map<String, Graphic[]> parseDataFile(String file) {
+	public static Map<String, Graphic[]> parseMapDataFile(String file) {
+		Log.i(TAG, "parseMapDataFile");
+
+		long startParsing = System.currentTimeMillis();
+
 		Map<String, Graphic[]> result = new HashMap<String, Graphic[]>();
 
 		try {
-			JSONObject object = new JSONObject(
-					IPFileUtils.readStringFromFile(file));
+
+			String jsonString = IPFileUtils.readStringFromFile(file);
+			long endReading = System.currentTimeMillis();
+			Log.i(TAG, "End Reading: " + (endReading - startParsing) / 1000.0f);
+
+			JSONObject object = new JSONObject(jsonString);
+			long parseObject = System.currentTimeMillis();
+			Log.i(TAG, "parseObject: " + (parseObject - endReading) / 1000.0f);
+
 			result.put("floor", parsePolygonFeatureSet(object, "floor"));
+			Log.i(TAG, "");
+
 			result.put("room", parsePolygonFeatureSet(object, "room"));
+			Log.i(TAG, "");
+
 			result.put("asset", parsePolygonFeatureSet(object, "asset"));
-			result.put("facility", parsePolygonFeatureSet(object, "facility"));
-			result.put("label", parsePolygonFeatureSet(object, "label"));
+			Log.i(TAG, "");
+
+			result.put("facility", parsePointFeatureSet(object, "facility"));
+			Log.i(TAG, "");
+
+			result.put("label", parsePointFeatureSet(object, "label"));
+
+			long endParsing = System.currentTimeMillis();
+			Log.i(TAG, "endParsing: " + (endParsing - parseObject) / 1000.0f);
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -36,6 +61,10 @@ public class IPFeatureSetParser {
 	@SuppressWarnings("unchecked")
 	static Graphic[] parsePolygonFeatureSet(JSONObject object, String name) {
 		JSONObject featureSetObject = object.optJSONObject(name);
+		if (featureSetObject == null) {
+			return new Graphic[0];
+		}
+
 		JSONArray featuresJsonArray = featureSetObject.optJSONArray("features");
 
 		Graphic[] result = new Graphic[featuresJsonArray.length()];
@@ -79,6 +108,10 @@ public class IPFeatureSetParser {
 	@SuppressWarnings("unchecked")
 	static Graphic[] parsePointFeatureSet(JSONObject object, String name) {
 		JSONObject featureSetObject = object.optJSONObject(name);
+		if (featureSetObject == null) {
+			return new Graphic[0];
+		}
+
 		JSONArray featuresJsonArray = featureSetObject.optJSONArray("features");
 
 		Graphic[] result = new Graphic[featuresJsonArray.length()];
