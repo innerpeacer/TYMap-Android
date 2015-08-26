@@ -8,7 +8,6 @@ import android.content.Context;
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.esri.core.renderer.Renderer;
 import com.esri.core.renderer.UniqueValue;
@@ -50,13 +49,18 @@ class IPAssetLayer extends GraphicsLayer {
 		return assetRenderer;
 	}
 
-	public void loadContents(FeatureSet set) {
-		removeAll();
+	// public void loadContents(FeatureSet set) {
+	// removeAll();
+	//
+	// if (set != null) {
+	// Graphic[] graphics = set.getGraphics();
+	// addGraphics(graphics);
+	// }
+	// }
 
-		if (set != null) {
-			Graphic[] graphics = set.getGraphics();
-			addGraphics(graphics);
-		}
+	public void loadContents(Graphic[] graphics) {
+		removeAll();
+		addGraphics(graphics);
 	}
 
 }

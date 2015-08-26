@@ -34,6 +34,7 @@ import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.FeatureSet;
+import com.esri.core.map.Graphic;
 import com.esri.core.symbol.MarkerSymbol;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
@@ -54,7 +55,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private TYBuilding building;
 	private TYMapInfo currentMapInfo;
 
-	private Map<String, FeatureSet> mapDataDict = new HashMap<String, FeatureSet>();
+	// private Map<String, FeatureSet> mapDataDict = new HashMap<String,
+	// FeatureSet>();
+	private Map<String, Graphic[]> mapDataDictionary = new HashMap<String, Graphic[]>();
 
 	private IPStructureGroupLayer structureGroupLayer;
 	private IPLabelGroupLayer labelGroupLayer;
@@ -156,7 +159,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 *            目标楼层的地图信息
 	 */
 	public void setFloor(final TYMapInfo info) {
-		// Graphic[] parsedGraphics = testParserData(info);
 
 		long startLoadTime = System.currentTimeMillis();
 		Log.i(TAG, "========================= Start Load: " + startLoadTime
@@ -216,7 +218,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		String jsonString = IPFileUtils.readStringFromFile(file.toString());
 		JsonFactory factory = new JsonFactory();
-		mapDataDict.clear();
+		// mapDataDict.clear();
+		mapDataDictionary.clear();
 
 		Log.i(TAG, "Read File: " + (System.currentTimeMillis() - parseStart)
 				/ 1000.0f);
@@ -232,7 +235,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				JsonParser parser = factory.createJsonParser(floorObject
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
-				mapDataDict.put("floor", set);
+				// mapDataDict.put("floor", set);
+				mapDataDictionary.put("floor", set.getGraphics());
 			}
 
 			Object roomObject = jsonObject.get("room");
@@ -240,7 +244,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				JsonParser parser = factory.createJsonParser(roomObject
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
-				mapDataDict.put("room", set);
+				// mapDataDict.put("room", set);
+				mapDataDictionary.put("room", set.getGraphics());
+
 			}
 
 			Object assetObject = jsonObject.get("asset");
@@ -248,7 +254,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				JsonParser parser = factory.createJsonParser(assetObject
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
-				mapDataDict.put("asset", set);
+				// mapDataDict.put("asset", set);
+				mapDataDictionary.put("asset", set.getGraphics());
+
 			}
 
 			Object facilityObject = jsonObject.get("facility");
@@ -256,7 +264,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				JsonParser parser = factory.createJsonParser(facilityObject
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
-				mapDataDict.put("facility", set);
+				// mapDataDict.put("facility", set);
+				mapDataDictionary.put("facility", set.getGraphics());
+
 			}
 
 			Object labelObject = jsonObject.get("label");
@@ -264,7 +274,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				JsonParser parser = factory.createJsonParser(labelObject
 						.toString());
 				FeatureSet set = FeatureSet.fromJson(parser);
-				mapDataDict.put("label", set);
+				// mapDataDict.put("label", set);
+				mapDataDictionary.put("label", set.getGraphics());
+
 			}
 
 		} catch (JsonParseException e) {
@@ -288,7 +300,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				// Log.i(TAG, "First Layer: " + firstLayer / 1000.0f);
 
 				if (!isInterupted) {
-					structureGroupLayer.loadFloorContent(mapDataDict
+					// structureGroupLayer.loadFloorContent(mapDataDict
+					// .get("floor"));
+					structureGroupLayer.loadFloorContent(mapDataDictionary
 							.get("floor"));
 				}
 
@@ -298,8 +312,10 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						/ 1000.0f);
 
 				if (!isInterupted) {
-					// structureGroupLayer.loadRoomContentFromFileWithInfo(info);
-					structureGroupLayer.loadRoomContent(mapDataDict.get("room"));
+					// structureGroupLayer.loadRoomContent(mapDataDict.get("room"));
+					structureGroupLayer.loadRoomContent(mapDataDictionary
+							.get("room"));
+
 				}
 
 				long roomLayerTime = System.currentTimeMillis();
@@ -308,8 +324,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						/ 1000.0f);
 
 				if (!isInterupted) {
-
-					structureGroupLayer.loadAssetContent(mapDataDict
+					// structureGroupLayer.loadAssetContent(mapDataDict
+					// .get("asset"));
+					structureGroupLayer.loadAssetContent(mapDataDictionary
 							.get("asset"));
 				}
 
@@ -319,7 +336,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						+ (assetLayerTime - roomLayerTime) / 1000.0f);
 
 				if (!isInterupted) {
-					labelGroupLayer.loadFacilityContents(mapDataDict
+					// labelGroupLayer.loadFacilityContents(mapDataDict
+					// .get("facility"));
+					labelGroupLayer.loadFacilityContents(mapDataDictionary
 							.get("facility"));
 				}
 
@@ -330,7 +349,10 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 						+ (facilityLayerTime - assetLayerTime) / 1000.0f);
 
 				if (!isInterupted) {
-					labelGroupLayer.loadLabelContents(mapDataDict.get("label"));
+					// labelGroupLayer.loadLabelContents(mapDataDict.get("label"));
+					labelGroupLayer.loadLabelContents(mapDataDictionary
+							.get("label"));
+
 				}
 
 				long labelLayerTime = System.currentTimeMillis();

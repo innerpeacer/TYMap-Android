@@ -13,7 +13,6 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.Symbol;
 import com.esri.core.symbol.TextSymbol;
@@ -87,60 +86,113 @@ class IPTextLabelLayer extends GraphicsLayer {
 		}
 	}
 
-	public void loadContents(FeatureSet set) {
+	public void loadContents(Graphic[] graphics) {
 		removeAll();
 		allTextLabels.clear();
 		graphicGidDict.clear();
 
-		if (set != null) {
-			TYMapLanguage language = TYMapEnvironment.getMapLanguage();
-			String field = getNameFieldForLanguage(language);
+		TYMapLanguage language = TYMapEnvironment.getMapLanguage();
+		String field = getNameFieldForLanguage(language);
 
-			Graphic[] graphics = set.getGraphics();
-			for (Graphic graphic : graphics) {
-				String name = (String) graphic.getAttributeValue(field);
+		for (Graphic graphic : graphics) {
+			String name = (String) graphic.getAttributeValue(field);
 
-				if (name != null && name.length() > 0) {
-					Point pos = (Point) graphic.getGeometry();
-					IPTextLabel textLabel = new IPTextLabel(name, pos);
+			if (name != null && name.length() > 0) {
+				Point pos = (Point) graphic.getGeometry();
+				IPTextLabel textLabel = new IPTextLabel(name, pos);
 
-					String poiID = (String) graphic
-							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-					if (allBrandDict.containsKey(poiID)) {
-						IPBrand brand = allBrandDict.get(poiID);
-						IPLabelSize logoSize = brand.getLogoSize();
-						String logoName = brand.getLogo();
+				String poiID = (String) graphic
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+				if (allBrandDict.containsKey(poiID)) {
+					IPBrand brand = allBrandDict.get(poiID);
+					IPLabelSize logoSize = brand.getLogoSize();
+					String logoName = brand.getLogo();
 
-						int resourceID = context.getResources().getIdentifier(
-								logoName, "drawable", context.getPackageName());
-						TYPictureMarkerSymbol pms = new TYPictureMarkerSymbol(
-								context.getResources().getDrawable(resourceID));
-						pms.setWidth((float) logoSize.width);
-						pms.setHeight((float) logoSize.height);
+					int resourceID = context.getResources().getIdentifier(
+							logoName, "drawable", context.getPackageName());
+					TYPictureMarkerSymbol pms = new TYPictureMarkerSymbol(
+							context.getResources().getDrawable(resourceID));
+					pms.setWidth((float) logoSize.width);
+					pms.setHeight((float) logoSize.height);
 
-						textLabel.setTextSymbol(pms);
-						textLabel.setTextSize(brand.getLogoSize());
+					textLabel.setTextSymbol(pms);
+					textLabel.setTextSize(brand.getLogoSize());
 
-					} else {
-						TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
-						ts.setFontFamily("DroidSansFallback.ttf");
-						// ts.setFontFamily("DroidSans.ttf");
+				} else {
+					TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
+					ts.setFontFamily("DroidSansFallback.ttf");
+					// ts.setFontFamily("DroidSans.ttf");
 
-						ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
-						ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
+					ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
+					ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
 
-						textLabel.setTextSymbol(ts);
-					}
-
-					textLabel.setTextGraphic(graphic);
-					int gid = addGraphic(graphic);
-
-					allTextLabels.add(textLabel);
-					graphicGidDict.put(graphic, gid);
+					textLabel.setTextSymbol(ts);
 				}
+
+				textLabel.setTextGraphic(graphic);
+				int gid = addGraphic(graphic);
+
+				allTextLabels.add(textLabel);
+				graphicGidDict.put(graphic, gid);
 			}
 		}
+
 	}
+
+	// public void loadContents(FeatureSet set) {
+	// removeAll();
+	// allTextLabels.clear();
+	// graphicGidDict.clear();
+	//
+	// if (set != null) {
+	// TYMapLanguage language = TYMapEnvironment.getMapLanguage();
+	// String field = getNameFieldForLanguage(language);
+	//
+	// Graphic[] graphics = set.getGraphics();
+	// for (Graphic graphic : graphics) {
+	// String name = (String) graphic.getAttributeValue(field);
+	//
+	// if (name != null && name.length() > 0) {
+	// Point pos = (Point) graphic.getGeometry();
+	// IPTextLabel textLabel = new IPTextLabel(name, pos);
+	//
+	// String poiID = (String) graphic
+	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+	// if (allBrandDict.containsKey(poiID)) {
+	// IPBrand brand = allBrandDict.get(poiID);
+	// IPLabelSize logoSize = brand.getLogoSize();
+	// String logoName = brand.getLogo();
+	//
+	// int resourceID = context.getResources().getIdentifier(
+	// logoName, "drawable", context.getPackageName());
+	// TYPictureMarkerSymbol pms = new TYPictureMarkerSymbol(
+	// context.getResources().getDrawable(resourceID));
+	// pms.setWidth((float) logoSize.width);
+	// pms.setHeight((float) logoSize.height);
+	//
+	// textLabel.setTextSymbol(pms);
+	// textLabel.setTextSize(brand.getLogoSize());
+	//
+	// } else {
+	// TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
+	// ts.setFontFamily("DroidSansFallback.ttf");
+	// // ts.setFontFamily("DroidSans.ttf");
+	//
+	// ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
+	// ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
+	//
+	// textLabel.setTextSymbol(ts);
+	// }
+	//
+	// textLabel.setTextGraphic(graphic);
+	// int gid = addGraphic(graphic);
+	//
+	// allTextLabels.add(textLabel);
+	// graphicGidDict.put(graphic, gid);
+	// }
+	// }
+	// }
+	// }
 
 	private String getNameFieldForLanguage(TYMapLanguage l) {
 		String result = null;

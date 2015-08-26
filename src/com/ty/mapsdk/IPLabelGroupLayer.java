@@ -8,7 +8,6 @@ import android.content.Context;
 
 import com.esri.android.map.GroupLayer;
 import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
 
@@ -57,12 +56,20 @@ class IPLabelGroupLayer extends GroupLayer {
 		labelLayer.removeAll();
 	}
 
-	public void loadFacilityContents(FeatureSet set) {
-		facilityLayer.loadContents(set);
+	// public void loadFacilityContents(FeatureSet set) {
+	// facilityLayer.loadContents(set);
+	// }
+	//
+	// public void loadLabelContents(FeatureSet set) {
+	// labelLayer.loadContents(set);
+	// }
+
+	public void loadFacilityContents(Graphic[] graphics) {
+		facilityLayer.loadContents(graphics);
 	}
 
-	public void loadLabelContents(FeatureSet set) {
-		labelLayer.loadContents(set);
+	public void loadLabelContents(Graphic[] graphics) {
+		labelLayer.loadContents(graphics);
 	}
 
 	public void clearSelection() {

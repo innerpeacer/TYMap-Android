@@ -12,7 +12,6 @@ import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.esri.core.renderer.Renderer;
 import com.esri.core.renderer.UniqueValue;
@@ -57,25 +56,43 @@ class IPRoomLayer extends GraphicsLayer {
 		return roomRenderer;
 	}
 
-	public void loadContents(FeatureSet set) {
+	// public void loadContents(FeatureSet set) {
+	// removeAll();
+	// roomDict.clear();
+	// roomGidDict.clear();
+	//
+	// if (set != null) {
+	// Graphic[] graphics = set.getGraphics();
+	//
+	// if (graphics != null && graphics.length > 0) {
+	// int[] gids = addGraphics(graphics);
+	//
+	// for (int i = 0; i < graphics.length; ++i) {
+	// String poiID = (String) graphics[i]
+	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+	// roomDict.put(poiID, graphics[i]);
+	// roomGidDict.put(poiID, gids[i]);
+	// }
+	// }
+	// }
+	// }
+
+	public void loadContents(Graphic[] graphics) {
 		removeAll();
 		roomDict.clear();
 		roomGidDict.clear();
 
-		if (set != null) {
-			Graphic[] graphics = set.getGraphics();
+		if (graphics != null && graphics.length > 0) {
+			int[] gids = addGraphics(graphics);
 
-			if (graphics != null && graphics.length > 0) {
-				int[] gids = addGraphics(graphics);
-
-				for (int i = 0; i < graphics.length; ++i) {
-					String poiID = (String) graphics[i]
-							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-					roomDict.put(poiID, graphics[i]);
-					roomGidDict.put(poiID, gids[i]);
-				}
+			for (int i = 0; i < graphics.length; ++i) {
+				String poiID = (String) graphics[i]
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+				roomDict.put(poiID, graphics[i]);
+				roomGidDict.put(poiID, gids[i]);
 			}
 		}
+
 	}
 
 	public TYPoi getPoiWithPoiID(String pid) {

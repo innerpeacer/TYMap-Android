@@ -14,7 +14,6 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.Symbol;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
@@ -97,61 +96,113 @@ class IPFacilityLayer extends GraphicsLayer {
 		}
 	}
 
-	public void loadContents(FeatureSet set) {
+	public void loadContents(Graphic[] graphics) {
 		removeAll();
 
 		groupedFacilityLabelDict.clear();
 		facilityLabelDict.clear();
 		graphicGidDict.clear();
-		if (set != null) {
-			Graphic[] graphics = set.getGraphics();
 
-			for (Graphic graphic : graphics) {
+		for (Graphic graphic : graphics) {
 
-				// Integer categoryID = Integer.parseInt((String) graphic
-				// .getAttributeValue("COLOR"));
+			// Integer categoryID = Integer.parseInt((String) graphic
+			// .getAttributeValue("COLOR"));
 
-				Integer categoryID;
-				Object categoryObj = graphic.getAttributeValue("COLOR");
-				if (categoryObj.getClass() == String.class) {
-					categoryID = Integer.parseInt((String) categoryObj);
-				} else {
-					categoryID = (Integer) categoryObj;
-				}
-
-				if (categoryID == null) {
-					continue;
-				}
-
-				Point pos = (Point) graphic.getGeometry();
-
-				if (!groupedFacilityLabelDict.keySet().contains(categoryID)) {
-					List<IPFacilityLabel> array = new ArrayList<IPFacilityLabel>();
-					groupedFacilityLabelDict.put(categoryID, array);
-				}
-
-				IPFacilityLabel fLabel = new IPFacilityLabel(categoryID, pos);
-				fLabel.setFacilityGraphic(graphic);
-				fLabel.setNormalFacilitySymbol(allFacilitySymbols
-						.get(categoryID));
-				fLabel.setHighlightedFaciltySymbol(allHighlightFacilitySymbols
-						.get(categoryID));
-				fLabel.setHighlighted(false);
-
-				List<IPFacilityLabel> array = groupedFacilityLabelDict
-						.get(categoryID);
-				array.add(fLabel);
-
-				String poiID = (String) graphic
-						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-				facilityLabelDict.put(poiID, fLabel);
-
-				int gid = addGraphic(graphic);
-				graphicGidDict.put(graphic, gid);
+			Integer categoryID;
+			Object categoryObj = graphic.getAttributeValue("COLOR");
+			if (categoryObj.getClass() == String.class) {
+				categoryID = Integer.parseInt((String) categoryObj);
+			} else {
+				categoryID = (Integer) categoryObj;
 			}
-		}
 
+			if (categoryID == null) {
+				continue;
+			}
+
+			Point pos = (Point) graphic.getGeometry();
+
+			if (!groupedFacilityLabelDict.keySet().contains(categoryID)) {
+				List<IPFacilityLabel> array = new ArrayList<IPFacilityLabel>();
+				groupedFacilityLabelDict.put(categoryID, array);
+			}
+
+			IPFacilityLabel fLabel = new IPFacilityLabel(categoryID, pos);
+			fLabel.setFacilityGraphic(graphic);
+			fLabel.setNormalFacilitySymbol(allFacilitySymbols.get(categoryID));
+			fLabel.setHighlightedFaciltySymbol(allHighlightFacilitySymbols
+					.get(categoryID));
+			fLabel.setHighlighted(false);
+
+			List<IPFacilityLabel> array = groupedFacilityLabelDict
+					.get(categoryID);
+			array.add(fLabel);
+
+			String poiID = (String) graphic
+					.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+			facilityLabelDict.put(poiID, fLabel);
+
+			int gid = addGraphic(graphic);
+			graphicGidDict.put(graphic, gid);
+
+		}
 	}
+
+	// public void loadContents(FeatureSet set) {
+	// removeAll();
+	//
+	// groupedFacilityLabelDict.clear();
+	// facilityLabelDict.clear();
+	// graphicGidDict.clear();
+	// if (set != null) {
+	// Graphic[] graphics = set.getGraphics();
+	//
+	// for (Graphic graphic : graphics) {
+	//
+	// // Integer categoryID = Integer.parseInt((String) graphic
+	// // .getAttributeValue("COLOR"));
+	//
+	// Integer categoryID;
+	// Object categoryObj = graphic.getAttributeValue("COLOR");
+	// if (categoryObj.getClass() == String.class) {
+	// categoryID = Integer.parseInt((String) categoryObj);
+	// } else {
+	// categoryID = (Integer) categoryObj;
+	// }
+	//
+	// if (categoryID == null) {
+	// continue;
+	// }
+	//
+	// Point pos = (Point) graphic.getGeometry();
+	//
+	// if (!groupedFacilityLabelDict.keySet().contains(categoryID)) {
+	// List<IPFacilityLabel> array = new ArrayList<IPFacilityLabel>();
+	// groupedFacilityLabelDict.put(categoryID, array);
+	// }
+	//
+	// IPFacilityLabel fLabel = new IPFacilityLabel(categoryID, pos);
+	// fLabel.setFacilityGraphic(graphic);
+	// fLabel.setNormalFacilitySymbol(allFacilitySymbols
+	// .get(categoryID));
+	// fLabel.setHighlightedFaciltySymbol(allHighlightFacilitySymbols
+	// .get(categoryID));
+	// fLabel.setHighlighted(false);
+	//
+	// List<IPFacilityLabel> array = groupedFacilityLabelDict
+	// .get(categoryID);
+	// array.add(fLabel);
+	//
+	// String poiID = (String) graphic
+	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+	// facilityLabelDict.put(poiID, fLabel);
+	//
+	// int gid = addGraphic(graphic);
+	// graphicGidDict.put(graphic, gid);
+	// }
+	// }
+	//
+	// }
 
 	public void showFacilityWithCategory(int categoryID) {
 		Iterator<Integer> iter = groupedFacilityLabelDict.keySet().iterator();
