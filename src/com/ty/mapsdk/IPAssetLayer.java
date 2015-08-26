@@ -59,23 +59,4 @@ class IPAssetLayer extends GraphicsLayer {
 		}
 	}
 
-	// public void loadContentsFromFileWithInfo(String path) {
-	// removeAll();
-	// JsonFactory factory = new JsonFactory();
-	//
-	// try {
-	// JsonParser parser = factory.createJsonParser(new File(path));
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	//
-	// Graphic[] graphics = set.getGraphics();
-	// addGraphics(graphics);
-	// } catch (JsonParseException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 }

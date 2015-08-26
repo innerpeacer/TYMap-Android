@@ -29,10 +29,6 @@ class IPFacilityLayer extends GraphicsLayer {
 	Map<Integer, TYPictureMarkerSymbol> allFacilitySymbols = new HashMap<Integer, TYPictureMarkerSymbol>();
 	Map<Integer, TYPictureMarkerSymbol> allHighlightFacilitySymbols = new HashMap<Integer, TYPictureMarkerSymbol>();
 
-	// Map<Integer, List<NPFacilityLabel>> groupedFacilityLabelDict = new
-	// HashMap<Integer, List<NPFacilityLabel>>();
-	// Map<String, NPFacilityLabel> facilityLabelDict = new HashMap<String,
-	// NPFacilityLabel>();
 	Map<Integer, List<IPFacilityLabel>> groupedFacilityLabelDict = new ConcurrentHashMap<Integer, List<IPFacilityLabel>>();
 	Map<String, IPFacilityLabel> facilityLabelDict = new ConcurrentHashMap<String, IPFacilityLabel>();
 
@@ -93,12 +89,11 @@ class IPFacilityLayer extends GraphicsLayer {
 					updateGraphic(gid, symbol);
 				}
 			} else {
-				// updateGraphic(graphicGidDict.get(fl.getFacilityGraphic()),
-				// fl.getCurrentSymbol());
 				Integer gid = graphicGidDict.get(fl.getFacilityGraphic());
 				if (gid != null) {
 					updateGraphic(gid, fl.getCurrentSymbol());
 				}
+
 			}
 		}
 	}
@@ -148,66 +143,6 @@ class IPFacilityLayer extends GraphicsLayer {
 		}
 
 	}
-
-	// public void loadContentsFromFileWithInfo(String path) {
-	// removeAll();
-	//
-	// groupedFacilityLabelDict.clear();
-	// facilityLabelDict.clear();
-	// graphicGidDict.clear();
-	//
-	// JsonFactory factory = new JsonFactory();
-	//
-	// try {
-	// JsonParser parser = factory.createJsonParser(new File(path));
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	//
-	// Graphic[] graphics = set.getGraphics();
-	//
-	// for (Graphic graphic : graphics) {
-	// Integer categoryID = Integer.parseInt((String) graphic
-	// .getAttributeValue("COLOR"));
-	// if (categoryID == null) {
-	// continue;
-	// }
-	//
-	// Point pos = (Point) graphic.getGeometry();
-	//
-	// if (!groupedFacilityLabelDict.keySet().contains(categoryID)) {
-	// List<IPFacilityLabel> array = new ArrayList<IPFacilityLabel>();
-	// groupedFacilityLabelDict.put(categoryID, array);
-	// }
-	//
-	// IPFacilityLabel fLabel = new IPFacilityLabel(categoryID, pos);
-	// fLabel.setFacilityGraphic(graphic);
-	// fLabel.setNormalFacilitySymbol(allFacilitySymbols
-	// .get(categoryID));
-	// fLabel.setHighlightedFaciltySymbol(allHighlightFacilitySymbols
-	// .get(categoryID));
-	// fLabel.setHighlighted(false);
-	//
-	// List<IPFacilityLabel> array = groupedFacilityLabelDict
-	// .get(categoryID);
-	// array.add(fLabel);
-	//
-	// String poiID = (String) graphic
-	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-	// facilityLabelDict.put(poiID, fLabel);
-	//
-	// int gid = addGraphic(graphic);
-	// graphicGidDict.put(graphic, gid);
-	// }
-	//
-	// // updateLabelState();
-	//
-	// } catch (JsonParseException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
 
 	public void showFacilityWithCategory(int categoryID) {
 		Iterator<Integer> iter = groupedFacilityLabelDict.keySet().iterator();

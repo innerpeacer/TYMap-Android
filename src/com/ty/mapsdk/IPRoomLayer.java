@@ -78,39 +78,6 @@ class IPRoomLayer extends GraphicsLayer {
 		}
 	}
 
-	// public void loadContentsFromFileWithInfo(String path) {
-	// removeAll();
-	// roomDict.clear();
-	// roomGidDict.clear();
-	// JsonFactory factory = new JsonFactory();
-	//
-	// try {
-	//
-	// JsonParser parser = factory.createJsonParser(new File(path));
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	//
-	// Graphic[] graphics = set.getGraphics();
-	//
-	// if (graphics != null && graphics.length > 0) {
-	// int[] gids = addGraphics(graphics);
-	//
-	// for (int i = 0; i < graphics.length; ++i) {
-	// String poiID = (String) graphics[i]
-	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-	// roomDict.put(poiID, graphics[i]);
-	// roomGidDict.put(poiID, gids[i]);
-	// }
-	// }
-	//
-	// } catch (JsonParseException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 	public TYPoi getPoiWithPoiID(String pid) {
 		TYPoi result = null;
 		Graphic graphic = roomDict.get(pid);

@@ -89,7 +89,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		this.context = context;
 
 		setAllowRotationByPinch(true);
-		setMapBackground(0x88888888, Color.TRANSPARENT, 0, 0);
+		setMapBackground(Color.WHITE, Color.TRANSPARENT, 0, 0);
 	}
 
 	public TYMapView(Context context, AttributeSet attrs) {
@@ -97,7 +97,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		this.context = context;
 
 		setAllowRotationByPinch(true);
-		setMapBackground(0x88888888, Color.TRANSPARENT, 0, 0);
+		setMapBackground(Color.WHITE, Color.TRANSPARENT, 0, 0);
 	}
 
 	/**
