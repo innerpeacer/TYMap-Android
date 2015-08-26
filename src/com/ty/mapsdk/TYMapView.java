@@ -1,11 +1,7 @@
 package com.ty.mapsdk;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -160,6 +156,12 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 *            目标楼层的地图信息
 	 */
 	public void setFloor(final TYMapInfo info) {
+		// Graphic[] parsedGraphics = testParserData(info);
+
+		long startLoadTime = System.currentTimeMillis();
+		Log.i(TAG, "========================= Start Load: " + startLoadTime
+				/ 1000.0f);
+
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Date invalidDate = dateFormat.parse("2015-10-11");
@@ -209,11 +211,22 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 			return;
 		}
 
-		String jsonString = readFile(file.toString());
+		long parseStart = System.currentTimeMillis();
+		Log.i(TAG, "Parser Start: " + parseStart / 1000.0f);
+
+		String jsonString = IPFileUtils.readStringFromFile(file.toString());
 		JsonFactory factory = new JsonFactory();
 		mapDataDict.clear();
+
+		Log.i(TAG, "Read File: " + (System.currentTimeMillis() - parseStart)
+				/ 1000.0f);
+
 		try {
 			JSONObject jsonObject = new JSONObject(jsonString);
+
+			Log.i(TAG, "Parse json: "
+					+ (System.currentTimeMillis() - parseStart) / 1000.0f);
+
 			Object floorObject = jsonObject.get("floor");
 			if (floorObject.getClass() != String.class) {
 				JsonParser parser = factory.createJsonParser(floorObject
@@ -264,39 +277,66 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 			e.printStackTrace();
 		}
 
+		Log.i(TAG, "Parser End: " + (System.currentTimeMillis() - parseStart)
+				/ 1000.0f);
+
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
+				long firstLayer = System.currentTimeMillis();
+				// Log.i(TAG, "First Layer: " + firstLayer / 1000.0f);
+
 				if (!isInterupted) {
-					// structureGroupLayer.loadFloorContentFromFileWithInfo(info);
 					structureGroupLayer.loadFloorContent(mapDataDict
 							.get("floor"));
 				}
+
+				long floorLayerTime = System.currentTimeMillis();
+				// Log.i(TAG, "floorLayerTime: " + floorLayerTime / 1000.0f);
+				Log.i(TAG, "floorLayerTime: " + (floorLayerTime - firstLayer)
+						/ 1000.0f);
 
 				if (!isInterupted) {
 					// structureGroupLayer.loadRoomContentFromFileWithInfo(info);
 					structureGroupLayer.loadRoomContent(mapDataDict.get("room"));
 				}
 
+				long roomLayerTime = System.currentTimeMillis();
+				// Log.i(TAG, "roomLayerTime: " + roomLayerTime / 1000.0f);
+				Log.i(TAG, "roomLayerTime: " + (roomLayerTime - floorLayerTime)
+						/ 1000.0f);
+
 				if (!isInterupted) {
-					// structureGroupLayer.loadAssetContentFromFileWithInfo(info);
+
 					structureGroupLayer.loadAssetContent(mapDataDict
 							.get("asset"));
 				}
 
+				long assetLayerTime = System.currentTimeMillis();
+				// Log.i(TAG, "assetLayerTime: " + assetLayerTime / 1000.0f);
+				Log.i(TAG, "assetLayerTime: "
+						+ (assetLayerTime - roomLayerTime) / 1000.0f);
+
 				if (!isInterupted) {
-					// Log.i(TAG, "loadFacilityContentsFromFileWithInfo");
-					// labelGroupLayer.loadFacilityContentsFromFileWithInfo(info);
 					labelGroupLayer.loadFacilityContents(mapDataDict
 							.get("facility"));
 				}
 
+				long facilityLayerTime = System.currentTimeMillis();
+				// Log.i(TAG, "facilityLayerTime: " + facilityLayerTime /
+				// 1000.0f);
+				Log.i(TAG, "facilityLayerTime: "
+						+ (facilityLayerTime - assetLayerTime) / 1000.0f);
+
 				if (!isInterupted) {
-					// Log.i(TAG, "loadLabelContentsFromFileWithInfo");
-					// labelGroupLayer.loadLabelContentsFromFileWithInfo(info);
 					labelGroupLayer.loadLabelContents(mapDataDict.get("label"));
 				}
+
+				long labelLayerTime = System.currentTimeMillis();
+				// Log.i(TAG, "labelLayerTime: " + labelLayerTime / 1000.0f);
+				Log.i(TAG, "labelLayerTime: "
+						+ (labelLayerTime - facilityLayerTime) / 1000.0f);
 
 				if (initialEnvelope == null) {
 					initialEnvelope = new Envelope(info.getMapExtent()
@@ -323,33 +363,20 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 					locationLayer.removeAll();
 				}
 
+				long overTime = System.currentTimeMillis();
+				// Log.i(TAG, "overTime: " + overTime / 1000.0f);
+				Log.i(TAG, "overTime: " + (overTime - labelLayerTime) / 1000.0f);
+
 				isSwitching = false;
 				isInterupted = false;
 				isBlocking = false;
 			}
 		}).start();
 
-	}
+		long endLoadTime = System.currentTimeMillis();
+		Log.i(TAG, "End Load: " + startLoadTime / 1000.0f);
+		Log.i(TAG, "Interval: " + (endLoadTime - startLoadTime) / 1000.0f);
 
-	String readFile(String file) {
-		String result = "";
-		try {
-			FileInputStream inStream = new FileInputStream(file);
-			InputStreamReader inputReader = new InputStreamReader(inStream);
-			BufferedReader bufReader = new BufferedReader(inputReader);
-
-			String line = "";
-			StringBuffer jsonStr = new StringBuffer();
-			while ((line = bufReader.readLine()) != null)
-				jsonStr.append(line);
-
-			result = jsonStr.toString();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return result;
 	}
 
 	/**
