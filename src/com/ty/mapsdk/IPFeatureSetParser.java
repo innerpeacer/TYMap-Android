@@ -17,6 +17,45 @@ import com.esri.core.map.Graphic;
 public class IPFeatureSetParser {
 	static final String TAG = IPFeatureSetParser.class.getSimpleName();
 
+	public static Map<String, Graphic[]> parseMapDataString(String string) {
+		Log.i(TAG, "parseMapDataString");
+
+		long startParsing = System.currentTimeMillis();
+		Map<String, Graphic[]> result = new HashMap<String, Graphic[]>();
+
+		try {
+
+			long endReading = System.currentTimeMillis();
+			Log.i(TAG, "End Reading: " + (endReading - startParsing) / 1000.0f);
+
+			JSONObject object = new JSONObject(string);
+			long parseObject = System.currentTimeMillis();
+			Log.i(TAG, "parseObject: " + (parseObject - endReading) / 1000.0f);
+
+			result.put("floor", parsePolygonFeatureSet(object, "floor"));
+			Log.i(TAG, "");
+
+			result.put("room", parsePolygonFeatureSet(object, "room"));
+			Log.i(TAG, "");
+
+			result.put("asset", parsePolygonFeatureSet(object, "asset"));
+			Log.i(TAG, "");
+
+			result.put("facility", parsePointFeatureSet(object, "facility"));
+			Log.i(TAG, "");
+
+			result.put("label", parsePointFeatureSet(object, "label"));
+
+			long endParsing = System.currentTimeMillis();
+			Log.i(TAG, "endParsing: " + (endParsing - parseObject) / 1000.0f);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 	public static Map<String, Graphic[]> parseMapDataFile(String file) {
 		Log.i(TAG, "parseMapDataFile");
 

@@ -314,11 +314,12 @@ public class TYBuilding implements Parcelable {
 	 * @return 建筑类数组
 	 */
 	public static List<TYBuilding> parseBuildingFromFiles(Context context,
-			String path, String cityID) {
+			String cityID) {
 
 		List<TYBuilding> buildings = new ArrayList<TYBuilding>();
 
 		try {
+			String path = IPMapFileManager.getBuildingJsonPath(cityID);
 			FileInputStream inStream = new FileInputStream(new File(path));
 			InputStreamReader inputReader = new InputStreamReader(inStream);
 			BufferedReader bufReader = new BufferedReader(inputReader);
@@ -367,9 +368,8 @@ public class TYBuilding implements Parcelable {
 	 * @return 建筑类
 	 */
 	public static TYBuilding parseBuildingFromFilesById(Context context,
-			String path, String cityID, String buildingID) {
-		List<TYBuilding> buildings = parseBuildingFromFiles(context, path,
-				cityID);
+			String cityID, String buildingID) {
+		List<TYBuilding> buildings = parseBuildingFromFiles(context, cityID);
 
 		for (int i = 0; i < buildings.size(); i++) {
 			TYBuilding building = buildings.get(i);
@@ -395,9 +395,8 @@ public class TYBuilding implements Parcelable {
 	 * @return 建筑类
 	 */
 	public static TYBuilding parseBuildingFromFilesByName(Context context,
-			String path, String cityID, String buildingName) {
-		List<TYBuilding> buildings = parseBuildingFromFiles(context, path,
-				cityID);
+			String cityID, String buildingName) {
+		List<TYBuilding> buildings = parseBuildingFromFiles(context, cityID);
 
 		for (int i = 0; i < buildings.size(); i++) {
 			TYBuilding building = buildings.get(i);

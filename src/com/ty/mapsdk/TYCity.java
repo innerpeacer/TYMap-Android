@@ -213,10 +213,11 @@ public class TYCity implements Parcelable {
 	 *            文件路径
 	 * @return 城市类数组
 	 */
-	public static List<TYCity> parseCityFromFiles(Context context, String path) {
+	public static List<TYCity> parseCityFromFiles(Context context) {
 		List<TYCity> cities = new ArrayList<TYCity>();
 
 		try {
+			String path = IPMapFileManager.getCityJsonPath();
 			FileInputStream inStream = new FileInputStream(new File(path));
 			InputStreamReader inputReader = new InputStreamReader(inStream);
 			BufferedReader bufReader = new BufferedReader(inputReader);
@@ -262,9 +263,8 @@ public class TYCity implements Parcelable {
 	 * 
 	 * @return 城市类
 	 */
-	public static TYCity parseCityFromFilesById(Context context, String path,
-			String cityId) {
-		List<TYCity> cities = parseCityFromFiles(context, path);
+	public static TYCity parseCityFromFilesById(Context context, String cityId) {
+		List<TYCity> cities = parseCityFromFiles(context);
 
 		for (int i = 0; i < cities.size(); i++) {
 			TYCity city = cities.get(i);
@@ -287,9 +287,9 @@ public class TYCity implements Parcelable {
 	 * 
 	 * @return 城市类
 	 */
-	public static TYCity parseCityFromFilesByName(Context context, String path,
+	public static TYCity parseCityFromFilesByName(Context context,
 			String cityName) {
-		List<TYCity> cities = parseCityFromFiles(context, path);
+		List<TYCity> cities = parseCityFromFiles(context);
 
 		for (int i = 0; i < cities.size(); i++) {
 			TYCity city = cities.get(i);

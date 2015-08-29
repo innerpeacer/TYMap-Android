@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.ty.mapproject.ui.UICityListAdapter;
-import com.ty.mapsdk.IPMapFileManager;
 import com.ty.mapsdk.TYCity;
 
 public class AllCityListActivity extends ListActivity {
@@ -20,8 +19,7 @@ public class AllCityListActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		allCities = TYCity.parseCityFromFiles(getBaseContext(),
-				IPMapFileManager.getCityJsonPath());
+		allCities = TYCity.parseCityFromFiles(getBaseContext());
 
 		UICityListAdapter adapter = new UICityListAdapter(this);
 		adapter.setData(allCities);

@@ -29,6 +29,7 @@ import com.esri.core.map.Graphic;
 import com.esri.core.symbol.MarkerSymbol;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
+import com.ty.mapsdk.swig.TYMapSDK;
 
 public class TYMapView extends MapView implements OnSingleTapListener,
 		OnPanListener, OnZoomListener, OnStatusChangedListener {
@@ -190,9 +191,11 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		if (!mapDataCache.containsKey(currentMapInfo.getMapID())) {
 			long loadStart = System.currentTimeMillis();
+
+			String content = TYMapSDK.decryptFile(IPMapFileManager
+					.getMapDataPath(currentMapInfo));
 			Map<String, Graphic[]> mapData = IPFeatureSetParser
-					.parseMapDataFile(IPMapFileManager
-							.getMapDataPath(currentMapInfo));
+					.parseMapDataString(content);
 			long loadEnd = System.currentTimeMillis();
 			Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
 

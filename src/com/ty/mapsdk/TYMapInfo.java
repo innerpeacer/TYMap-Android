@@ -323,11 +323,13 @@ public class TYMapInfo implements Parcelable {
 	 * @return 所有楼层的地图信息数组:[NPMapInfo]
 	 */
 	public static List<TYMapInfo> parseMapInfoFromFiles(Context context,
-			String path, String buildingID) {
+			String cityID, String buildingID) {
 
 		List<TYMapInfo> mapInfos = new ArrayList<TYMapInfo>();
 
 		try {
+			String path = IPMapFileManager.getMapInfoJsonPath(cityID,
+					buildingID);
 			FileInputStream inStream = new FileInputStream(new File(path));
 			InputStreamReader inputReader = new InputStreamReader(inStream);
 			BufferedReader bufReader = new BufferedReader(inputReader);
@@ -376,8 +378,8 @@ public class TYMapInfo implements Parcelable {
 	 * @return 楼层地图信息
 	 */
 	public static TYMapInfo parseMapInfoFromFilesById(Context context,
-			String path, String buildingID, String mapID) {
-		List<TYMapInfo> mapInfos = parseMapInfoFromFiles(context, path,
+			String cityID, String buildingID, String mapID) {
+		List<TYMapInfo> mapInfos = parseMapInfoFromFiles(context, cityID,
 				buildingID);
 
 		for (int i = 0; i < mapInfos.size(); i++) {

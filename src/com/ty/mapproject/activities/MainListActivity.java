@@ -20,13 +20,13 @@ public class MainListActivity extends HelperListActivity {
 		super.onCreate(savedInstanceState);
 
 		String mapRootDir = Environment.getExternalStorageDirectory()
-				+ "/TuYaMap/MapResource";
+				+ "/TuYaMap/MapEncrypted";
 		TYMapEnvironment.setRootDirectoryForMapFiles(mapRootDir);
 
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
 		}
-		// copyFileIfNeeded();
+		copyFileIfNeeded();
 
 		AppSettings settings = new AppSettings(this);
 		settings.setDefaultCityID("0021");
@@ -37,7 +37,7 @@ public class MainListActivity extends HelperListActivity {
 	};
 
 	void copyFileIfNeeded() {
-		String sourcePath = "MapResource";
+		String sourcePath = "MapEncrypted";
 		String targetPath = TYMapEnvironment.getRootDirectoryForMapFiles();
 
 		Log.i(TAG, "source path: " + sourcePath);
@@ -74,6 +74,10 @@ public class MainListActivity extends HelperListActivity {
 
 		Intent intent = (Intent) map.get("Intent");
 		startActivity(intent);
+	}
+
+	static {
+		System.loadLibrary("TYMapSDK");
 	}
 
 }

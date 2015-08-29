@@ -46,12 +46,9 @@ public class BuildingMapViewActivity extends Activity implements
 
 		String cityID = getIntent().getStringExtra("cityID");
 		String buildingID = getIntent().getStringExtra("buildingID");
-		currentBuilding = TYBuilding.parseBuildingFromFilesById(this,
-				IPMapFileManager.getBuildingJsonPath(cityID), cityID,
+		currentBuilding = TYBuilding.parseBuildingFromFilesById(this, cityID,
 				buildingID);
-		mapInfos = TYMapInfo.parseMapInfoFromFiles(this,
-				IPMapFileManager.getMapInfoJsonPath(cityID, buildingID),
-				buildingID);
+		mapInfos = TYMapInfo.parseMapInfoFromFiles(this, cityID, buildingID);
 
 		setContentView(R.layout.activity_building_map_view);
 		initMapLayout();

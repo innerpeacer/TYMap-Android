@@ -17,9 +17,9 @@ import com.ty.mapsdk.TYBuilding;
 import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
+import com.ty.mapsdk.TYMapView.TYMapViewListenser;
 import com.ty.mapsdk.TYPoi;
 import com.ty.mapsdk.TYRenderingScheme;
-import com.ty.mapsdk.TYMapView.TYMapViewListenser;
 
 public abstract class BaseMapViewActivity extends Activity implements
 		TYMapViewListenser {
@@ -59,12 +59,9 @@ public abstract class BaseMapViewActivity extends Activity implements
 		String cityID = pref.getDefaultCityID();
 		String buildingID = pref.getDefaultBuildingID();
 
-		currentBuilding = TYBuilding.parseBuildingFromFilesById(this,
-				IPMapFileManager.getBuildingJsonPath(cityID), cityID,
+		currentBuilding = TYBuilding.parseBuildingFromFilesById(this, cityID,
 				buildingID);
-		mapInfos = TYMapInfo.parseMapInfoFromFiles(this,
-				IPMapFileManager.getMapInfoJsonPath(cityID, buildingID),
-				buildingID);
+		mapInfos = TYMapInfo.parseMapInfoFromFiles(this, cityID, buildingID);
 	}
 
 	private void initMapLayout() {
