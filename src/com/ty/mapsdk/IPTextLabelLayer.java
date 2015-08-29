@@ -145,9 +145,9 @@ class IPTextLabelLayer extends GraphicsLayer {
 				graphicGidDict.put(graphic, gid);
 			}
 		}
-
 	}
 
+	@SuppressWarnings("deprecation")
 	public static Drawable createMapBitMap(String text) {
 
 		Paint paint = new Paint();

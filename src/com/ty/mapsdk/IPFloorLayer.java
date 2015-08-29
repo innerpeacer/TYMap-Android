@@ -15,7 +15,7 @@ class IPFloorLayer extends GraphicsLayer {
 	static final String TAG = IPFloorLayer.class.getSimpleName();
 
 	Context context;
-	private TYRenderingScheme renderingScheme;
+	TYRenderingScheme renderingScheme;
 
 	public IPFloorLayer(Context context, TYRenderingScheme renderingScheme,
 			SpatialReference spatialReference, Envelope envelope) {

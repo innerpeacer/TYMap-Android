@@ -53,7 +53,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private IPLabelGroupLayer labelGroupLayer;
 
 	private IPRouteLayer routeLayer;
-	// private NPRouteArrowLayer routeArrowLayer;
 	private IPAnimatedRouteArrowLayer animatedRouteArrowLayer;
 	private IPRouteHintLayer routeHintLayer;
 
@@ -123,9 +122,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		routeHintLayer = new IPRouteHintLayer(context);
 		addLayer(routeHintLayer);
 
-		// routeArrowLayer = new NPRouteArrowLayer(context, this);
-		// addLayer(routeArrowLayer);
-
 		animatedRouteArrowLayer = new IPAnimatedRouteArrowLayer(context, this);
 		addLayer(animatedRouteArrowLayer);
 
@@ -141,76 +137,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private boolean isSwitching = false;
 	private boolean isInterupted = false;
 	private boolean isBlocking = false;
-
-	// Map<String, Graphic[]> parserMapData(String file) {
-	// Map<String, Graphic[]> result = new HashMap<String, Graphic[]>();
-	//
-	// if (!(new File(file).exists())) {
-	// return result;
-	// }
-	//
-	// String jsonString = IPFileUtils.readStringFromFile(file.toString());
-	// JsonFactory factory = new JsonFactory();
-	//
-	// try {
-	// JSONObject jsonObject = new JSONObject(jsonString);
-	//
-	// Object floorObject = jsonObject.get("floor");
-	// if (floorObject.getClass() != String.class) {
-	// JsonParser parser = factory.createJsonParser(floorObject
-	// .toString());
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	// result.put("floor", set.getGraphics());
-	// }
-	//
-	// Object roomObject = jsonObject.get("room");
-	// if (roomObject.getClass() != String.class) {
-	// JsonParser parser = factory.createJsonParser(roomObject
-	// .toString());
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	// result.put("room", set.getGraphics());
-	//
-	// }
-	//
-	// Object assetObject = jsonObject.get("asset");
-	// if (assetObject.getClass() != String.class) {
-	// JsonParser parser = factory.createJsonParser(assetObject
-	// .toString());
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	// result.put("asset", set.getGraphics());
-	//
-	// }
-	//
-	// Object facilityObject = jsonObject.get("facility");
-	// if (facilityObject.getClass() != String.class) {
-	// JsonParser parser = factory.createJsonParser(facilityObject
-	// .toString());
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	// result.put("facility", set.getGraphics());
-	//
-	// }
-	//
-	// Object labelObject = jsonObject.get("label");
-	// if (labelObject.getClass() != String.class) {
-	// JsonParser parser = factory.createJsonParser(labelObject
-	// .toString());
-	// FeatureSet set = FeatureSet.fromJson(parser);
-	// result.put("label", set.getGraphics());
-	//
-	// }
-	//
-	// } catch (JsonParseException e) {
-	// e.printStackTrace();
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// } catch (JSONException e) {
-	// e.printStackTrace();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return result;
-	// }
 
 	/**
 	 * 切换楼层方法
@@ -258,17 +184,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		routeLayer.removeAll();
 		routeHintLayer.removeAll();
-		// routeArrowLayer.removeAll();
 		animatedRouteArrowLayer.stopShowingArrow();
 
 		locationLayer.removeAll();
-
-		// long loadStart = System.currentTimeMillis();
-		// mapDataDictionary = IPFeatureSetParser
-		// .parseMapDataFile(IPMapFileManager
-		// .getMapDataPath(currentMapInfo));
-		// long loadEnd = System.currentTimeMillis();
-		// Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
 
 		if (!mapDataCache.containsKey(currentMapInfo.getMapID())) {
 			long loadStart = System.currentTimeMillis();
@@ -293,7 +211,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				}
 
 				if (!isInterupted) {
-					// structureGroupLayer.loadRoomContent(mapDataDict.get("room"));
 					structureGroupLayer.loadRoomContent(mapDataDictionary
 							.get("room"));
 
@@ -385,7 +302,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				.showRemainingRouteResultOnFloor(
 						currentMapInfo.getFloorNumber(), lp);
 		if (linesToShow != null && linesToShow.size() > 0) {
-			// routeArrowLayer.showRouteArrows(linesToShow);
 			animatedRouteArrowLayer.showRouteArrows(linesToShow);
 		}
 	}
@@ -501,7 +417,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	public void resetRouteLayer() {
 		routeLayer.reset();
 		routeHintLayer.removeAll();
-		// routeArrowLayer.removeAll();
 		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
@@ -511,7 +426,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	public void clearRouteLayer() {
 		routeLayer.removeAll();
 		routeHintLayer.removeAll();
-		// routeArrowLayer.removeAll();
 		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
@@ -1025,20 +939,16 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	public void onStatusChanged(Object source, STATUS status) {
 		switch (status) {
 		case INITIALIZED:
-			// Log.i(TAG, "INITIALIZED");
 			isMapInitlized = true;
 			break;
 
 		case INITIALIZATION_FAILED:
-			// Log.i(TAG, "INITIALIZATION_FAILED");
 			break;
 
 		case LAYER_LOADED:
-			// Log.i(TAG, "LAYER_LOADED");
 			break;
 
 		case LAYER_LOADING_FAILED:
-			// Log.i(TAG, "LAYER_LOADING_FAILED");
 			break;
 
 		default:
