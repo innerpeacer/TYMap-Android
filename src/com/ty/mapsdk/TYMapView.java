@@ -27,9 +27,9 @@ import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.MarkerSymbol;
+import com.ty.mapdata.TYBuilding;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
-import com.ty.mapsdk.swig.TYMapSDK;
 
 public class TYMapView extends MapView implements OnSingleTapListener,
 		OnPanListener, OnZoomListener, OnStatusChangedListener {
@@ -43,6 +43,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private Context context;
 
 	private boolean isMapInitlized = false;
+
+	private TYRenderingScheme renderingScheme;
 
 	private TYBuilding building;
 	private TYMapInfo currentMapInfo;
@@ -94,14 +96,15 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 * 
 	 * @param renderingScheme
 	 *            地图渲染方案
-	 * @param buliding
+	 * @param building
 	 *            地图显示的目标建筑
 	 */
-	public void init(TYRenderingScheme renderingScheme, TYBuilding buliding) {
+	public void init(TYBuilding building) {
 		// Log.i(TAG, "init");
-		this.building = buliding;
+		this.building = building;
+		renderingScheme = new TYRenderingScheme(this.context, this.building);
 
-		List<IPBrand> brandArray = IPBrand.parseAllBrands(buliding);
+		List<IPBrand> brandArray = IPBrand.parseAllBrands(building);
 		for (IPBrand brand : brandArray) {
 			allBrandDict.put(brand.getPoiID(), brand);
 		}
@@ -126,7 +129,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		animatedRouteArrowLayer = new IPAnimatedRouteArrowLayer(context, this);
 		addLayer(animatedRouteArrowLayer);
 
-		locationLayer = new IPLocationLayer();
+		locationLayer = new IPLocationLayer(context);
 		addLayer(locationLayer);
 
 		setOnSingleTapListener(this);
@@ -187,12 +190,12 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		routeHintLayer.removeAll();
 		animatedRouteArrowLayer.stopShowingArrow();
 
-		locationLayer.removeAll();
+		locationLayer.removeLocation();
 
 		if (!mapDataCache.containsKey(currentMapInfo.getMapID())) {
 			long loadStart = System.currentTimeMillis();
 
-			String content = TYMapSDK.decryptFile(IPMapFileManager
+			String content = IPMapSDK.decryptFile(IPMapFileManager
 					.getMapDataPath(currentMapInfo));
 			Map<String, Graphic[]> mapData = IPFeatureSetParser
 					.parseMapDataString(content);
@@ -256,7 +259,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 					structureGroupLayer.removeGraphicsFromSublayers();
 					labelGroupLayer.removeGraphicsFromSublayers();
 
-					locationLayer.removeAll();
+					// locationLayer.removeAll();
+					locationLayer.removeLocation();
+
 				}
 
 				isSwitching = false;
@@ -446,7 +451,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 *            定位点符号
 	 */
 	public void setLocationSymbol(MarkerSymbol markerSymbol) {
-		locationLayer.setLcoationSymbol(markerSymbol);
+		locationLayer.setLocationSymbol(markerSymbol);
 	}
 
 	/**
@@ -456,11 +461,17 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 *            定位结果坐标点
 	 */
 	public void showLocation(TYLocalPoint location) {
-		locationLayer.removeAll();
+		// locationLayer.removeAll();
+		if (location == null) {
+			locationLayer.removeLocation();
+		}
+
 		if (currentMapInfo.getFloorNumber() == location.getFloor()) {
 			Point pos = new Point(location.getX(), location.getY());
 			locationLayer.showLocation(pos, currentDeviceHeading,
 					building.getInitAngle(), mapViewMode);
+		} else {
+			locationLayer.removeLocation();
 		}
 	}
 

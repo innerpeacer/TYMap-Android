@@ -8,9 +8,9 @@ import java.io.RandomAccessFile;
 import android.os.Environment;
 import android.util.Log;
 
-import com.ty.mapsdk.swig.TYMapSDK;
+import com.ty.mapdata.TYBuilding;
 
-public class IPMapFileManager {
+class IPMapFileManager {
 
 	static String JSON_FILE_MAP_DATA = "%s.data";
 
@@ -69,7 +69,7 @@ public class IPMapFileManager {
 		String buildingDir = getBuildingDir(info.getCityID(),
 				info.getBuildingID());
 		String fileName = String.format(JSON_FILE_MAP_DATA, info.getMapID());
-		fileName = String.format("%s.tymap", TYMapSDK.md5(fileName));
+		fileName = String.format("%s.tymap", IPMapSDK.md5(fileName));
 		return (new File(buildingDir, fileName).toString());
 	}
 

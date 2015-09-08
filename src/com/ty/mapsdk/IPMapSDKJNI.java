@@ -6,11 +6,14 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-package com.ty.mapsdk.swig;
+package com.ty.mapsdk;
 
-public class TYMapSDKJNI {
-  public final static native String md5(String jarg1);
-  public final static native String decryptString(String jarg1);
-  public final static native String encryptString(String jarg1);
-  public final static native String decryptFile(String jarg1);
+class IPMapSDKJNI {
+	final static native String md5(String jarg1);
+
+	final static native String decryptString(String jarg1);
+
+	final static native String encryptString(String jarg1);
+
+	final static native String decryptFile(String jarg1);
 }

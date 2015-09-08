@@ -1,33 +1,37 @@
 package com.ty.mapsdk;
 
-import android.graphics.Color;
+import android.content.Context;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
-import com.esri.core.renderer.SimpleRenderer;
 import com.esri.core.symbol.MarkerSymbol;
-import com.esri.core.symbol.SimpleMarkerSymbol;
-import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 import com.ty.mapsdk.TYMapView.TYMapViewMode;
 
 class IPLocationLayer extends GraphicsLayer {
 	private MarkerSymbol locationSymbol;
 
-	public IPLocationLayer() {
+	private Graphic locationGraphic;
+	private int locationGraphicID;
+
+	public IPLocationLayer(Context context) {
 		super();
 
-		locationSymbol = new SimpleMarkerSymbol(Color.GREEN, 5, STYLE.CIRCLE);
-		SimpleRenderer render = new SimpleRenderer(locationSymbol);
-		setRenderer(render);
+		TYPictureMarkerSymbol defaultSymbol = new TYPictureMarkerSymbol(context
+				.getResources().getDrawable(
+						context.getResources().getIdentifier("l7", "drawable",
+								context.getPackageName())));
+		defaultSymbol.setWidth(80);
+		defaultSymbol.setHeight(80);
+		locationSymbol = defaultSymbol;
+
+		locationGraphic = new Graphic(null, locationSymbol);
+		locationGraphicID = addGraphic(locationGraphic);
 	}
 
-	public void setLcoationSymbol(MarkerSymbol symbol) {
-
+	public void setLocationSymbol(MarkerSymbol symbol) {
 		locationSymbol = symbol;
-		SimpleRenderer render = new SimpleRenderer(locationSymbol);
-		setRenderer(render);
-
+		updateGraphic(locationGraphicID, locationSymbol);
 	}
 
 	public void updateDeviceHeading(double deviceHeading, double initAngle,
@@ -48,11 +52,14 @@ class IPLocationLayer extends GraphicsLayer {
 
 	public void showLocation(Point location, double deviceHeading,
 			double initAngle, TYMapViewMode mode) {
-		removeAll();
-		addGraphic(new Graphic(location, locationSymbol));
+		// removeAll();
+		// addGraphic(new Graphic(location, locationSymbol));
+		updateGraphic(locationGraphicID, location);
 	}
 
 	public void removeLocation() {
-		removeAll();
+		// removeAll();
+		Point location = null;
+		updateGraphic(locationGraphicID, location);
 	}
 }

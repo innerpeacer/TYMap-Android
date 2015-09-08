@@ -13,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.ty.mapdata.TYBuilding;
+
 class IPBrand {
 	static final String TAG = IPBrand.class.getSimpleName();
 

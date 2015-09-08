@@ -239,7 +239,7 @@ using namespace std;
 extern "C" {
 #endif
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_TYMapSDKJNI_md5(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_md5(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string result;
@@ -260,7 +260,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_TYMapSDKJNI_md5(JNIEnv *jenv,
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_TYMapSDKJNI_decryptString(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptString(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string result;
@@ -281,7 +281,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_TYMapSDKJNI_decryptString(JNI
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_TYMapSDKJNI_encryptString(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_encryptString(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string result;
@@ -302,7 +302,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_TYMapSDKJNI_encryptString(JNI
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_TYMapSDKJNI_decryptFile(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptFile(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   char *arg1 = (char *) 0 ;
   std::string result;

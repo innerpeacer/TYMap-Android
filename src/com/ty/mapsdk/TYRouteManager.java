@@ -17,6 +17,7 @@ import com.esri.core.tasks.na.RouteParameters;
 import com.esri.core.tasks.na.RouteResult;
 import com.esri.core.tasks.na.RouteTask;
 import com.esri.core.tasks.na.StopGraphic;
+import com.ty.mapdata.TYBuilding;
 import com.ty.mapdata.TYLocalPoint;
 
 /**

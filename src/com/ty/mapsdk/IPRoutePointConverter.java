@@ -1,6 +1,7 @@
 package com.ty.mapsdk;
 
 import com.esri.core.geometry.Point;
+import com.ty.mapdata.TYBuilding.OffsetSize;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYMapInfo.MapExtent;
 
@@ -10,7 +11,7 @@ import com.ty.mapsdk.TYMapInfo.MapExtent;
 class IPRoutePointConverter {
 
 	private MapExtent baseExtent;
-	private TYMapSize baseOffset;
+	private OffsetSize baseOffset;
 
 	/**
 	 * 导航点转换类初始化方法
@@ -21,7 +22,7 @@ class IPRoutePointConverter {
 	 *            地图偏移量
 	 * 
 	 */
-	public IPRoutePointConverter(MapExtent extent, TYMapSize offset) {
+	public IPRoutePointConverter(MapExtent extent, OffsetSize offset) {
 		this.baseExtent = extent;
 		this.baseOffset = offset;
 	}

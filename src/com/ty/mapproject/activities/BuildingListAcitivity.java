@@ -8,8 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import com.ty.mapdata.TYBuilding;
 import com.ty.mapproject.ui.UIBuildingListAdapter;
-import com.ty.mapsdk.TYBuilding;
+import com.ty.mapsdk.TYBuildingManager;
 
 public class BuildingListAcitivity extends ListActivity {
 
@@ -21,8 +22,8 @@ public class BuildingListAcitivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 
 		currentCityID = getIntent().getStringExtra("cityID");
-		allBuildings = TYBuilding.parseBuildingFromFiles(getBaseContext(),
-				currentCityID);
+		allBuildings = TYBuildingManager.parseBuildingFromFiles(
+				getBaseContext(), currentCityID);
 
 		UIBuildingListAdapter adapter = new UIBuildingListAdapter(this);
 		adapter.setData(allBuildings);

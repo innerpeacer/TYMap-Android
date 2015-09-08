@@ -4,21 +4,21 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.esri.core.geometry.Point;
+import com.ty.mapdata.TYBuilding;
 import com.ty.mapproject.R;
-import com.ty.mapsdk.IPMapFileManager;
-import com.ty.mapsdk.TYBuilding;
+import com.ty.mapsdk.TYBuildingManager;
 import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYMapView.TYMapViewListenser;
 import com.ty.mapsdk.TYPoi;
-import com.ty.mapsdk.TYRenderingScheme;
 
 public class BuildingMapViewActivity extends Activity implements
 		TYMapViewListenser {
@@ -36,8 +36,6 @@ public class BuildingMapViewActivity extends Activity implements
 
 	int contentViewID;
 
-	TYRenderingScheme renderingScheme;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,9 +44,12 @@ public class BuildingMapViewActivity extends Activity implements
 
 		String cityID = getIntent().getStringExtra("cityID");
 		String buildingID = getIntent().getStringExtra("buildingID");
-		currentBuilding = TYBuilding.parseBuildingFromFilesById(this, cityID,
-				buildingID);
+		currentBuilding = TYBuildingManager.parseBuildingFromFilesById(this,
+				cityID, buildingID);
 		mapInfos = TYMapInfo.parseMapInfoFromFiles(this, cityID, buildingID);
+
+		Log.i(TAG, currentBuilding.toString());
+		Log.i(TAG, mapInfos.toString());
 
 		setContentView(R.layout.activity_building_map_view);
 		initMapLayout();
@@ -104,9 +105,7 @@ public class BuildingMapViewActivity extends Activity implements
 		setTitle(String.format("%s-%s", currentBuilding.getName(),
 				currentMapInfo.getFloorName()));
 
-		renderingScheme = new TYRenderingScheme(this,
-				IPMapFileManager.getRenderingScheme(currentBuilding));
-		mapView.init(renderingScheme, currentBuilding);
+		mapView.init(currentBuilding);
 		mapView.setFloor(currentMapInfo);
 
 		mapView.addMapListener(this);

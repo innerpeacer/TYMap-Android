@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.ty.mapsdk.TYBuilding;
+import com.ty.mapdata.TYBuilding;
 
 public class UIBuildingListAdapter extends BaseAdapter {
 

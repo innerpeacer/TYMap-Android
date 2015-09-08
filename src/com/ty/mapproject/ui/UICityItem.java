@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ty.mapdata.TYCity;
 import com.ty.mapproject.R;
-import com.ty.mapsdk.TYCity;
 
 public class UICityItem extends RelativeLayout {
 	private Context context;

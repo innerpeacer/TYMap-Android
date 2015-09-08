@@ -5,6 +5,7 @@ import java.io.File;
 import com.esri.android.runtime.ArcGISRuntime;
 import com.esri.core.geometry.SpatialReference;
 import com.esri.core.io.UserCredentials;
+import com.ty.mapdata.TYBuilding;
 
 /**
  * 地图环境

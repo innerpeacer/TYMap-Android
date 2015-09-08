@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
+import com.ty.mapdata.TYBuilding;
 
 /**
  * 渲染方案类：用于表示地图的渲染规则
@@ -88,13 +89,16 @@ public class TYRenderingScheme {
 	 * @return 渲染方案实例
 	 */
 	@SuppressLint("UseSparseArrays")
-	public TYRenderingScheme(Context context, String path) {
+	TYRenderingScheme(Context context, String path) {
 		this.context = context;
 		fillSymbolDictionary = new HashMap<Integer, SimpleFillSymbol>();
 		iconSymbolDictionary = new HashMap<Integer, String>();
 
 		parseRenderingSchemeFileFromFile(path);
+	}
 
+	public TYRenderingScheme(Context context, TYBuilding building) {
+		this(context, IPMapFileManager.getRenderingScheme(building));
 	}
 
 	/**
@@ -140,6 +144,7 @@ public class TYRenderingScheme {
 	}
 
 	private void parseRenderingSchemeFileFromFile(String path) {
+		Log.i(TAG, "parseRenderingSchemeFileFromFile");
 		try {
 			FileInputStream inStream = new FileInputStream(new File(path));
 			InputStreamReader inputReader = new InputStreamReader(inStream);

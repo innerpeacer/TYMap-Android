@@ -1,4 +1,4 @@
-%module TYMapSDK
+%module (allprotected="1") IPMapSDK
 
 %include "std_string.i"
 
