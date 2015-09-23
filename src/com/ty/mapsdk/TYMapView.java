@@ -1,8 +1,5 @@
 package com.ty.mapsdk;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,6 +70,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	private Map<String, IPBrand> allBrandDict = new HashMap<String, IPBrand>();
 
+	private String userID;
+	private String mapLicense;
+
 	// =====================================
 	public TYMapView(Context context) {
 		super(context);
@@ -93,14 +93,19 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	/**
 	 * 地图初始化方法
 	 * 
-	 * @param renderingScheme
-	 *            地图渲染方案
 	 * @param building
 	 *            地图显示的目标建筑
+	 * @param userID
+	 *            SDK的用户ID
+	 * @param license
+	 *            目标建筑的License
 	 */
-	public void init(TYBuilding building) {
+	public void init(TYBuilding building, String userID, String license) {
 		// Log.i(TAG, "init");
 		this.building = building;
+		this.userID = userID;
+		this.mapLicense = license;
+
 		renderingScheme = new TYRenderingScheme(this.context, this.building);
 
 		List<IPBrand> brandArray = IPBrand.parseAllBrands(building);
@@ -137,6 +142,33 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		setOnStatusChangedListener(this);
 	}
 
+	/**
+	 * 切换建筑方法，将地图切换到目标建筑
+	 * 
+	 * @param building
+	 *            切换的目标建筑
+	 * @param userID
+	 *            SDK的用户ID
+	 * @param license
+	 *            目标建筑的License
+	 */
+	public void switchBuilding(TYBuilding building, String userID,
+			String license) {
+		this.building = building;
+		this.userID = userID;
+		this.mapLicense = license;
+
+		renderingScheme = new TYRenderingScheme(this.context, this.building);
+
+		List<IPBrand> brandArray = IPBrand.parseAllBrands(building);
+		for (IPBrand brand : brandArray) {
+			allBrandDict.put(brand.getPoiID(), brand);
+		}
+
+		structureGroupLayer.setRenderScheme(renderingScheme);
+		labelGroupLayer.setRenderScheme(renderingScheme);
+	}
+
 	private boolean isSwitching = false;
 	private boolean isInterupted = false;
 	private boolean isBlocking = false;
@@ -149,24 +181,38 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 */
 	public void setFloor(final TYMapInfo info) {
 
-		// if (!info.getBuildingID().equalsIgnoreCase("00210004")) {
-		// return;
-		// }
-
-		try {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Date invalidDate = dateFormat.parse("2017-10-11");
-
-			Date now = new Date();
-			boolean isInvalid = now.after(invalidDate);
-			if (isInvalid) {
-				// Toast.makeText(getContext(), "抱歉，SDK已过期", Toast.LENGTH_LONG)
-				// .show();
-				return;
-			}
-		} catch (ParseException e) {
+		if (!IPLicenseValidation.checkValidity(userID, mapLicense, building)) {
 			return;
 		}
+
+		Date expiredDate = IPLicenseValidation.evaluateLicense(userID,
+				mapLicense, building);
+		if (expiredDate == null) {
+			return;
+		}
+
+		Date now = new Date();
+		boolean isInvalid = now.after(expiredDate);
+		if (isInvalid) {
+			// Toast.makeText(getContext(), "抱歉，SDK已过期", Toast.LENGTH_LONG)
+			// .show();
+			return;
+		}
+
+		// try {
+		// DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		// Date invalidDate = dateFormat.parse("2017-10-11");
+		//
+		// Date now = new Date();
+		// boolean isInvalid = now.after(invalidDate);
+		// if (isInvalid) {
+		// // Toast.makeText(getContext(), "抱歉，SDK已过期", Toast.LENGTH_LONG)
+		// // .show();
+		// return;
+		// }
+		// } catch (ParseException e) {
+		// return;
+		// }
 
 		if (currentMapInfo != null
 				&& info.getMapID().equalsIgnoreCase(currentMapInfo.getMapID())) {

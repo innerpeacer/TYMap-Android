@@ -23,20 +23,15 @@ class IPFloorLayer extends GraphicsLayer {
 		setRenderer(createRenderer());
 	}
 
+	public void setRenderScheme(TYRenderingScheme rs) {
+		this.renderingScheme = rs;
+		setRenderer(createRenderer());
+	}
+
 	private Renderer createRenderer() {
 		return new SimpleRenderer(renderingScheme.getDefaultFillSymbol());
 		// return new SimpleRenderer(new SimpleFillSymbol(Color.WHITE));
-
 	}
-
-	// public void loadContents(FeatureSet set) {
-	// removeAll();
-	//
-	// if (set != null) {
-	// Graphic[] graphics = set.getGraphics();
-	// addGraphics(graphics);
-	// }
-	// }
 
 	public void loadContents(Graphic[] graphics) {
 		removeAll();

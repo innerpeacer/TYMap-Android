@@ -26,7 +26,10 @@ public class MainListActivity extends HelperListActivity {
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
 		}
-		copyFileIfNeeded();
+		// copyFileIfNeeded();
+
+		LicenseManager.loadContent(FileHelper.readStringFromAsset(this,
+				"Licenses.json"));
 
 		AppSettings settings = new AppSettings(this);
 		settings.setDefaultCityID("0021");

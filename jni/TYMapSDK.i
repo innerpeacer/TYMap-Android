@@ -6,6 +6,7 @@
 
 #include "TYMapSDK/src/Utils/IPEncryption.hpp"
 #include "TYMapSDK/src/Utils/MD5Utils.hpp"
+#include "TYMapSDK/src/Utils/IPLicenseValidation.h"
 
 using namespace std;
 

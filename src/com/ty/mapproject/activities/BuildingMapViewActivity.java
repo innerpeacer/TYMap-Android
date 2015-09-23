@@ -1,6 +1,7 @@
 package com.ty.mapproject.activities;
 
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -105,7 +106,10 @@ public class BuildingMapViewActivity extends Activity implements
 		setTitle(String.format("%s-%s", currentBuilding.getName(),
 				currentMapInfo.getFloorName()));
 
-		mapView.init(currentBuilding);
+		Map<String, String> dict = LicenseManager
+				.getLicenseForBuilding(currentBuilding.getBuildingID());
+		mapView.init(currentBuilding, dict.get("UserID"), dict.get("License"));
+
 		mapView.setFloor(currentMapInfo);
 
 		mapView.addMapListener(this);

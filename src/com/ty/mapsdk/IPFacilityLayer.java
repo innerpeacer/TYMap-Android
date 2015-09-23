@@ -41,7 +41,13 @@ class IPFacilityLayer extends GraphicsLayer {
 		this.context = context;
 		this.groupLayer = groupLayer;
 		this.renderingScheme = renderingScheme;
+		getFacilitySymbols();
+	}
 
+	public void setRenderScheme(TYRenderingScheme rs) {
+		this.renderingScheme = rs;
+		allFacilitySymbols.clear();
+		allHighlightFacilitySymbols.clear();
 		getFacilitySymbols();
 	}
 
@@ -105,9 +111,6 @@ class IPFacilityLayer extends GraphicsLayer {
 
 		for (Graphic graphic : graphics) {
 
-			// Integer categoryID = Integer.parseInt((String) graphic
-			// .getAttributeValue("COLOR"));
-
 			Integer categoryID;
 			Object categoryObj = graphic.getAttributeValue("COLOR");
 			if (categoryObj.getClass() == String.class) {
@@ -147,62 +150,6 @@ class IPFacilityLayer extends GraphicsLayer {
 
 		}
 	}
-
-	// public void loadContents(FeatureSet set) {
-	// removeAll();
-	//
-	// groupedFacilityLabelDict.clear();
-	// facilityLabelDict.clear();
-	// graphicGidDict.clear();
-	// if (set != null) {
-	// Graphic[] graphics = set.getGraphics();
-	//
-	// for (Graphic graphic : graphics) {
-	//
-	// // Integer categoryID = Integer.parseInt((String) graphic
-	// // .getAttributeValue("COLOR"));
-	//
-	// Integer categoryID;
-	// Object categoryObj = graphic.getAttributeValue("COLOR");
-	// if (categoryObj.getClass() == String.class) {
-	// categoryID = Integer.parseInt((String) categoryObj);
-	// } else {
-	// categoryID = (Integer) categoryObj;
-	// }
-	//
-	// if (categoryID == null) {
-	// continue;
-	// }
-	//
-	// Point pos = (Point) graphic.getGeometry();
-	//
-	// if (!groupedFacilityLabelDict.keySet().contains(categoryID)) {
-	// List<IPFacilityLabel> array = new ArrayList<IPFacilityLabel>();
-	// groupedFacilityLabelDict.put(categoryID, array);
-	// }
-	//
-	// IPFacilityLabel fLabel = new IPFacilityLabel(categoryID, pos);
-	// fLabel.setFacilityGraphic(graphic);
-	// fLabel.setNormalFacilitySymbol(allFacilitySymbols
-	// .get(categoryID));
-	// fLabel.setHighlightedFaciltySymbol(allHighlightFacilitySymbols
-	// .get(categoryID));
-	// fLabel.setHighlighted(false);
-	//
-	// List<IPFacilityLabel> array = groupedFacilityLabelDict
-	// .get(categoryID);
-	// array.add(fLabel);
-	//
-	// String poiID = (String) graphic
-	// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
-	// facilityLabelDict.put(poiID, fLabel);
-	//
-	// int gid = addGraphic(graphic);
-	// graphicGidDict.put(graphic, gid);
-	// }
-	// }
-	//
-	// }
 
 	public void showFacilityWithCategory(int categoryID) {
 		Iterator<Integer> iter = groupedFacilityLabelDict.keySet().iterator();
@@ -259,21 +206,7 @@ class IPFacilityLayer extends GraphicsLayer {
 		IPFacilityLabel fl = facilityLabelDict.get(pid);
 		Graphic graphic = fl.getFacilityGraphic();
 		if (graphic != null) {
-			// result = new TYPoi(
-			// (String) graphic
-			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-			// (String) graphic
-			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-			// (String) graphic
-			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-			// (String) graphic
-			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-			// (String) graphic
-			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-			// graphic.getGeometry(),
-			// (Integer) graphic
-			// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID),
-			// POI_LAYER.POI_FACILITY);
+
 			int categoryID;
 			Object categoryObj = graphic
 					.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);

@@ -8,12 +8,15 @@
 
 package com.ty.mapsdk;
 
-class IPMapSDKJNI {
-	final static native String md5(String jarg1);
-
-	final static native String decryptString(String jarg1);
-
-	final static native String encryptString(String jarg1);
-
-	final static native String decryptFile(String jarg1);
+public class IPMapSDKJNI {
+  public final static native String md5(String jarg1);
+  public final static native String decryptString__SWIG_0(String jarg1);
+  public final static native String encryptString__SWIG_0(String jarg1);
+  public final static native String decryptFile__SWIG_0(String jarg1);
+  public final static native String decryptString__SWIG_1(String jarg1, String jarg2);
+  public final static native String encryptString__SWIG_1(String jarg1, String jarg2);
+  public final static native void encryptFile(String jarg1, String jarg2, String jarg3);
+  public final static native String decryptFile__SWIG_1(String jarg1, String jarg2);
+  public final static native boolean checkValidity(String jarg1, String jarg2, String jarg3);
+  public final static native String getExpiredDate(String jarg1, String jarg2, String jarg3);
 }

@@ -29,6 +29,11 @@ class IPAssetLayer extends GraphicsLayer {
 		setRenderer(createAssetRenderer());
 	}
 
+	public void setRenderScheme(TYRenderingScheme rs) {
+		this.renderingScheme = rs;
+		setRenderer(createAssetRenderer());
+	}
+
 	private Renderer createAssetRenderer() {
 		UniqueValueRenderer assetRenderer = new UniqueValueRenderer();
 		List<UniqueValue> uvInfo = new ArrayList<UniqueValue>();
@@ -48,15 +53,6 @@ class IPAssetLayer extends GraphicsLayer {
 		assetRenderer.setUniqueValueInfos(uvInfo);
 		return assetRenderer;
 	}
-
-	// public void loadContents(FeatureSet set) {
-	// removeAll();
-	//
-	// if (set != null) {
-	// Graphic[] graphics = set.getGraphics();
-	// addGraphics(graphics);
-	// }
-	// }
 
 	public void loadContents(Graphic[] graphics) {
 		removeAll();

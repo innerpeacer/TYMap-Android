@@ -8,21 +8,45 @@
 
 package com.ty.mapsdk;
 
-class IPMapSDK {
-	static String md5(String str) {
-		return IPMapSDKJNI.md5(str);
-	}
+public class IPMapSDK {
+  public static String md5(String str) {
+    return IPMapSDKJNI.md5(str);
+  }
 
-	static String decryptString(String str) {
-		return IPMapSDKJNI.decryptString(str);
-	}
+  public static String decryptString(String str) {
+    return IPMapSDKJNI.decryptString__SWIG_0(str);
+  }
 
-	static String encryptString(String str) {
-		return IPMapSDKJNI.encryptString(str);
-	}
+  public static String encryptString(String str) {
+    return IPMapSDKJNI.encryptString__SWIG_0(str);
+  }
 
-	static String decryptFile(String file) {
-		return IPMapSDKJNI.decryptFile(file);
-	}
+  public static String decryptFile(String file) {
+    return IPMapSDKJNI.decryptFile__SWIG_0(file);
+  }
+
+  public static String decryptString(String str, String key) {
+    return IPMapSDKJNI.decryptString__SWIG_1(str, key);
+  }
+
+  public static String encryptString(String originalString, String key) {
+    return IPMapSDKJNI.encryptString__SWIG_1(originalString, key);
+  }
+
+  public static void encryptFile(String originalPath, String encryptedFile, String key) {
+    IPMapSDKJNI.encryptFile(originalPath, encryptedFile, key);
+  }
+
+  public static String decryptFile(String file, String key) {
+    return IPMapSDKJNI.decryptFile__SWIG_1(file, key);
+  }
+
+  public static boolean checkValidity(String userID, String license, String buildingID) {
+    return IPMapSDKJNI.checkValidity(userID, license, buildingID);
+  }
+
+  public static String getExpiredDate(String userID, String license, String buildingID) {
+    return IPMapSDKJNI.getExpiredDate(userID, license, buildingID);
+  }
 
 }

@@ -41,6 +41,12 @@ class IPStructureGroupLayer extends GroupLayer {
 
 	}
 
+	public void setRenderScheme(TYRenderingScheme rs) {
+		floorLayer.setRenderScheme(rs);
+		roomLayer.setRenderScheme(rs);
+		assetLayer.setRenderScheme(rs);
+	}
+
 	public void removeGraphicsFromSublayers() {
 		floorLayer.removeAll();
 		roomLayer.removeAll();
@@ -48,18 +54,6 @@ class IPStructureGroupLayer extends GroupLayer {
 		assetLayer.removeAll();
 
 	}
-
-	// public void loadFloorContent(FeatureSet set) {
-	// floorLayer.loadContents(set);
-	// }
-	//
-	// public void loadRoomContent(FeatureSet set) {
-	// roomLayer.loadContents(set);
-	// }
-	//
-	// public void loadAssetContent(FeatureSet set) {
-	// assetLayer.loadContents(set);
-	// }
 
 	public void loadFloorContent(Graphic[] graphics) {
 		floorLayer.loadContents(graphics);
@@ -153,21 +147,6 @@ class IPStructureGroupLayer extends GroupLayer {
 		if (roomIDs != null && roomIDs.length > 0) {
 			for (int gid : roomIDs) {
 				Graphic g = roomLayer.getGraphic(gid);
-				// TYPoi poi = new TYPoi(
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-				// g.getGeometry(),
-				// Integer.parseInt((String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
-				// POI_LAYER.POI_ROOM);
 
 				// 兼容老数据，CategoryID为整数
 
@@ -207,21 +186,6 @@ class IPStructureGroupLayer extends GroupLayer {
 		if (assetIDs != null && assetIDs.length > 0) {
 			for (int gid : assetIDs) {
 				Graphic g = assetLayer.getGraphic(gid);
-				// TYPoi poi = new TYPoi(
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-				// g.getGeometry(),
-				// Integer.parseInt((String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
-				// POI_LAYER.POI_ASSET);
 
 				int categoryID;
 				Object categoryObj = g

@@ -26,13 +26,16 @@ class IPLabelGroupLayer extends GroupLayer {
 		super();
 
 		this.mapView = mapView;
-
 		facilityLayer = new IPFacilityLayer(context, this, renderingScheme, sr,
 				null);
 		addLayer(facilityLayer);
 
 		labelLayer = new IPTextLabelLayer(context, this, sr, null);
 		addLayer(labelLayer);
+	}
+
+	public void setRenderScheme(TYRenderingScheme rs) {
+		facilityLayer.setRenderScheme(rs);
 	}
 
 	public void setBrandDict(Map<String, IPBrand> dict) {
@@ -144,21 +147,7 @@ class IPLabelGroupLayer extends GroupLayer {
 		if (facilityIDs != null && facilityIDs.length > 0) {
 			for (int gid : facilityIDs) {
 				Graphic g = facilityLayer.getGraphic(gid);
-				// TYPoi poi = new TYPoi(
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-				// (String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-				// g.getGeometry(),
-				// Integer.parseInt((String) g
-				// .getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID)),
-				// POI_LAYER.POI_FACILITY);
+
 				int categoryID;
 				Object categoryObj = g
 						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID);
