@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -310,7 +309,6 @@ class IPFacilityLayer extends GraphicsLayer {
 	}
 
 	private void getFacilitySymbols() {
-		Log.i(TAG, "getFacilitySymbols");
 		Map<Integer, String> iconDict = renderingScheme
 				.getIconSymbolDictionary();
 
@@ -342,8 +340,6 @@ class IPFacilityLayer extends GraphicsLayer {
 				allHighlightFacilitySymbols.put(colorID, psHighlighted);
 			}
 		}
-
-		Log.i(TAG, "getFacilitySymbols over");
 
 	}
 

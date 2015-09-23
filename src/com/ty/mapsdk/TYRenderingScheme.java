@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
@@ -144,7 +143,7 @@ public class TYRenderingScheme {
 	}
 
 	private void parseRenderingSchemeFileFromFile(String path) {
-		Log.i(TAG, "parseRenderingSchemeFileFromFile");
+		// Log.i(TAG, "parseRenderingSchemeFileFromFile");
 		try {
 			FileInputStream inStream = new FileInputStream(new File(path));
 			InputStreamReader inputReader = new InputStreamReader(inStream);
@@ -159,7 +158,7 @@ public class TYRenderingScheme {
 
 			if (jsonObject != null
 					&& !jsonObject.isNull(JSON_FIELD_ROOT_RENDERING_SCHEME)) {
-				Log.i(TAG, JSON_FIELD_ROOT_RENDERING_SCHEME);
+				// Log.i(TAG, JSON_FIELD_ROOT_RENDERING_SCHEME);
 				JSONObject rootDict = jsonObject
 						.getJSONObject(JSON_FIELD_ROOT_RENDERING_SCHEME);
 

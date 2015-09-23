@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import android.os.Environment;
-import android.util.Log;
 
 import com.ty.mapdata.TYBuilding;
 
@@ -95,11 +94,8 @@ class IPMapFileManager {
 
 		File result = new File(buildingDir, fileName);
 		if (result.exists()) {
-			Log.i("IPMapFileManager", "Use: " + result.toString());
 			return result.toString();
 		} else {
-			Log.i("IPMapFileManager", "Use: " + getDefaultRenderingScheme());
-			Log.i("IPMapFileManager", "Not Use: " + result.toString());
 			return getDefaultRenderingScheme();
 		}
 	}

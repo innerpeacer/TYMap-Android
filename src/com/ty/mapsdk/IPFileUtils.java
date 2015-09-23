@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class IPFileUtils {
+class IPFileUtils {
 
 	public static String readStringFromFile(String file) {
 		String result = "";

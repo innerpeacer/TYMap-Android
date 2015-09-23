@@ -12,7 +12,7 @@ import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 
-public class IPFeatureSetParser {
+class IPFeatureSetParser {
 	static final String TAG = IPFeatureSetParser.class.getSimpleName();
 
 	public static Map<String, Graphic[]> parseMapDataString(String string) {

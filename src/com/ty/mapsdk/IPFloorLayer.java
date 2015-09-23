@@ -1,7 +1,6 @@
 package com.ty.mapsdk;
 
 import android.content.Context;
-import android.graphics.Color;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -9,7 +8,6 @@ import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Graphic;
 import com.esri.core.renderer.Renderer;
 import com.esri.core.renderer.SimpleRenderer;
-import com.esri.core.symbol.SimpleFillSymbol;
 
 class IPFloorLayer extends GraphicsLayer {
 	static final String TAG = IPFloorLayer.class.getSimpleName();
@@ -26,8 +24,8 @@ class IPFloorLayer extends GraphicsLayer {
 	}
 
 	private Renderer createRenderer() {
-		// return new SimpleRenderer(renderingScheme.getDefaultFillSymbol());
-		return new SimpleRenderer(new SimpleFillSymbol(Color.WHITE));
+		return new SimpleRenderer(renderingScheme.getDefaultFillSymbol());
+		// return new SimpleRenderer(new SimpleFillSymbol(Color.WHITE));
 
 	}
 

@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
@@ -150,15 +149,19 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 */
 	public void setFloor(final TYMapInfo info) {
 
+		// if (!info.getBuildingID().equalsIgnoreCase("00210004")) {
+		// return;
+		// }
+
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Date invalidDate = dateFormat.parse("2015-10-11");
+			Date invalidDate = dateFormat.parse("2017-10-11");
 
 			Date now = new Date();
 			boolean isInvalid = now.after(invalidDate);
 			if (isInvalid) {
-				Toast.makeText(getContext(), "抱歉，SDK已过期", Toast.LENGTH_LONG)
-						.show();
+				// Toast.makeText(getContext(), "抱歉，SDK已过期", Toast.LENGTH_LONG)
+				// .show();
 				return;
 			}
 		} catch (ParseException e) {
@@ -193,14 +196,14 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		locationLayer.removeLocation();
 
 		if (!mapDataCache.containsKey(currentMapInfo.getMapID())) {
-			long loadStart = System.currentTimeMillis();
+			// long loadStart = System.currentTimeMillis();
 
 			String content = IPMapSDK.decryptFile(IPMapFileManager
 					.getMapDataPath(currentMapInfo));
 			Map<String, Graphic[]> mapData = IPFeatureSetParser
 					.parseMapDataString(content);
-			long loadEnd = System.currentTimeMillis();
-			Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
+			// long loadEnd = System.currentTimeMillis();
+			// Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
 
 			mapDataCache.put(currentMapInfo.getMapID(), mapData);
 		}
