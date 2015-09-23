@@ -23,7 +23,7 @@ public class TYRouteResult {
 	private Map<Integer, List<TYRoutePart>> allFloorRoutePartDict = new HashMap<Integer, List<TYRoutePart>>();
 
 	/**
-	 * 路径结果的类实例化方法，一般不需要直接调用，由导航管理类调用生成
+	 * 路径结果的构造函数，一般不需要直接调用，由导航管理类调用生成
 	 * 
 	 * @param routePartArray
 	 *            路径段数组
@@ -165,7 +165,7 @@ public class TYRouteResult {
 
 				TYLocalPoint lp = new TYLocalPoint(p0.getX(), p0.getY(), rp
 						.getMapInfo().getFloorNumber());
-				IPLandmark landmark = landmarkManager.searchLandmark(lp, 10);
+				TYLandmark landmark = landmarkManager.searchLandmark(lp, 10);
 
 				TYDirectionalHint ds = new TYDirectionalHint(p0, p1,
 						currentAngle);
@@ -245,8 +245,8 @@ public class TYRouteResult {
 				continue;
 			}
 
-			IPRouteVector2 v = new IPRouteVector2(p1.getX() - p0.getX(), p1.getY()
-					- p0.getY());
+			IPRouteVector2 v = new IPRouteVector2(p1.getX() - p0.getX(),
+					p1.getY() - p0.getY());
 			double angle = v.getAngle();
 
 			if (Math.abs(currentAngle - angle) > ANGLE_THREHOLD) {

@@ -8,9 +8,9 @@ import com.esri.core.io.UserCredentials;
 import com.ty.mapdata.TYBuilding;
 
 /**
- * 地图环境
+ * 地图运行环境
  * 
- * @author innerpeacer 地图环境
+ * @author innerpeacer 地图运行环境
  */
 public class TYMapEnvironment {
 
@@ -41,7 +41,7 @@ public class TYMapEnvironment {
 	/**
 	 * 访问地图服务的默认用户验证
 	 * 
-	 * @return [user:password] --> ["arcgis":"666666"]
+	 * @return [user:password]
 	 */
 	public static UserCredentials defaultUserCredentials() {
 		if (userCredentials == null) {
@@ -70,6 +70,13 @@ public class TYMapEnvironment {
 		return mapFileRootDirectory;
 	}
 
+	/**
+	 * 获取目标建筑的目录路径
+	 * 
+	 * @param building
+	 *            目标建筑
+	 * @return 目标建筑的文件路径
+	 */
 	public static String getDirectoryForBuilding(TYBuilding building) {
 		File cityDir = new File(mapFileRootDirectory, building.getCityID());
 		File buildingDir = new File(cityDir, building.getBuildingID());

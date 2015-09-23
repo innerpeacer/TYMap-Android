@@ -32,7 +32,7 @@ public class TYDirectionalHint {
 	private double currentAngle;
 	private double length;
 
-	private IPLandmark landmark;
+	private TYLandmark landmark;
 	private TYRoutePart routePart;
 
 	private IPRouteVector2 vector;
@@ -97,62 +97,68 @@ public class TYDirectionalHint {
 	}
 
 	/**
-	 * 当前段的路标信息
+	 * 获取当前段的路标信息
 	 */
-	public IPLandmark getLandmark() {
+	public TYLandmark getLandmark() {
 		return landmark;
 	}
 
 	/**
-	 * 当前段的路标信息
+	 * 设置当前段的路标信息
+	 * 
+	 * @param landmark
+	 *            路标信息
 	 */
-	public void setLandmark(IPLandmark landmark) {
+	public void setLandmark(TYLandmark landmark) {
 		this.landmark = landmark;
 	}
 
 	/**
-	 * 包含当前段的路径部分
+	 * 获取包含当前段的路径部分
 	 */
 	public TYRoutePart getRoutePart() {
 		return routePart;
 	}
 
 	/**
-	 * 包含当前段的路径部分
+	 * 设置包含当前段的路径部分
+	 * 
+	 * @param routePart
+	 *            路径部分
 	 */
 	public void setRoutePart(TYRoutePart routePart) {
 		this.routePart = routePart;
 	}
 
 	/**
-	 * 当前段起点
+	 * 获取当前段起点
 	 */
 	public Point getStartPoint() {
 		return startPoint;
 	}
 
 	/**
-	 * 当前段终点
+	 * 获取当前段终点
 	 */
 	public Point getEndPoint() {
 		return endPoint;
 	}
 
 	/**
-	 * 当前段的相对方向
+	 * 获取当前段的相对方向
 	 */
 	public TYRelativeDirection getRelativeDirection() {
 		return relativeDirection;
 	}
 
 	/**
-	 * 前一段的方向角
+	 * 获取前一段的方向角
 	 */
 	public double getPreviousAngle() {
 		return previousAngle;
 	}
 
-	public String getDirection(TYRelativeDirection direction) {
+	String getDirection(TYRelativeDirection direction) {
 		String result = null;
 		switch (direction) {
 		case TYStraight:
@@ -190,8 +196,7 @@ public class TYDirectionalHint {
 		return result;
 	}
 
-	public TYRelativeDirection calculateRelativeDirection(double angle,
-			double preAngle) {
+	TYRelativeDirection calculateRelativeDirection(double angle, double preAngle) {
 		TYRelativeDirection direction = null;
 
 		double deltaAngle = angle - preAngle;
@@ -239,14 +244,14 @@ public class TYDirectionalHint {
 	}
 
 	/**
-	 * 当前段的方向角
+	 * 获取当前段的方向角
 	 */
 	public double getCurrentAngle() {
 		return currentAngle;
 	}
 
 	/**
-	 * 当前段的长度
+	 * 获取当前段的长度
 	 */
 	public double getLength() {
 		return length;

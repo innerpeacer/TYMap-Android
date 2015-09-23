@@ -80,12 +80,12 @@ public class TYRenderingScheme {
 	private Map<Integer, String> iconSymbolDictionary;
 
 	/**
-	 * 渲染方案初始化方法
+	 * 渲染方案构造函数
 	 * 
+	 * @param context
+	 *            上下文环境
 	 * @param path
 	 *            渲染方案文件路径
-	 * 
-	 * @return 渲染方案实例
 	 */
 	@SuppressLint("UseSparseArrays")
 	TYRenderingScheme(Context context, String path) {
@@ -96,47 +96,55 @@ public class TYRenderingScheme {
 		parseRenderingSchemeFileFromFile(path);
 	}
 
+	/**
+	 * 渲染方案构造函数
+	 * 
+	 * @param context
+	 *            上下文环境
+	 * @param building
+	 *            目标建筑
+	 */
 	public TYRenderingScheme(Context context, TYBuilding building) {
 		this(context, IPMapFileManager.getRenderingScheme(building));
 	}
 
 	/**
-	 * 默认填充符号
+	 * 获取默认填充符号
 	 */
 	public SimpleFillSymbol getDefaultFillSymbol() {
 		return defaultFillSymbol;
 	}
 
 	/**
-	 * 默认高亮填充符号
+	 * 获取默认高亮填充符号
 	 */
 	public SimpleFillSymbol getDefaultHighlightFillSymbol() {
 		return defaultHighlightFillSymbol;
 	}
 
 	/**
-	 * 默认线型符号
+	 * 获取默认线型符号
 	 */
 	public SimpleLineSymbol getDefaultLineSymbol() {
 		return defaultLineSymbol;
 	}
 
 	/**
-	 * 默认高亮线型符号
+	 * 获取默认高亮线型符号
 	 */
 	public SimpleLineSymbol getDefaultHighlightLineSymbol() {
 		return defaultHighlightLineSymbol;
 	}
 
 	/**
-	 * 填充符号字典，{Integer: FillSymbol} -> {类型: 填充符号}
+	 * 获取填充符号字典，{Integer: FillSymbol} -> {类型: 填充符号}
 	 */
 	public Map<Integer, SimpleFillSymbol> getFillSymbolDictionary() {
 		return fillSymbolDictionary;
 	}
 
 	/**
-	 * Icon符号字典，{Integer: String} -> {类型: Icon文件名}
+	 * 获取Icon符号字典，{Integer: String} -> {类型: Icon文件名}
 	 */
 	public Map<Integer, String> getIconSymbolDictionary() {
 		return iconSymbolDictionary;

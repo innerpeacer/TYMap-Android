@@ -27,6 +27,12 @@ import com.ty.mapdata.TYBuilding;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapsdk.TYPoi.POI_LAYER;
 
+/**
+ * 地图视图类
+ * 
+ * @author innerpeacer
+ * 
+ */
 public class TYMapView extends MapView implements OnSingleTapListener,
 		OnPanListener, OnZoomListener, OnStatusChangedListener {
 
@@ -73,7 +79,12 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private String userID;
 	private String mapLicense;
 
-	// =====================================
+	/**
+	 * 地图视图构造函数
+	 * 
+	 * @param context
+	 *            上下文环境
+	 */
 	public TYMapView(Context context) {
 		super(context);
 		this.context = context;
@@ -82,6 +93,14 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		setMapBackground(Color.WHITE, Color.TRANSPARENT, 0, 0);
 	}
 
+	/**
+	 * 地图视图构造函数
+	 * 
+	 * @param context
+	 *            上下文环境
+	 * @param attrs
+	 *            页面属性
+	 */
 	public TYMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
@@ -199,21 +218,6 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 			return;
 		}
 
-		// try {
-		// DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		// Date invalidDate = dateFormat.parse("2017-10-11");
-		//
-		// Date now = new Date();
-		// boolean isInvalid = now.after(invalidDate);
-		// if (isInvalid) {
-		// // Toast.makeText(getContext(), "抱歉，SDK已过期", Toast.LENGTH_LONG)
-		// // .show();
-		// return;
-		// }
-		// } catch (ParseException e) {
-		// return;
-		// }
-
 		if (currentMapInfo != null
 				&& info.getMapID().equalsIgnoreCase(currentMapInfo.getMapID())) {
 			return;
@@ -322,17 +326,10 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	}
 
 	/**
-	 * 当前建筑的当前楼层信息
+	 * 获取当前建筑的当前楼层信息
 	 */
 	public TYMapInfo getCurrentMapInfo() {
 		return currentMapInfo;
-	}
-
-	/**
-	 * 当前建筑的当前楼层信息
-	 */
-	public void setCurrentMapInfo(TYMapInfo currentMapInfo) {
-		this.currentMapInfo = currentMapInfo;
 	}
 
 	/**
@@ -486,10 +483,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
-	/**
-	 * 检测标签，对重叠标签进行处理
-	 */
-	public void checkLabels() {
+	void checkLabels() {
 		labelGroupLayer.updateLabels();
 	}
 
@@ -563,14 +557,17 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	}
 
 	/**
-	 * 在POI被点选时是否高亮显示，默认为NO
+	 * POI被点选时是否高亮显示，默认为NO
 	 */
 	public boolean isHighlightPoiOnSelection() {
 		return highlightPoiOnSelection;
 	}
 
 	/**
-	 * 在POI被点选时是否高亮显示，默认为NO
+	 * 设置POI被点选时是否高亮显示
+	 * 
+	 * @param highlightPoiOnSelection
+	 *            是否高亮
 	 */
 	public void setHighlightPoiOnSelection(boolean highlightPoiOnSelection) {
 		this.highlightPoiOnSelection = highlightPoiOnSelection;
@@ -910,7 +907,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		 * 
 		 * @param mapView
 		 *            地图视图
-		 * @param array
+		 * @param poiList
 		 *            选中的POI数组:[NPPoi]
 		 */
 		void onPoiSelected(TYMapView mapView, List<TYPoi> poiList);

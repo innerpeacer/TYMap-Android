@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.esri.core.geometry.Point;
 import com.ty.mapdata.TYBuilding;
 import com.ty.mapproject.R;
-import com.ty.mapproject.settings.AppSettings;
+import com.ty.mapproject.settings.TYUserDefaults;
 import com.ty.mapsdk.TYBuildingManager;
 import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
@@ -53,7 +53,7 @@ public abstract class BaseMapViewActivity extends Activity implements
 	public abstract void initContentViewID();
 
 	private void getCurrentBuilding() {
-		AppSettings pref = new AppSettings(this);
+		TYUserDefaults pref = new TYUserDefaults(this);
 		String cityID = pref.getDefaultCityID();
 		String buildingID = pref.getDefaultBuildingID();
 

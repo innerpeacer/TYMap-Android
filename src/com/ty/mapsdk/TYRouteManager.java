@@ -60,7 +60,7 @@ public class TYRouteManager {
 	};
 
 	/**
-	 * 路径管理类的实例化方法
+	 * 路径管理类的构造函数
 	 * 
 	 * @param building
 	 *            目标建筑

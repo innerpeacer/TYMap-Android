@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.ty.mapproject.R;
-import com.ty.mapproject.settings.AppSettings;
+import com.ty.mapproject.settings.TYUserDefaults;
 import com.ty.mapsdk.TYMapEnvironment;
 
 public class MainListActivity extends HelperListActivity {
@@ -31,7 +31,7 @@ public class MainListActivity extends HelperListActivity {
 		LicenseManager.loadContent(FileHelper.readStringFromAsset(this,
 				"Licenses.json"));
 
-		AppSettings settings = new AppSettings(this);
+		TYUserDefaults settings = new TYUserDefaults(this);
 		settings.setDefaultCityID("0021");
 		settings.setDefaultBuildingID("00210100");
 		// settings.setDefaultBuildingID("002100002");

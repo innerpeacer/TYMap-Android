@@ -1,6 +1,5 @@
 package com.ty.mapsdk;
 
-
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 
@@ -18,9 +17,9 @@ public class TYRoutePart {
 	/**
 	 * 路径导航段的初始化方法，一般不需要直接调用，由导航管理类调用生成
 	 * 
-	 * @param route
+	 * @param polyline
 	 *            导航线
-	 * @param mapInfo
+	 * @param info
 	 *            导航线所在楼层的地图信息
 	 * 
 	 */
@@ -84,42 +83,48 @@ public class TYRoutePart {
 	}
 
 	/**
-	 * 当前段的几何数据
+	 * 返回当前段的几何数据
 	 */
 	public Polyline getRoute() {
 		return route;
 	}
 
 	/**
-	 * 当前段的地图信息
+	 * 返回当前段的地图信息
 	 */
 	public TYMapInfo getMapInfo() {
 		return info;
 	}
 
 	/**
-	 * 当前段的前一段
+	 * 返回当前段的前一段
 	 */
 	public TYRoutePart getPreviousPart() {
 		return previousPart;
 	}
 
 	/**
-	 * 当前段的前一段
+	 * 设置当前段的前一段
+	 * 
+	 * @param previousPart
+	 *            前一段
 	 */
 	public void setPreviousPart(TYRoutePart previousPart) {
 		this.previousPart = previousPart;
 	}
 
 	/**
-	 * 当前段的下一段
+	 * 返回当前段的下一段
 	 */
 	public TYRoutePart getNextPart() {
 		return nextPart;
 	}
 
 	/**
-	 * 当前段的下一段
+	 * 设置当前段的后一段
+	 * 
+	 * @param nextPart
+	 *            后一段
 	 */
 	public void setNextPart(TYRoutePart nextPart) {
 		this.nextPart = nextPart;

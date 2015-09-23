@@ -18,7 +18,7 @@ class IPLandmarkManager {
 	private static IPLandmarkManager landmarkManager;
 
 	private int currentFloor = 0;
-	private List<IPLandmark> allLandmarks = new ArrayList<IPLandmark>();
+	private List<TYLandmark> allLandmarks = new ArrayList<TYLandmark>();
 
 	private IPLandmarkManager() {
 
@@ -49,7 +49,7 @@ class IPLandmarkManager {
 
 					TYLocalPoint location = new TYLocalPoint(pos.getX(),
 							pos.getY(), currentFloor);
-					IPLandmark landmark = new IPLandmark();
+					TYLandmark landmark = new TYLandmark();
 					landmark.setName(name);
 					landmark.setLocation(location);
 
@@ -65,12 +65,12 @@ class IPLandmarkManager {
 		}
 	}
 
-	public IPLandmark searchLandmark(TYLocalPoint location, double tolerance) {
+	public TYLandmark searchLandmark(TYLocalPoint location, double tolerance) {
 		if (location.getFloor() != currentFloor) {
 			return null;
 		}
 
-		for (IPLandmark landmark : allLandmarks) {
+		for (TYLandmark landmark : allLandmarks) {
 			TYLocalPoint lp = landmark.getLocation();
 			double distance = lp.distanceWithPoint(location);
 			if (distance < tolerance) {

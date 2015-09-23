@@ -17,6 +17,12 @@ import android.content.Context;
 
 import com.ty.mapdata.TYBuilding;
 
+/**
+ * 建筑管理类，用于管理建筑数据
+ * 
+ * @author innerpeacer
+ * 
+ */
 public class TYBuildingManager {
 
 	public static final String JSON_KEY_BUILDINGS = "Buildings";
@@ -25,21 +31,18 @@ public class TYBuildingManager {
 	 * 从外部存储目录解析所有建筑信息列表
 	 * 
 	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
-	 * @param cityID
-	 *            城市ID
-	 * 
+	 *            上下文环境
+	 * @param buildingID
+	 *            建筑ID
 	 * @return 建筑类数组
 	 */
 	public static List<TYBuilding> parseBuildingFromFiles(Context context,
-			String cityID) {
+			String buildingID) {
 
 		List<TYBuilding> buildings = new ArrayList<TYBuilding>();
 
 		try {
-			String path = IPMapFileManager.getBuildingJsonPath(cityID);
+			String path = IPMapFileManager.getBuildingJsonPath(buildingID);
 			FileInputStream inStream = new FileInputStream(new File(path));
 			InputStreamReader inputReader = new InputStreamReader(inStream);
 			BufferedReader bufReader = new BufferedReader(inputReader);
@@ -78,9 +81,7 @@ public class TYBuildingManager {
 	 * 从外部存储目录按ID解析特定建筑信息
 	 * 
 	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
+	 *            上下文环境
 	 * @param cityID
 	 *            城市ID
 	 * @param buildingID
@@ -104,9 +105,7 @@ public class TYBuildingManager {
 	 * 从外部存储目录按名称解析特定建筑信息
 	 * 
 	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
+	 *            上下文环境
 	 * @param cityID
 	 *            城市ID
 	 * @param buildingName

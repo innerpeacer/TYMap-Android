@@ -52,10 +52,19 @@ public class TYMapInfo implements Parcelable {
 	private double ymin;
 	private double ymax;
 
+	/**
+	 * 地图信息类构造函数
+	 */
 	public TYMapInfo() {
 		super();
 	}
 
+	/**
+	 * 地图信息类构造函数
+	 * 
+	 * @param in
+	 *            包含地图信息的Parcel对象
+	 */
 	TYMapInfo(Parcel in) {
 		cityID = in.readString();
 		buildingID = in.readString();
@@ -73,6 +82,7 @@ public class TYMapInfo implements Parcelable {
 		ymax = in.readDouble();
 	}
 
+	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(cityID);
 		dest.writeString(buildingID);
@@ -101,10 +111,17 @@ public class TYMapInfo implements Parcelable {
 		};
 	};
 
+	@Override
 	public int describeContents() {
 		return 0;
 	}
 
+	/**
+	 * 从json对象中解析出地图信息
+	 * 
+	 * @param jsonObject
+	 *            待解析对象
+	 */
 	public void parseJson(JSONObject jsonObject) {
 		if (jsonObject != null) {
 			if (!jsonObject.isNull(KEY_MAPINFO_CITYID)) {
@@ -144,6 +161,11 @@ public class TYMapInfo implements Parcelable {
 		}
 	}
 
+	/**
+	 * 创建地图信息的json对象
+	 * 
+	 * @return 地图信息的json表示
+	 */
 	public JSONObject buildJson() {
 		JSONObject jsonObject = new JSONObject();
 		try {
@@ -165,63 +187,63 @@ public class TYMapInfo implements Parcelable {
 	}
 
 	/**
-	 * 所在城市的ID
+	 * 获取所在城市的ID
 	 */
 	public String getCityID() {
 		return cityID;
 	}
 
 	/**
-	 * 所在建筑的ID
+	 * 获取所在建筑的ID
 	 */
 	public String getBuildingID() {
 		return buildingID;
 	}
 
 	/**
-	 * 当前地图的唯一ID，当前与楼层的FloorID一致
+	 * 获取当前地图的唯一ID，当前与楼层的FloorID一致
 	 */
 	public String getMapID() {
 		return mapID;
 	}
 
 	/**
-	 * 地图尺寸
+	 * 获取地图尺寸
 	 */
 	public TYMapSize getMapSize() {
 		return new TYMapSize(size_x, size_y);
 	}
 
 	/**
-	 * 地图范围
+	 * 获取地图范围
 	 */
 	public MapExtent getMapExtent() {
 		return new MapExtent(xmin, ymin, xmax, ymax);
 	}
 
 	/**
-	 * 当前楼层名称，如F1、B1
+	 * 获取当前楼层名称，如F1、B1
 	 */
 	public String getFloorName() {
 		return floorName;
 	}
 
 	/**
-	 * 当前楼层序号,如-1、1
+	 * 获取当前楼层序号,如-1、1
 	 */
 	public int getFloorNumber() {
 		return floorNumber;
 	}
 
 	/**
-	 * 地图X方向放缩比例，当前比例为1
+	 * 获取地图X方向放缩比例，当前比例为1
 	 */
 	public double getScaleX() {
 		return size_x / (xmax - xmin);
 	}
 
 	/**
-	 * 地图Y方向放缩比例，当前比例为1
+	 * 获取地图Y方向放缩比例，当前比例为1
 	 */
 	public double getScaleY() {
 		return size_y / (ymax - ymin);
@@ -315,12 +337,12 @@ public class TYMapInfo implements Parcelable {
 	 * 从外部存储目录解析某建筑所有楼层的地图信息
 	 * 
 	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
+	 *            上下文环境
+	 * @param cityID
+	 *            城市ID
 	 * @param buildingID
-	 *            楼层所在建筑的ID
-	 * @return 所有楼层的地图信息数组:[NPMapInfo]
+	 *            建筑ID
+	 * @return 地图信息数组
 	 */
 	public static List<TYMapInfo> parseMapInfoFromFiles(Context context,
 			String cityID, String buildingID) {
@@ -368,9 +390,9 @@ public class TYMapInfo implements Parcelable {
 	 * 从外部存储目录解析某楼层地图信息的静态方法
 	 * 
 	 * @param context
-	 *            Context
-	 * @param path
-	 *            文件路径
+	 *            上下文环境
+	 * @param cityID
+	 *            楼层所在城市的ID
 	 * @param buildingID
 	 *            楼层所在建筑的ID
 	 * @param mapID

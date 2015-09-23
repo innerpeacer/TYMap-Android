@@ -3,7 +3,7 @@ package com.ty.mapsdk;
 import com.esri.core.geometry.Geometry;
 
 /**
- * @brief POI类：用于表示POI相关数据，主要包含POI地理信息，及相应POI ID
+ * POI类：用于表示POI相关数据，主要包含POI地理信息，及相应POI ID
  */
 public class TYPoi {
 
@@ -24,56 +24,56 @@ public class TYPoi {
 	private POI_LAYER layer;
 
 	/**
-	 * POI地理ID
+	 * 获取POI地理ID
 	 */
 	public String getGeoID() {
 		return geoID;
 	}
 
 	/**
-	 * @brief POI ID
+	 * 获取 POI ID
 	 */
 	public String getPoiID() {
 		return poiID;
 	}
 
 	/**
-	 * POI所在楼层ID
+	 * 获取POI所在楼层ID
 	 */
 	public String getFloorID() {
 		return floorID;
 	}
 
 	/**
-	 * POI所在建筑ID
+	 * 获取POI所在建筑ID
 	 */
 	public String getBuildingID() {
 		return buildingID;
 	}
 
 	/**
-	 * POI名称
+	 * 获取POI名称
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * POI几何数据
+	 * 获取POI几何数据
 	 */
 	public Geometry getGeometry() {
 		return geometry;
 	}
 
 	/**
-	 * POI分类类型ID
+	 * 获取POI分类类型ID
 	 */
 	public int getCategoryID() {
 		return categoryID;
 	}
 
 	/**
-	 * POI所在层
+	 * 获取POI所在层
 	 */
 	public POI_LAYER getLayer() {
 		return layer;
@@ -96,6 +96,26 @@ public class TYPoi {
 		}
 	}
 
+	/**
+	 * POI构造函数
+	 * 
+	 * @param gid
+	 *            地理ID
+	 * @param pid
+	 *            POI ID
+	 * @param fid
+	 *            楼层ID
+	 * @param bid
+	 *            建筑ID
+	 * @param pname
+	 *            POI名称
+	 * @param geometry
+	 *            POI几何数据
+	 * @param cid
+	 *            POI类型ID
+	 * @param ptype
+	 *            POI所在层
+	 */
 	public TYPoi(String gid, String pid, String fid, String bid, String pname,
 			Geometry geometry, int cid, POI_LAYER ptype) {
 		this.geoID = gid;
