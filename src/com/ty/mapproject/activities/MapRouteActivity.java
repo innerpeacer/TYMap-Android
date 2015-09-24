@@ -295,9 +295,7 @@ public class MapRouteActivity extends BaseMapViewActivity implements
 			//
 			// routeHintLabel.setText(hintString);
 			// }
-
 		}
-
 	}
 
 	@Override
