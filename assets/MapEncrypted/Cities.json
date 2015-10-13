@@ -1,22 +1,6 @@
 {
     "Cities": [
                {
-               "id":"0571",
-               "name":"杭州市",
-               "sname":"杭州",
-               "longitude":"116.407143",
-               "latitude":"39.915156",
-               "status":"0"
-               },
-               {
-               "id":"0519",
-               "name":"常州市",
-               "sname":"常州",
-               "longitude":"116.407143",
-               "latitude":"39.915156",
-               "status":"0"
-               },
-               {
                "id":"0021",
                "name":"上海市",
                "sname":"上海",
@@ -71,6 +55,30 @@
                "id":"0512",
                "name":"苏州市",
                "sname":"苏州",
+               "longitude":"116.407143",
+               "latitude":"39.915156",
+               "status":"0"
+               },
+               {
+               "id":"0571",
+               "name":"杭州市",
+               "sname":"杭州",
+               "longitude":"116.407143",
+               "latitude":"39.915156",
+               "status":"0"
+               },
+               {
+               "id":"0519",
+               "name":"常州市",
+               "sname":"常州",
+               "longitude":"116.407143",
+               "latitude":"39.915156",
+               "status":"0"
+               },
+               {
+               "id":"0591",
+               "name":"福州市",
+               "sname":"福州",
                "longitude":"116.407143",
                "latitude":"39.915156",
                "status":"0"

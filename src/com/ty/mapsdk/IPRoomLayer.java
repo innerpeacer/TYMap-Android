@@ -118,6 +118,8 @@ class IPRoomLayer extends GraphicsLayer {
 	}
 
 	public TYPoi extractPoiOnCurrentFloor(double x, double y) {
+		// Log.i(TAG, "extractPoiOnCurrentFloor");
+
 		TYPoi poi = null;
 
 		for (String poiID : roomDict.keySet()) {
@@ -134,17 +136,21 @@ class IPRoomLayer extends GraphicsLayer {
 					categoryID = (Integer) categoryObj;
 				}
 
-				poi = new TYPoi(
-						(String) graphic
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
-						(String) graphic
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID),
-						(String) graphic
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
-						(String) graphic
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-						(String) graphic
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
+				String geoID = (String) graphic
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID);
+				String floorID = (String) graphic
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID);
+				String buildingID = (String) graphic
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID);
+
+				String name = null;
+				Object nameObject = graphic
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME);
+				if (nameObject.getClass() == String.class) {
+					name = (String) nameObject;
+				}
+
+				poi = new TYPoi(geoID, poiID, floorID, buildingID, name,
 						graphic.getGeometry(), categoryID, POI_LAYER.POI_ROOM);
 				break;
 			}

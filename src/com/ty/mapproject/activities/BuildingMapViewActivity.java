@@ -111,7 +111,6 @@ public class BuildingMapViewActivity extends Activity implements
 		mapView.init(currentBuilding, dict.get("UserID"), dict.get("License"));
 
 		mapView.setFloor(currentMapInfo);
-
 		mapView.addMapListener(this);
 	}
 

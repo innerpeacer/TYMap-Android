@@ -93,14 +93,18 @@ class IPTextLabelLayer extends GraphicsLayer {
 	}
 
 	public void loadContents(Graphic[] graphics) {
+		// Log.i(TAG, "loadContents");
+
 		removeAll();
 		allTextLabels.clear();
 		graphicGidDict.clear();
 
 		TYMapLanguage language = TYMapEnvironment.getMapLanguage();
 		String field = getNameFieldForLanguage(language);
+		// Log.i(TAG, field);
 
 		for (Graphic graphic : graphics) {
+			// Log.i(TAG, graphic + "");
 			String name = (String) graphic.getAttributeValue(field);
 
 			if (name != null && name.length() > 0) {
@@ -125,16 +129,8 @@ class IPTextLabelLayer extends GraphicsLayer {
 					textLabel.setTextSize(brand.getLogoSize());
 
 				} else {
-					// TextSymbol ts = new TextSymbol(10, name, Color.BLACK);
-					// ts.setFontFamily("DroidSansFallback.ttf");
-					// // ts.setFontFamily("DroidSans.ttf");
-					//
-					// ts.setHorizontalAlignment(HorizontalAlignment.CENTER);
-					// ts.setVerticalAlignment(VerticalAlignment.MIDDLE);
-
 					PictureMarkerSymbol ts = new PictureMarkerSymbol(
 							createMapBitMap(name));
-
 					textLabel.setTextSymbol(ts);
 				}
 

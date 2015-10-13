@@ -68,10 +68,12 @@ class IPLabelGroupLayer extends GroupLayer {
 	// }
 
 	public void loadFacilityContents(Graphic[] graphics) {
+		// Log.i(TAG, "loadFacilityContents: " + graphics.length);
 		facilityLayer.loadContents(graphics);
 	}
 
 	public void loadLabelContents(Graphic[] graphics) {
+		// Log.i(TAG, "loadLabelContents: " + graphics.length);
 		labelLayer.loadContents(graphics);
 	}
 

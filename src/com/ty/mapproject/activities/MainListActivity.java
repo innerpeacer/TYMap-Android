@@ -35,11 +35,16 @@ public class MainListActivity extends HelperListActivity {
 		settings.setDefaultCityID("0021");
 		settings.setDefaultBuildingID("00210100");
 		// settings.setDefaultBuildingID("002100002");
+		settings.setDefaultBuildingID("00210004");
+
+		// settings.setDefaultCityID("0591");
+		// settings.setDefaultBuildingID("05910001");
 
 		setTitle(getResources().getString(R.string.app_name));
 	};
 
 	void copyFileIfNeeded() {
+
 		String sourcePath = "MapEncrypted";
 		String targetPath = TYMapEnvironment.getRootDirectoryForMapFiles();
 

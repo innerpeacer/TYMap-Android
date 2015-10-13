@@ -39,6 +39,8 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 	public void onClickAtPoint(TYMapView mapView, Point mappoint) {
 		// Log.i(TAG, "onClickAtPoint: " + mappoint);
 
+		mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(), mappoint.getY());
+
 	}
 
 	private View loadCalloutView(String title, String detail) {
@@ -53,7 +55,9 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 
 	@Override
 	public void onPoiSelected(TYMapView mapView, List<TYPoi> poiList) {
-		Log.i(TAG, "onPoiSelected: " + poiList);
+		Log.i(TAG, "onPoiSelected: " + poiList.size());
+		Log.i(TAG, "" + poiList);
+
 		mapCallout.setStyle(R.xml.callout_style);
 		if (mapCallout != null && mapCallout.isShowing()) {
 			mapCallout.hide();

@@ -16,6 +16,7 @@ class IPFeatureSetParser {
 	static final String TAG = IPFeatureSetParser.class.getSimpleName();
 
 	public static Map<String, Graphic[]> parseMapDataString(String string) {
+		// Log.i(TAG, string);
 		Map<String, Graphic[]> result = new HashMap<String, Graphic[]>();
 		try {
 			JSONObject object = new JSONObject(string);

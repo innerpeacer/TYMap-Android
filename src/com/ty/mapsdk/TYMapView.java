@@ -199,7 +199,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 *            目标楼层的地图信息
 	 */
 	public void setFloor(final TYMapInfo info) {
-
+		// Log.i(TAG, "setFloor: " + info);
 		if (!IPLicenseValidation.checkValidity(userID, mapLicense, building)) {
 			return;
 		}
@@ -311,10 +311,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				if (isInterupted) {
 					structureGroupLayer.removeGraphicsFromSublayers();
 					labelGroupLayer.removeGraphicsFromSublayers();
-
-					// locationLayer.removeAll();
 					locationLayer.removeLocation();
-
 				}
 
 				isSwitching = false;

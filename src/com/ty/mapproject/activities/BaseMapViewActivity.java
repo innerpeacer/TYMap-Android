@@ -60,6 +60,7 @@ public abstract class BaseMapViewActivity extends Activity implements
 		currentBuilding = TYBuildingManager.parseBuildingFromFilesById(this,
 				cityID, buildingID);
 		mapInfos = TYMapInfo.parseMapInfoFromFiles(this, cityID, buildingID);
+
 	}
 
 	private void initMapLayout() {
@@ -116,11 +117,11 @@ public abstract class BaseMapViewActivity extends Activity implements
 				.getLicenseForBuilding(currentBuilding.getBuildingID());
 		mapView.init(currentBuilding, dict.get("UserID"), dict.get("License"));
 		mapView.setFloor(currentMapInfo);
-
 		mapView.addMapListener(this);
 	}
 
 	protected void changedToFloor(int index) {
+		// Log.i(TAG, "changedToFloor: " + index);
 		currentFloorIndex = index;
 		currentMapInfo = mapInfos.get(index);
 
@@ -141,7 +142,7 @@ public abstract class BaseMapViewActivity extends Activity implements
 
 	@Override
 	public void onFinishLoadingFloor(TYMapView mapView, TYMapInfo mapInfo) {
-		// Log.i(TAG, "" + mapInfo);
+		// Log.i(TAG, "onFinishLoadingFloor：" + mapInfo);
 	}
 
 	@Override

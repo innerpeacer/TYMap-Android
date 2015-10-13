@@ -56,14 +56,17 @@ class IPStructureGroupLayer extends GroupLayer {
 	}
 
 	public void loadFloorContent(Graphic[] graphics) {
+		// Log.i(TAG, "loadFloorContent: " + graphics.length);
 		floorLayer.loadContents(graphics);
 	}
 
 	public void loadRoomContent(Graphic[] graphics) {
+		// Log.i(TAG, "loadRoomContent: " + graphics.length);
 		roomLayer.loadContents(graphics);
 	}
 
 	public void loadAssetContent(Graphic[] graphics) {
+		// Log.i(TAG, "loadAssetContent: " + graphics.length);
 		assetLayer.loadContents(graphics);
 	}
 
@@ -134,8 +137,8 @@ class IPStructureGroupLayer extends GroupLayer {
 		// Log.i(TAG, "StructureGroupLayer: extractSelectedPoi");
 		List<TYPoi> poiList = new ArrayList<TYPoi>();
 
-		poiList.addAll(extractSelectedRoomPoi(x, y, tolerance));
 		poiList.addAll(extractSelectedAssetPoi(x, y, tolerance));
+		poiList.addAll(extractSelectedRoomPoi(x, y, tolerance));
 
 		return poiList;
 	}
@@ -196,6 +199,12 @@ class IPStructureGroupLayer extends GroupLayer {
 					categoryID = (Integer) categoryObj;
 				}
 
+				String poiName = (String) g
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME);
+				if (poiName == null) {
+					continue;
+				}
+
 				TYPoi poi = new TYPoi(
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_GEO_ID),
@@ -205,9 +214,8 @@ class IPStructureGroupLayer extends GroupLayer {
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_FLOOR_ID),
 						(String) g
 								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID),
-						(String) g
-								.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_NAME),
-						g.getGeometry(), categoryID, POI_LAYER.POI_ASSET);
+						poiName, g.getGeometry(), categoryID,
+						POI_LAYER.POI_ASSET);
 				poiList.add(poi);
 			}
 		}

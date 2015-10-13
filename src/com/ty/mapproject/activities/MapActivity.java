@@ -24,6 +24,7 @@ public class MapActivity extends BaseMapViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		mapView.setHighlightPoiOnSelection(true);
 
 		graphicsLayer = new GraphicsLayer();
