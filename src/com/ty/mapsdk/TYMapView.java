@@ -10,7 +10,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
@@ -336,7 +335,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		List<Polyline> linesToShow = routeLayer
 				.showRouteResultOnFloor(currentMapInfo.getFloorNumber());
 		if (linesToShow != null && linesToShow.size() > 0) {
-			Log.i(TAG, "Show Route Arrows");
+			// Log.i(TAG, "Show Route Arrows");
 			// routeArrowLayer.showRouteArrows(linesToShow);
 			animatedRouteArrowLayer.showRouteArrows(linesToShow);
 		}

@@ -26,7 +26,7 @@ public class MainListActivity extends HelperListActivity {
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
 		}
-		// copyFileIfNeeded();
+		copyFileIfNeeded();
 
 		LicenseManager.loadContent(FileHelper.readStringFromAsset(this,
 				"Licenses.json"));
@@ -62,7 +62,7 @@ public class MainListActivity extends HelperListActivity {
 						MapActivity.class)),
 				new IntentPair(getResources().getString(
 						R.string.map_route_activity_title), new Intent(this,
-						MapRouteActivity.class)),
+						MapOfflineRouteActivity.class)),
 				new IntentPair(getResources().getString(
 						R.string.map_callout_activity_title), new Intent(this,
 						MapCalloutActivity.class)),

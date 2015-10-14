@@ -65,6 +65,15 @@ public class MapRouteActivity extends BaseMapViewActivity implements
 
 		endPoint = new TYLocalPoint(1779.204079, 581.868337, 7);
 		startPoint = new TYLocalPoint(1917, 558, 7);
+
+		// IPXGeosCoordinate coord = new IPXGeosCoordinate();
+		// coord.setX(0);
+		// coord.setY(0);
+		//
+		// IPXGeosGeometryFactory factory = new IPXGeosGeometryFactory();
+		//
+		// IPXGeosPoint point = factory.createPoint(coord);
+		// Log.i(TAG, "Geos Point: " + point.getX() + ", " + point.getY());
 	}
 
 	@Override

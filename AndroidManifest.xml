@@ -31,6 +31,8 @@
         </activity>
         <activity android:name="com.ty.mapproject.activities.MapRouteActivity" >
         </activity>
+        <activity android:name=".activities.MapOfflineRouteActivity" >
+        </activity>
         <activity android:name="com.ty.mapproject.activities.MapCalloutActivity" >
         </activity>
         <activity android:name="com.ty.mapproject.activities.MapLocationActivity" >
