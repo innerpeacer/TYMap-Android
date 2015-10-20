@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.esri.android.map.MapView;
 import com.esri.android.map.event.OnPanListener;
@@ -77,6 +78,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	private String userID;
 	private String mapLicense;
+
+	double lastMapRotation = 0.0;
+	double lastMapScale = 0.0;
 
 	/**
 	 * 地图视图构造函数
@@ -479,8 +483,17 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		animatedRouteArrowLayer.stopShowingArrow();
 	}
 
-	void checkLabels() {
-		labelGroupLayer.updateLabels();
+	public void checkLabels() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				long now = System.currentTimeMillis();
+				labelGroupLayer.updateLabels();
+				Log.i(TAG, "checkLabels:" + (System.currentTimeMillis() - now)
+						/ 1000.0f);
+
+			}
+		}).start();
 	}
 
 	/**
@@ -844,13 +857,53 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		checkMapCenter();
 	}
 
+	double ScaleThrehold = 1.1;
+	double rotationThrehold = 20f;
+
 	@Override
 	public void postAction(float pivotX, float pivotY, double factor) {
-		labelGroupLayer.updateLabels();
+		// labelGroupLayer.updateLabels();
+		// if (listeners.size() > 0) {
+		// notifyMapDidZoomed(this);
+		// }
 
-		if (listeners.size() > 0) {
-			notifyMapDidZoomed(this);
-		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+
+				// Log.i(TAG, "Rotation: " + lastMapRotation);
+				if (lastMapRotation == 0) {
+					lastMapRotation = getRotationAngle();
+				}
+
+				// Log.i(TAG, "Scale: " + lastMapScale);
+				if (lastMapScale == 0) {
+					lastMapScale = getScale();
+				}
+
+				double scaleRatio = lastMapScale / getScale();
+				if (scaleRatio > 1.2
+						|| scaleRatio < 0.8
+						|| Math.abs(lastMapRotation - getRotationAngle()) > rotationThrehold) {
+					lastMapScale = getScale();
+					lastMapRotation = getRotationAngle();
+				} else {
+					return;
+				}
+
+				// long now = System.currentTimeMillis();
+				labelGroupLayer.updateLabels();
+				// Log.i(TAG, "checkLabels:" + (System.currentTimeMillis() -
+				// now)
+				// / 1000.0f);
+
+				if (listeners.size() > 0) {
+					notifyMapDidZoomed(TYMapView.this);
+				}
+
+			}
+		}).start();
+
 	}
 
 	@Override

@@ -307,6 +307,11 @@ IPXNode *IPXRouteNetworkDataset::processTempNodeForStart(geos::geom::Point *star
         }
         delete sequences;
         
+        if (!link->getLine()->contains(npOnLink) && link->getLine()->distance(npOnLink) == 0) {
+//            printf("Wrong Link");
+            continue;
+        }
+
         Coordinate coord;
         coord.x = npOnLink->getX();
         coord.y = npOnLink->getY();
@@ -459,6 +464,11 @@ IPXNode *IPXRouteNetworkDataset::processTempNodeForEnd(geos::geom::Point *endPoi
         }
         delete sequences;
         
+        if (!link->getLine()->contains(npOnLink) && link->getLine()->distance(npOnLink) == 0) {
+//            printf("Wrong Link");
+            continue;
+        }
+
         Coordinate coord;
         coord.x = npOnLink->getX();
         coord.y = npOnLink->getY();

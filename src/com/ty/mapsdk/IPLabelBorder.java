@@ -6,8 +6,8 @@ class IPLabelBorder {
 	private double bottom;
 	private double top;
 
-	private static final double Horizontal_Border_Buffer = -10.0;
-	private static final double Vertical_Border_Buffer = -20.0;
+	private static final double Horizontal_Border_Buffer = -20.0;
+	private static final double Vertical_Border_Buffer = -30.0;
 
 	public IPLabelBorder() {
 

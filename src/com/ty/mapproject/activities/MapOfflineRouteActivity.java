@@ -47,7 +47,8 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 	@Override
 	public void didSolveRouteWithResult(TYOfflineRouteManager routeManager,
 			TYRouteResult rs) {
-		// Log.i(TAG, "TYOfflineRouteManager.didSolveRouteWithResult()");
+		Log.i(TAG, "TYOfflineRouteManager.didSolveRouteWithResult()");
+		Log.i(TAG, rs + "");
 		hintLayer.removeAll();
 
 		routeResult = rs;
@@ -116,6 +117,14 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		routeResult = null;
 		isRouting = true;
 
+		Log.i(TAG, startPoint.getX() + "");
+		Log.i(TAG, startPoint.getY() + "");
+
+		startPoint = new TYLocalPoint(13275974.30287264, 2989071.967726886, 3);
+		endPoint = new TYLocalPoint(13275987.1889, 2989087.670699999, 3);
+
+		mapView.showRouteStartSymbolOnCurrentFloor(startPoint);
+		mapView.showRouteEndSymbolOnCurrentFloor(endPoint);
 		offlineRouteManager.requestRoute(startPoint, endPoint);
 	}
 
@@ -136,7 +145,7 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		hintLayer.removeAll();
 		hintLayer.addGraphic(new Graphic(mappoint, sms));
 
-		// Log.i(TAG, "Click: " + mappoint.getX() + ", " + mappoint.getY());
+		Log.i(TAG, "Click: " + mappoint.getX() + ", " + mappoint.getY());
 
 		TYLocalPoint localPoint = new TYLocalPoint(mappoint.getX(),
 				mappoint.getY(), currentMapInfo.getFloorNumber());
@@ -144,6 +153,7 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		endPoint = startPoint;
 		startPoint = localPoint;
 		requestRoute();
+
 	}
 
 	@Override

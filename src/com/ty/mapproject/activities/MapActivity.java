@@ -31,7 +31,7 @@ public class MapActivity extends BaseMapViewActivity {
 		mapView.addLayer(graphicsLayer);
 
 		mapView.setMapMode(TYMapViewMode.TYMapViewModeFollowing);
-
+		mapView.setAllowRotationByPinch(true);
 		// List<NPBrand> allBrands = NPBrand.parseAllBrands(currentBuilding);
 		// Log.i(TAG, allBrands.toString());
 	}

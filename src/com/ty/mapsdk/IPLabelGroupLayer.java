@@ -46,12 +46,20 @@ class IPLabelGroupLayer extends GroupLayer {
 		return mapView;
 	}
 
-	public void updateLabels() {
+	public synchronized void updateLabels() {
 		// Log.i(TAG, "updateLabels");
 		visiableBorders.clear();
 
+		// long now = System.currentTimeMillis();
+
 		facilityLayer.updateLabels(visiableBorders);
+		// Log.i(TAG, "facilityLayer.updateLabels:"
+		// + (System.currentTimeMillis() - now) / 1000.0f);
+		// now = System.currentTimeMillis();
+
 		labelLayer.updateLabels(visiableBorders);
+		// Log.i(TAG, "labelLayer.updateLabels:"
+		// + (System.currentTimeMillis() - now) / 1000.0f);
 	}
 
 	public void removeGraphicsFromSublayers() {
