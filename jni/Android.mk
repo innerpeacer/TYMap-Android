@@ -28,7 +28,9 @@ LOCAL_SRC_FILES := 	TYMapSDK_wrap.cxx \
 					TYMapSDK/src/RouteNetwork/IPXNode.cpp \
 					TYMapSDK/src/RouteNetwork/IPXNodeRecord.cpp \
 					TYMapSDK/src/RouteNetwork/IPXRouteNetworkDBAdapter.cpp \
-					TYMapSDK/src/RouteNetwork/IPXRouteNetworkDataset.cpp
+					TYMapSDK/src/RouteNetwork/IPXRouteNetworkDataset.cpp \
+					TYMapSDK/src/MapDB/IPXFeatureRecord.cpp \
+					TYMapSDK/src/MapDB/IPXMapDataDBAdapter.cpp
 					
 LOCAL_CPPFLAGS += -std=gnu++11 -fexceptions -frtti
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/geos/include $(LOCAL_PATH)/sqlite3/include

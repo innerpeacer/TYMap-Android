@@ -250,15 +250,21 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		if (!mapDataCache.containsKey(currentMapInfo.getMapID())) {
 			// long loadStart = System.currentTimeMillis();
-
-			String content = IPMapSDK.decryptFile(IPMapFileManager
-					.getMapDataPath(currentMapInfo));
-			Map<String, Graphic[]> mapData = IPFeatureSetParser
-					.parseMapDataString(content);
+			//
+			// String content = IPMapSDK.decryptFile(IPMapFileManager
+			// .getMapDataPath(currentMapInfo));
+			// Map<String, Graphic[]> mapData = IPFeatureSetParser
+			// .parseMapDataString(content);
 			// long loadEnd = System.currentTimeMillis();
-			// Log.i(TAG, "Load Time: " + (loadEnd - loadStart) / 1000.0f);
+			// Log.i(TAG, "Load Json Time: " + (loadEnd - loadStart) / 1000.0f);
+
+			long loadDBStart = System.currentTimeMillis();
+			Map<String, Graphic[]> mapData = readMapDataFromDB(currentMapInfo);
+			long loadDBEnd = System.currentTimeMillis();
+			Log.i(TAG, "Load DB Time: " + (loadDBEnd - loadDBStart) / 1000.0f);
 
 			mapDataCache.put(currentMapInfo.getMapID(), mapData);
+
 		}
 		mapDataDictionary = mapDataCache.get(currentMapInfo.getMapID());
 
@@ -323,6 +329,11 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 			}
 		}).start();
 
+	}
+
+	private Map<String, Graphic[]> readMapDataFromDB(TYMapInfo info) {
+		IPMapFeatureData featureData = new IPMapFeatureData(building);
+		return featureData.getAllMapDataOnFloor(info.getFloorNumber());
 	}
 
 	/**

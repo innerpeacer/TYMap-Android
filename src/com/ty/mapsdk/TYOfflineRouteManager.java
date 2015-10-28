@@ -10,6 +10,12 @@ import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 import com.ty.mapdata.TYBuilding;
 import com.ty.mapdata.TYLocalPoint;
+import com.ty.mapsdk.swig.IPXGeosCoordinate;
+import com.ty.mapsdk.swig.IPXGeosGeometryFactory;
+import com.ty.mapsdk.swig.IPXGeosLineString;
+import com.ty.mapsdk.swig.IPXGeosPoint;
+import com.ty.mapsdk.swig.IPXRouteNetworkDBAdapter;
+import com.ty.mapsdk.swig.IPXRouteNetworkDataset;
 
 /**
  * 离线路径管理类

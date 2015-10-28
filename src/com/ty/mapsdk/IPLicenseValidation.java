@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.ty.mapdata.TYBuilding;
+import com.ty.mapsdk.swig.IPMapSDKJNI;
 
 class IPLicenseValidation {
 

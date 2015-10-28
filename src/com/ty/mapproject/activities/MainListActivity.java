@@ -34,13 +34,18 @@ public class MainListActivity extends HelperListActivity {
 		TYUserDefaults settings = new TYUserDefaults(this);
 		settings.setDefaultCityID("0021");
 		// settings.setDefaultBuildingID("00210100");
-		// settings.setDefaultBuildingID("002100002");
+		settings.setDefaultBuildingID("002100002");
 		// settings.setDefaultBuildingID("00210004");
 
-		settings.setDefaultCityID("0591");
-		settings.setDefaultBuildingID("05910001");
+		// settings.setDefaultCityID("0591");
+		// settings.setDefaultBuildingID("05910001");
 		// settings.setDefaultBuildingID("05910002");
 
+		settings.setDefaultCityID("0532");
+		settings.setDefaultBuildingID("05320001");
+
+		settings.setDefaultCityID("H852");
+		settings.setDefaultBuildingID("H85200001");
 		setTitle(getResources().getString(R.string.app_name));
 	};
 

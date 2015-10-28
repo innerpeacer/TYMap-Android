@@ -214,6 +214,13 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #include <string>
 
 
+#include <stdexcept>
+
+
+#include <vector>
+#include <stdexcept>
+
+
 
 #include "TYMapSDK/src/Utils/IPEncryption.hpp"
 #include "TYMapSDK/src/Utils/MD5Utils.hpp"
@@ -225,6 +232,9 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #include "TYMapSDK/src/RouteNetwork/IPXRouteNetworkDataset.hpp"
 #include "TYMapSDK/src/RouteNetwork/IPXRouteNetworkDBAdapter.hpp"
 
+#include "TYMapSDK/src/MapDB/IPXFeatureRecord.hpp"
+#include "TYMapSDK/src/MapDB/IPXMapDataDBAdapter.hpp"
+
 using namespace std;
 using namespace Innerpeacer::MapSDK;
 
@@ -232,12 +242,51 @@ using namespace geos;
 using namespace geos::geom;
 
 
+SWIGINTERN std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::const_reference std_vector_Sl_Innerpeacer_MapSDK_IPXFeatureRecord_Sm__Sg__get(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *self,int i){
+                int size = int(self->size());
+                if (i>=0 && i<size)
+                    return (*self)[i];
+                else
+                    throw std::out_of_range("vector index out of range");
+            }
+SWIGINTERN void std_vector_Sl_Innerpeacer_MapSDK_IPXFeatureRecord_Sm__Sg__set(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *self,int i,std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type const &val){
+                int size = int(self->size());
+                if (i>=0 && i<size)
+                    (*self)[i] = val;
+                else
+                    throw std::out_of_range("vector index out of range");
+            }
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1x_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXGeosGeometry(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosGeometry_1getGeometryTypeId(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  geos::geom::GeometryTypeId result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  result = (geos::geom::GeometryTypeId)((geos::geom::Geometry const *)arg1)->getGeometryTypeId();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosCoordinate_1x_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2) {
   geos::geom::Coordinate *arg1 = (geos::geom::Coordinate *) 0 ;
   double arg2 ;
   
@@ -250,7 +299,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1x_1set
 }
 
 
-SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1x_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosCoordinate_1x_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jdouble jresult = 0 ;
   geos::geom::Coordinate *arg1 = (geos::geom::Coordinate *) 0 ;
   double result;
@@ -265,7 +314,7 @@ SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1x_1
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1y_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosCoordinate_1y_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2) {
   geos::geom::Coordinate *arg1 = (geos::geom::Coordinate *) 0 ;
   double arg2 ;
   
@@ -278,7 +327,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1y_1set
 }
 
 
-SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1y_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosCoordinate_1y_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jdouble jresult = 0 ;
   geos::geom::Coordinate *arg1 = (geos::geom::Coordinate *) 0 ;
   double result;
@@ -293,7 +342,7 @@ SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosCoordinate_1y_1
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXGeosCoordinate(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXGeosCoordinate(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   geos::geom::Coordinate *result = 0 ;
   
@@ -305,7 +354,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXGeosCoordinate(J
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosCoordinate(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXGeosCoordinate(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   geos::geom::Coordinate *arg1 = (geos::geom::Coordinate *) 0 ;
   
   (void)jenv;
@@ -315,7 +364,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosCoordinate
 }
 
 
-SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosPoint_1getX(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosPoint_1getX(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jdouble jresult = 0 ;
   geos::geom::Point *arg1 = (geos::geom::Point *) 0 ;
   double result;
@@ -330,7 +379,7 @@ SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosPoint_1getX(JNI
 }
 
 
-SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosPoint_1getY(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosPoint_1getY(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jdouble jresult = 0 ;
   geos::geom::Point *arg1 = (geos::geom::Point *) 0 ;
   double result;
@@ -345,7 +394,7 @@ SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosPoint_1getY(JNI
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosPoint(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXGeosPoint(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   geos::geom::Point *arg1 = (geos::geom::Point *) 0 ;
   
   (void)jenv;
@@ -355,7 +404,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosPoint(JNIE
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosGeometryFactory_1createPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosGeometryFactory_1createPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   jlong jresult = 0 ;
   geos::geom::GeometryFactory *arg1 = (geos::geom::GeometryFactory *) 0 ;
   geos::geom::Coordinate *arg2 = 0 ;
@@ -377,7 +426,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosGeometryFactory_1
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXGeosGeometryFactory(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXGeosGeometryFactory(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   geos::geom::GeometryFactory *result = 0 ;
   
@@ -389,7 +438,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXGeosGeometryFact
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosGeometryFactory(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXGeosGeometryFactory(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   geos::geom::GeometryFactory *arg1 = (geos::geom::GeometryFactory *) 0 ;
   
   (void)jenv;
@@ -399,7 +448,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosGeometryFa
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosLineString(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXGeosLineString(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   geos::geom::LineString *arg1 = (geos::geom::LineString *) 0 ;
   
   (void)jenv;
@@ -409,7 +458,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXGeosLineString
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1getCoordinateN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosLineString_1getCoordinateN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jlong jresult = 0 ;
   geos::geom::LineString *arg1 = (geos::geom::LineString *) 0 ;
   int arg2 ;
@@ -426,8 +475,8 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1getCo
 }
 
 
-SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1getNumPoints(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jint jresult = 0 ;
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosLineString_1getNumPoints(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
   geos::geom::LineString *arg1 = (geos::geom::LineString *) 0 ;
   std::size_t result;
   
@@ -436,12 +485,12 @@ SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1getNum
   (void)jarg1_;
   arg1 = *(geos::geom::LineString **)&jarg1; 
   result = (std::size_t)((geos::geom::LineString const *)arg1)->getNumPoints();
-  jresult = (jint)result; 
+  jresult = (jlong)result; 
   return jresult;
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1getCoordinate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosLineString_1getCoordinate(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   geos::geom::LineString *arg1 = (geos::geom::LineString *) 0 ;
   geos::geom::Coordinate *result = 0 ;
@@ -456,7 +505,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1getCo
 }
 
 
-SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1getLength(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosLineString_1getLength(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jdouble jresult = 0 ;
   geos::geom::LineString *arg1 = (geos::geom::LineString *) 0 ;
   double result;
@@ -471,7 +520,106 @@ SWIGEXPORT jdouble JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXGeosLineString_1get
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_md5(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXGeosPolygon(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  geos::geom::Polygon *arg1 = (geos::geom::Polygon *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(geos::geom::Polygon **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosPolygon_1getExteriorRing(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Polygon *arg1 = (geos::geom::Polygon *) 0 ;
+  geos::geom::LineString *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Polygon **)&jarg1; 
+  result = (geos::geom::LineString *)((geos::geom::Polygon const *)arg1)->getExteriorRing();
+  *(geos::geom::LineString **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosPolygon_1getNumInteriorRing(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Polygon *arg1 = (geos::geom::Polygon *) 0 ;
+  size_t result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Polygon **)&jarg1; 
+  result = (size_t)((geos::geom::Polygon const *)arg1)->getNumInteriorRing();
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosPolygon_1getInteriorRingN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  jlong jresult = 0 ;
+  geos::geom::Polygon *arg1 = (geos::geom::Polygon *) 0 ;
+  std::size_t arg2 ;
+  geos::geom::LineString *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Polygon **)&jarg1; 
+  arg2 = (std::size_t)jarg2; 
+  result = (geos::geom::LineString *)((geos::geom::Polygon const *)arg1)->getInteriorRingN(arg2);
+  *(geos::geom::LineString **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXGeosMultiPolygon(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  geos::geom::MultiPolygon *arg1 = (geos::geom::MultiPolygon *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(geos::geom::MultiPolygon **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosMultiPolygon_1getNumGeometries(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::MultiPolygon *arg1 = (geos::geom::MultiPolygon *) 0 ;
+  std::size_t result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::MultiPolygon **)&jarg1; 
+  result = (std::size_t)((geos::geom::MultiPolygon const *)arg1)->getNumGeometries();
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosMultiPolygon_1getGeometryN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  jlong jresult = 0 ;
+  geos::geom::MultiPolygon *arg1 = (geos::geom::MultiPolygon *) 0 ;
+  std::size_t arg2 ;
+  geos::geom::Geometry *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::MultiPolygon **)&jarg1; 
+  arg2 = (std::size_t)jarg2; 
+  result = (geos::geom::Geometry *)((geos::geom::MultiPolygon const *)arg1)->getGeometryN(arg2);
+  *(geos::geom::Geometry **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_md5(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string result;
@@ -492,7 +640,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_md5(JNIEnv *jenv, jcla
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptString_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptString_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string result;
@@ -513,7 +661,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptString_1_1SWIG_
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_encryptString_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_encryptString_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string result;
@@ -534,7 +682,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_encryptString_1_1SWIG_
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptFile_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptFile_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   char *arg1 = (char *) 0 ;
   std::string result;
@@ -553,7 +701,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptFile_1_1SWIG_10
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptString_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptString_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string arg2 ;
@@ -583,7 +731,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptString_1_1SWIG_
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_encryptString_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_encryptString_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string arg2 ;
@@ -613,7 +761,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_encryptString_1_1SWIG_
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_encryptFile(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2, jstring jarg3) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_encryptFile(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2, jstring jarg3) {
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
   char *arg3 = (char *) 0 ;
@@ -642,7 +790,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_encryptFile(JNIEnv *jenv,
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptFile_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptFile_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2) {
   jstring jresult = 0 ;
   char *arg1 = (char *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -668,7 +816,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_decryptFile_1_1SWIG_11
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_checkValidity(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2, jstring jarg3) {
+SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_checkValidity(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2, jstring jarg3) {
   jboolean jresult = 0 ;
   std::string arg1 ;
   std::string arg2 ;
@@ -707,7 +855,7 @@ SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_checkValidity(JNIEnv 
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_getExpiredDate(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2, jstring jarg3) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getExpiredDate(JNIEnv *jenv, jclass jcls, jstring jarg1, jstring jarg2, jstring jarg3) {
   jstring jresult = 0 ;
   std::string arg1 ;
   std::string arg2 ;
@@ -746,7 +894,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_getExpiredDate(JNIEnv 
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXRouteNetworkDataset(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXRouteNetworkDataset(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDataset *result = 0 ;
   
@@ -758,7 +906,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXRouteNetworkData
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXRouteNetworkDataset(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXRouteNetworkDataset(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   Innerpeacer::MapSDK::IPXRouteNetworkDataset *arg1 = (Innerpeacer::MapSDK::IPXRouteNetworkDataset *) 0 ;
   
   (void)jenv;
@@ -768,7 +916,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXRouteNetworkDa
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDataset_1getShorestPath(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXRouteNetworkDataset_1getShorestPath(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3, jobject jarg3_) {
   jlong jresult = 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDataset *arg1 = (Innerpeacer::MapSDK::IPXRouteNetworkDataset *) 0 ;
   geos::geom::Point *arg2 = (geos::geom::Point *) 0 ;
@@ -789,7 +937,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDataset_1
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDataset_1toString(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXRouteNetworkDataset_1toString(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jstring jresult = 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDataset *arg1 = (Innerpeacer::MapSDK::IPXRouteNetworkDataset *) 0 ;
   std::string result;
@@ -804,7 +952,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDataset
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXRouteNetworkDBAdapter(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXRouteNetworkDBAdapter(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jlong jresult = 0 ;
   char *arg1 = (char *) 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *result = 0 ;
@@ -823,7 +971,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_new_1IPXRouteNetworkDBAd
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDBAdapter_1open(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXRouteNetworkDBAdapter_1open(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *) 0 ;
   bool result;
@@ -838,7 +986,7 @@ SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDBAdap
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDBAdapter_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXRouteNetworkDBAdapter_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *) 0 ;
   bool result;
@@ -853,7 +1001,7 @@ SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDBAdap
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDBAdapter_1readRouteNetworkDataset(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXRouteNetworkDBAdapter_1readRouteNetworkDataset(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *) 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDataset *result = 0 ;
@@ -868,7 +1016,7 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_IPXRouteNetworkDBAdapter
 }
 
 
-SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXRouteNetworkDBAdapter(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXRouteNetworkDBAdapter(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXRouteNetworkDBAdapter *) 0 ;
   
   (void)jenv;
@@ -877,6 +1025,621 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_IPMapSDKJNI_delete_1IPXRouteNetworkDB
   delete arg1;
 }
 
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1geometry_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  geos::geom::Geometry *arg2 = (geos::geom::Geometry *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = *(geos::geom::Geometry **)&jarg2; 
+  if (arg1) (arg1)->geometry = arg2;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1geometry_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  geos::geom::Geometry *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (geos::geom::Geometry *) ((arg1)->geometry);
+  *(geos::geom::Geometry **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1point_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  geos::geom::Point *arg2 = (geos::geom::Point *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = *(geos::geom::Point **)&jarg2; 
+  if (arg1) (arg1)->point = arg2;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1point_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  geos::geom::Point *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (geos::geom::Point *) ((arg1)->point);
+  *(geos::geom::Point **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1polygon_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  geos::geom::Polygon *arg2 = (geos::geom::Polygon *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = *(geos::geom::Polygon **)&jarg2; 
+  if (arg1) (arg1)->polygon = arg2;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1polygon_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  geos::geom::Polygon *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (geos::geom::Polygon *) ((arg1)->polygon);
+  *(geos::geom::Polygon **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1geoID_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+    return ;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return ;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  if (arg1) (arg1)->geoID = *arg2;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1geoID_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (std::string *) & ((arg1)->geoID);
+  jresult = jenv->NewStringUTF(result->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1poiID_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+    return ;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return ;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  if (arg1) (arg1)->poiID = *arg2;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1poiID_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (std::string *) & ((arg1)->poiID);
+  jresult = jenv->NewStringUTF(result->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1categoryID_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+    return ;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return ;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  if (arg1) (arg1)->categoryID = *arg2;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1categoryID_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (std::string *) & ((arg1)->categoryID);
+  jresult = jenv->NewStringUTF(result->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1name_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  if(!jarg2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+    return ;
+  }
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return ;
+  std::string arg2_str(arg2_pstr);
+  arg2 = &arg2_str;
+  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
+  if (arg1) (arg1)->name = *arg2;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1name_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jstring jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  std::string *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (std::string *) & ((arg1)->name);
+  jresult = jenv->NewStringUTF(result->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1symbolID_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = (int)jarg2; 
+  if (arg1) (arg1)->symbolID = arg2;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1symbolID_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (int) ((arg1)->symbolID);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1floorNumber_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = (int)jarg2; 
+  if (arg1) (arg1)->floorNumber = arg2;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1floorNumber_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (int) ((arg1)->floorNumber);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1layer_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = (int)jarg2; 
+  if (arg1) (arg1)->layer = arg2;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1layer_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (int) ((arg1)->layer);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXFeatureRecord(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (Innerpeacer::MapSDK::IPXFeatureRecord *)new Innerpeacer::MapSDK::IPXFeatureRecord();
+  *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXFeatureRecord(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1VectorOfFeatureRecord_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *)new std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >();
+  *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1VectorOfFeatureRecord_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jint jarg1) {
+  jlong jresult = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type arg1 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type)jarg1; 
+  result = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *)new std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >(arg1);
+  *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  result = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type)((std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > const *)arg1)->size();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  result = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type)((std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > const *)arg1)->capacity();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  arg2 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  result = (bool)((std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > const *)arg1)->empty();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *arg2 = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type temp2 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  temp2 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *)&jarg2;
+  arg2 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *)&temp2; 
+  (arg1)->push_back((std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type const &)*arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jlong jresult = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  int arg2 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *) &std_vector_Sl_Innerpeacer_MapSDK_IPXFeatureRecord_Sm__Sg__get(arg1,arg2);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  
+  *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *)&jresult = *result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_VectorOfFeatureRecord_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jlong jarg3, jobject jarg3_) {
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  int arg2 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *arg3 = 0 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type temp3 = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg3_;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *)&jarg3;
+  arg3 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >::value_type *)&temp3; 
+  try {
+    std_vector_Sl_Innerpeacer_MapSDK_IPXFeatureRecord_Sm__Sg__set(arg1,arg2,(Innerpeacer::MapSDK::IPXFeatureRecord *const &)*arg3);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+  
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1VectorOfFeatureRecord(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *arg1 = (std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXMapDataDBAdapter(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+  jlong jresult = 0 ;
+  char *arg1 = (char *) 0 ;
+  Innerpeacer::MapSDK::IPXMapDataDBAdapter *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = 0;
+  if (jarg1) {
+    arg1 = (char *)jenv->GetStringUTFChars(jarg1, 0);
+    if (!arg1) return 0;
+  }
+  result = (Innerpeacer::MapSDK::IPXMapDataDBAdapter *)new Innerpeacer::MapSDK::IPXMapDataDBAdapter((char const *)arg1);
+  *(Innerpeacer::MapSDK::IPXMapDataDBAdapter **)&jresult = result; 
+  if (arg1) jenv->ReleaseStringUTFChars(jarg1, (const char *)arg1);
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXMapDataDBAdapter_1open(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  Innerpeacer::MapSDK::IPXMapDataDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXMapDataDBAdapter *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXMapDataDBAdapter **)&jarg1; 
+  result = (bool)(arg1)->open();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXMapDataDBAdapter_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  Innerpeacer::MapSDK::IPXMapDataDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXMapDataDBAdapter *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXMapDataDBAdapter **)&jarg1; 
+  result = (bool)(arg1)->close();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXMapDataDBAdapter_1getAllRecordsOnFloor(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXMapDataDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXMapDataDBAdapter *) 0 ;
+  int arg2 ;
+  std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXMapDataDBAdapter **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (arg1)->getAllRecordsOnFloor(arg2);
+  *(std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > **)&jresult = new std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * >((const std::vector< Innerpeacer::MapSDK::IPXFeatureRecord * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXMapDataDBAdapter(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  Innerpeacer::MapSDK::IPXMapDataDBAdapter *arg1 = (Innerpeacer::MapSDK::IPXMapDataDBAdapter *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(Innerpeacer::MapSDK::IPXMapDataDBAdapter **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosPoint_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(geos::geom::Geometry **)&baseptr = *(geos::geom::Point **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosLineString_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(geos::geom::Geometry **)&baseptr = *(geos::geom::LineString **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosPolygon_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(geos::geom::Geometry **)&baseptr = *(geos::geom::Polygon **)&jarg1;
+    return baseptr;
+}
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosMultiPolygon_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+    jlong baseptr = 0;
+    (void)jenv;
+    (void)jcls;
+    *(geos::geom::Geometry **)&baseptr = *(geos::geom::MultiPolygon **)&jarg1;
+    return baseptr;
+}
 
 #ifdef __cplusplus
 }

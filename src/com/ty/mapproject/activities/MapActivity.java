@@ -2,15 +2,11 @@ package com.ty.mapproject.activities;
 
 import java.util.List;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
-import com.esri.core.map.Graphic;
-import com.esri.core.symbol.SimpleMarkerSymbol;
-import com.esri.core.symbol.SimpleMarkerSymbol.STYLE;
 import com.ty.mapproject.R;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYMapView.TYMapViewMode;
@@ -50,27 +46,28 @@ public class MapActivity extends BaseMapViewActivity {
 		Log.i(TAG, "Center: " + mapView.getCenter().getX() + ", "
 				+ mapView.getCenter().getY());
 
-		graphicsLayer.removeAll();
-		graphicsLayer.addGraphic(new Graphic(mappoint, new SimpleMarkerSymbol(
-				Color.GREEN, 5, STYLE.CIRCLE)));
-
-		List<Integer> allFacilitiesIDs = mapView
-				.getAllFacilityCategoryIDOnCurrentFloor();
-
-		if (index > allFacilitiesIDs.size()) {
-			index = 0;
-		}
-
-		if (index == allFacilitiesIDs.size()) {
-			mapView.showAllFacilitiesOnCurrentFloor();
-			index++;
-		} else if (allFacilitiesIDs.size() > 0) {
-			Log.i(TAG,
-					"Current Index: " + index + ", "
-							+ allFacilitiesIDs.get(index));
-			mapView.showFacilityOnCurrentWithCategory(allFacilitiesIDs
-					.get(index++));
-		}
+		// graphicsLayer.removeAll();
+		// graphicsLayer.addGraphic(new Graphic(mappoint, new
+		// SimpleMarkerSymbol(
+		// Color.GREEN, 5, STYLE.CIRCLE)));
+		//
+		// List<Integer> allFacilitiesIDs = mapView
+		// .getAllFacilityCategoryIDOnCurrentFloor();
+		//
+		// if (index > allFacilitiesIDs.size()) {
+		// index = 0;
+		// }
+		//
+		// if (index == allFacilitiesIDs.size()) {
+		// mapView.showAllFacilitiesOnCurrentFloor();
+		// index++;
+		// } else if (allFacilitiesIDs.size() > 0) {
+		// Log.i(TAG,
+		// "Current Index: " + index + ", "
+		// + allFacilitiesIDs.get(index));
+		// mapView.showFacilityOnCurrentWithCategory(allFacilitiesIDs
+		// .get(index++));
+		// }
 	}
 
 	@Override

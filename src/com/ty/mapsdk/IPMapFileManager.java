@@ -8,10 +8,15 @@ import java.io.RandomAccessFile;
 import android.os.Environment;
 
 import com.ty.mapdata.TYBuilding;
+import com.ty.mapsdk.swig.IPMapSDK;
 
 class IPMapFileManager {
 
+	static String FILE_MAP_DATABASE = "TYMap.db";
+	static String FILE_MAP_INFO_DATABASE = "%s.tymap";
+
 	static String JSON_FILE_MAP_DATA = "%s.data";
+	static String FILE_MAP_DB = "%s.tymap";
 
 	static String JSON_FILE_LANDMARK = "%s_LANDMARK.json";
 	static String JSON_FILE_BRANDS = "Brands_Building_%s.json";
@@ -36,6 +41,27 @@ class IPMapFileManager {
 			file = new File(root, filename);
 		}
 		return file;
+	}
+
+	public static String getMapDBPath() {
+		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
+		String fileName = FILE_MAP_DATABASE;
+		return (new File(mapRootDir, fileName)).toString();
+	}
+
+	public static String getMapInfoDBPath(TYBuilding building) {
+		String buildingDir = getBuildingDir(building.getCityID(),
+				building.getBuildingID());
+		String fileName = String.format(FILE_MAP_INFO_DATABASE,
+				building.getBuildingID());
+		return (new File(buildingDir, fileName).toString());
+	}
+
+	public static String getMapInfoDBPath(String cityID, String buildingID) {
+		String buildingDir = getBuildingDir(cityID, buildingID);
+		String fileName = String.format(FILE_MAP_INFO_DATABASE, buildingID);
+		return (new File(buildingDir, fileName).toString());
+
 	}
 
 	public static String getCityJsonPath() {
@@ -69,6 +95,13 @@ class IPMapFileManager {
 				info.getBuildingID());
 		String fileName = String.format(JSON_FILE_MAP_DATA, info.getMapID());
 		fileName = String.format("%s.tymap", IPMapSDK.md5(fileName));
+		return (new File(buildingDir, fileName).toString());
+	}
+
+	public static String getMapDBPath(TYBuilding building) {
+		String buildingDir = getBuildingDir(building.getCityID(),
+				building.getBuildingID());
+		String fileName = String.format(FILE_MAP_DB, building.getBuildingID());
 		return (new File(buildingDir, fileName).toString());
 	}
 

@@ -1,6 +1,5 @@
 package com.ty.mapproject.activities;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Point;
@@ -60,9 +58,15 @@ public class BuildingMapViewActivity extends Activity implements
 
 	boolean isRouteManagerReady = false;
 
+	long startLoadTime;
+	long endLoadTime;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		startLoadTime = System.currentTimeMillis();
+		Log.i(TAG, "Before Load:" + startLoadTime);
 
 		TYMapEnvironment.initMapEnvironment();
 
@@ -81,28 +85,28 @@ public class BuildingMapViewActivity extends Activity implements
 		hintLayer = new GraphicsLayer();
 		mapView.addLayer(hintLayer);
 
-		String dbName = String.format("%s_Route.db",
-				currentBuilding.getBuildingID());
-		File file = new File(
-				TYMapEnvironment.getDirectoryForBuilding(currentBuilding),
-				dbName);
-		if (file.exists()) {
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					offlineRouteManager = new TYOfflineRouteManager(
-							currentBuilding, mapInfos);
-					offlineRouteManager
-							.addRouteManagerListener(BuildingMapViewActivity.this);
-					isRouteManagerReady = true;
-				}
-			}).start();
-		} else {
-			Toast.makeText(getBaseContext(), "当前建筑暂不支持路径规划！", Toast.LENGTH_LONG)
-					.show();
-			isRouteManagerReady = false;
-		}
+		// String dbName = String.format("%s_Route.db",
+		// currentBuilding.getBuildingID());
+		// File file = new File(
+		// TYMapEnvironment.getDirectoryForBuilding(currentBuilding),
+		// dbName);
+		// if (file.exists()) {
+		// new Thread(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// offlineRouteManager = new TYOfflineRouteManager(
+		// currentBuilding, mapInfos);
+		// offlineRouteManager
+		// .addRouteManagerListener(BuildingMapViewActivity.this);
+		// isRouteManagerReady = true;
+		// }
+		// }).start();
+		// } else {
+		// Toast.makeText(getBaseContext(), "当前建筑暂不支持路径规划！", Toast.LENGTH_LONG)
+		// .show();
+		// isRouteManagerReady = false;
+		// }
 
 	}
 
@@ -266,6 +270,9 @@ public class BuildingMapViewActivity extends Activity implements
 	}
 
 	public void onFinishLoadingFloor(TYMapView mapView, TYMapInfo mapInfo) {
+		endLoadTime = System.currentTimeMillis();
+		Log.i(TAG, "After Load:" + endLoadTime);
+		Log.i(TAG, "Load Time: " + (endLoadTime - startLoadTime) / 1000.0f);
 		if (isRouting) {
 			mapView.showRouteResultOnCurrentFloor();
 		}

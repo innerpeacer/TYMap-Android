@@ -1,56 +1,33 @@
 package com.ty.mapsdk;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import com.ty.mapdata.TYBuilding;
 
 /**
  * 地图信息类：用于表示某一层地图的配置信息，包含地图ID、地图尺寸、地图范围、地图偏转角等
  */
 public class TYMapInfo implements Parcelable {
-	public static final String JSON_KEY_MAPINFOS = "MapInfo";
+	static final String TAG = TYMapInfo.class.getSimpleName();
+	String cityID;
+	String buildingID;
+	String mapID;
 
-	private static final String KEY_MAPINFO_CITYID = "cityID";
-	private static final String KEY_MAPINFO_BUILDINGID = "buildingID";
-	private static final String KEY_MAP_ID = "mapID";
-	private static final String KEY_FLOOR_NAME = "floorName";
-	private static final String KEY_FLOOR_NUMBER = "floorIndex";
+	String floorName;
+	int floorNumber;
 
-	private static final String KEY_SIZE_X = "size_x";
-	private static final String KEY_SIZE_Y = "size_y";
+	double size_x;
+	double size_y;
 
-	private static final String KEY_X_MIN = "xmin";
-	private static final String KEY_X_MAX = "xmax";
-	private static final String KEY_Y_MIN = "ymin";
-	private static final String KEY_Y_MAX = "ymax";
-
-	private String cityID;
-	private String buildingID;
-	private String mapID;
-
-	private String floorName;
-	private int floorNumber;
-
-	private double size_x;
-	private double size_y;
-
-	private double xmin;
-	private double xmax;
-	private double ymin;
-	private double ymax;
+	double xmin;
+	double xmax;
+	double ymin;
+	double ymax;
 
 	/**
 	 * 地图信息类构造函数
@@ -114,76 +91,6 @@ public class TYMapInfo implements Parcelable {
 	@Override
 	public int describeContents() {
 		return 0;
-	}
-
-	/**
-	 * 从json对象中解析出地图信息
-	 * 
-	 * @param jsonObject
-	 *            待解析对象
-	 */
-	public void parseJson(JSONObject jsonObject) {
-		if (jsonObject != null) {
-			if (!jsonObject.isNull(KEY_MAPINFO_CITYID)) {
-				setCityID(jsonObject.optString(KEY_MAPINFO_CITYID));
-			}
-
-			if (!jsonObject.isNull(KEY_MAPINFO_BUILDINGID)) {
-				setBuildingID(jsonObject.optString(KEY_MAPINFO_BUILDINGID));
-			}
-			if (!jsonObject.isNull(KEY_MAP_ID)) {
-				setMapID(jsonObject.optString(KEY_MAP_ID));
-			}
-			if (!jsonObject.isNull(KEY_FLOOR_NAME)) {
-				setFloorName(jsonObject.optString(KEY_FLOOR_NAME));
-			}
-			if (!jsonObject.isNull(KEY_FLOOR_NUMBER)) {
-				setFloorNumber(jsonObject.optInt(KEY_FLOOR_NUMBER));
-			}
-			if (!jsonObject.isNull(KEY_SIZE_X)) {
-				setSize_x(jsonObject.optDouble(KEY_SIZE_X));
-			}
-			if (!jsonObject.isNull(KEY_SIZE_Y)) {
-				setSize_y(jsonObject.optDouble(KEY_SIZE_Y));
-			}
-			if (!jsonObject.isNull(KEY_X_MIN)) {
-				setXmin(jsonObject.optDouble(KEY_X_MIN));
-			}
-			if (!jsonObject.isNull(KEY_X_MAX)) {
-				setXmax(jsonObject.optDouble(KEY_X_MAX));
-			}
-			if (!jsonObject.isNull(KEY_Y_MIN)) {
-				setYmin(jsonObject.optDouble(KEY_Y_MIN));
-			}
-			if (!jsonObject.isNull(KEY_Y_MAX)) {
-				setYmax(jsonObject.optDouble(KEY_Y_MAX));
-			}
-		}
-	}
-
-	/**
-	 * 创建地图信息的json对象
-	 * 
-	 * @return 地图信息的json表示
-	 */
-	public JSONObject buildJson() {
-		JSONObject jsonObject = new JSONObject();
-		try {
-			jsonObject.put(KEY_MAPINFO_CITYID, cityID);
-			jsonObject.put(KEY_MAPINFO_BUILDINGID, buildingID);
-			jsonObject.put(KEY_MAP_ID, mapID);
-			jsonObject.put(KEY_FLOOR_NAME, floorName);
-			jsonObject.put(KEY_FLOOR_NUMBER, floorNumber);
-			jsonObject.put(KEY_SIZE_X, size_x);
-			jsonObject.put(KEY_SIZE_Y, size_y);
-			jsonObject.put(KEY_X_MIN, xmin);
-			jsonObject.put(KEY_X_MAX, xmax);
-			jsonObject.put(KEY_Y_MIN, ymin);
-			jsonObject.put(KEY_Y_MAX, ymax);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return jsonObject;
 	}
 
 	/**
@@ -334,6 +241,22 @@ public class TYMapInfo implements Parcelable {
 	}
 
 	/**
+	 * 解析目标建筑的所有楼层地图信息
+	 * 
+	 * @param building
+	 *            目标建筑
+	 * @return 目标楼层所有地图信息
+	 */
+	public static List<TYMapInfo> parseAllMapInfo(TYBuilding building) {
+		String dbPath = IPMapFileManager.getMapInfoDBPath(building);
+		IPMapInfoDBAdapter db = new IPMapInfoDBAdapter(dbPath);
+		db.open();
+		List<TYMapInfo> mapInfoArray = db.getAllMapInfo();
+		db.close();
+		return mapInfoArray;
+	}
+
+	/**
 	 * 从外部存储目录解析某建筑所有楼层的地图信息
 	 * 
 	 * @param context
@@ -346,44 +269,17 @@ public class TYMapInfo implements Parcelable {
 	 */
 	public static List<TYMapInfo> parseMapInfoFromFiles(Context context,
 			String cityID, String buildingID) {
+		String dbPath = IPMapFileManager.getMapInfoDBPath(cityID, buildingID);
+		Log.i(TAG, dbPath);
+		IPMapInfoDBAdapter db = new IPMapInfoDBAdapter(dbPath);
+		db.open();
+		List<TYMapInfo> mapInfoArray = db.getAllMapInfo();
+		db.close();
 
-		List<TYMapInfo> mapInfos = new ArrayList<TYMapInfo>();
-
-		try {
-			String path = IPMapFileManager.getMapInfoJsonPath(cityID,
-					buildingID);
-			FileInputStream inStream = new FileInputStream(new File(path));
-			InputStreamReader inputReader = new InputStreamReader(inStream);
-			BufferedReader bufReader = new BufferedReader(inputReader);
-
-			String line = "";
-			StringBuffer jsonStr = new StringBuffer();
-			while ((line = bufReader.readLine()) != null)
-				jsonStr.append(line);
-
-			JSONObject jsonObject = new JSONObject(jsonStr.toString());
-			if (jsonObject != null
-					&& !jsonObject.isNull(TYMapInfo.JSON_KEY_MAPINFOS)) {
-				JSONArray array = jsonObject
-						.getJSONArray(TYMapInfo.JSON_KEY_MAPINFOS);
-				for (int i = 0; i < array.length(); i++) {
-					TYMapInfo mapInfo = new TYMapInfo();
-					mapInfo.parseJson(array.optJSONObject(i));
-					mapInfos.add(mapInfo);
-				}
-			}
-
-			inputReader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mapInfos;
+		Log.i(TAG, mapInfoArray.toString());
+		return mapInfoArray;
+		// return IPMapInfoJsonParser.parseMapInfoFromFiles(context, cityID,
+		// buildingID);
 	}
 
 	/**
@@ -401,16 +297,15 @@ public class TYMapInfo implements Parcelable {
 	 */
 	public static TYMapInfo parseMapInfoFromFilesById(Context context,
 			String cityID, String buildingID, String mapID) {
-		List<TYMapInfo> mapInfos = parseMapInfoFromFiles(context, cityID,
-				buildingID);
-
-		for (int i = 0; i < mapInfos.size(); i++) {
-			TYMapInfo mapInfo = mapInfos.get(i);
-			if (mapInfo.getMapID().equals(mapID)) {
-				return mapInfo;
-			}
-		}
-		return null;
+		TYMapInfo info = null;
+		String dbPath = IPMapFileManager.getMapInfoDBPath(cityID, buildingID);
+		IPMapInfoDBAdapter db = new IPMapInfoDBAdapter(dbPath);
+		db.open();
+		info = db.getMapInfoWithMapID(mapID);
+		db.close();
+		return info;
+		// return IPMapInfoJsonParser.parseMapInfoFromFilesById(context, cityID,
+		// buildingID, mapID);
 	}
 
 	/**

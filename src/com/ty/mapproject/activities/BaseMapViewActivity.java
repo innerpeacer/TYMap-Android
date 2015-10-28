@@ -5,6 +5,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,6 +36,9 @@ public abstract class BaseMapViewActivity extends Activity implements
 	int currentFloorIndex;
 
 	int contentViewID;
+
+	long startLoadTime;
+	long endLoadTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +120,11 @@ public abstract class BaseMapViewActivity extends Activity implements
 		Map<String, String> dict = LicenseManager
 				.getLicenseForBuilding(currentBuilding.getBuildingID());
 		mapView.init(currentBuilding, dict.get("UserID"), dict.get("License"));
+
+		startLoadTime = System.currentTimeMillis();
+		Log.i(TAG, "Before Load:" + startLoadTime);
 		mapView.setFloor(currentMapInfo);
+
 		mapView.addMapListener(this);
 	}
 
@@ -127,6 +135,9 @@ public abstract class BaseMapViewActivity extends Activity implements
 
 		setTitle(String.format("%s-%s", currentBuilding.getName(),
 				currentMapInfo.getFloorName()));
+
+		startLoadTime = System.currentTimeMillis();
+		Log.i(TAG, "Before Load:" + startLoadTime);
 		mapView.setFloor(currentMapInfo);
 	}
 
@@ -143,6 +154,10 @@ public abstract class BaseMapViewActivity extends Activity implements
 	@Override
 	public void onFinishLoadingFloor(TYMapView mapView, TYMapInfo mapInfo) {
 		// Log.i(TAG, "onFinishLoadingFloor：" + mapInfo);
+		endLoadTime = System.currentTimeMillis();
+		Log.i(TAG, "After Load:" + endLoadTime);
+		Log.i(TAG, "Load Time: " + (endLoadTime - startLoadTime) / 1000.0f);
+
 	}
 
 	@Override

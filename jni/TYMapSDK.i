@@ -1,6 +1,7 @@
 %module (allprotected="1") IPMapSDK
 
 %include "std_string.i"
+%include "std_vector.i"
 
 %{
 
@@ -13,6 +14,9 @@
 
 #include "TYMapSDK/src/RouteNetwork/IPXRouteNetworkDataset.hpp"
 #include "TYMapSDK/src/RouteNetwork/IPXRouteNetworkDBAdapter.hpp"
+
+#include "TYMapSDK/src/MapDB/IPXFeatureRecord.hpp"
+#include "TYMapSDK/src/MapDB/IPXMapDataDBAdapter.hpp"
 
 using namespace std;
 using namespace Innerpeacer::MapSDK;
@@ -27,3 +31,4 @@ typedef int size_t;
 %include "TYMapSDK/swig/Geos.i"
 %include "TYMapSDK/swig/Utils.i"
 %include "TYMapSDK/swig/RouteNetwork.i"
+%include "TYMapSDK/swig/MapDB.i"

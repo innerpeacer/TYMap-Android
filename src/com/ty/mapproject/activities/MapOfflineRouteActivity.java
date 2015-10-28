@@ -18,6 +18,7 @@ import com.ty.mapsdk.TYOfflineRouteManager;
 import com.ty.mapsdk.TYOfflineRouteManager.TYOfflineRouteManagerListener;
 import com.ty.mapsdk.TYPictureMarkerSymbol;
 import com.ty.mapsdk.TYPoi;
+import com.ty.mapsdk.TYRoutePart;
 import com.ty.mapsdk.TYRouteResult;
 
 public class MapOfflineRouteActivity extends BaseMapViewActivity implements
@@ -33,15 +34,26 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 	TYRouteResult routeResult;
 	GraphicsLayer hintLayer;
 
+	boolean isRouteManagerReady = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initMapSettings();
 		initSymbols();
 
-		offlineRouteManager = new TYOfflineRouteManager(currentBuilding,
-				mapInfos);
-		offlineRouteManager.addRouteManagerListener(this);
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				offlineRouteManager = new TYOfflineRouteManager(
+						currentBuilding, mapInfos);
+				offlineRouteManager
+						.addRouteManagerListener(MapOfflineRouteActivity.this);
+				isRouteManagerReady = true;
+			}
+		}).start();
+
 	}
 
 	@Override
@@ -68,6 +80,14 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 
 	public void onFinishLoadingFloor(TYMapView mapView, TYMapInfo mapInfo) {
 		if (isRouting) {
+			List<TYRoutePart> parts = routeResult.getRoutePartsOnFloor(mapInfo
+					.getFloorNumber());
+			if (parts != null && parts.size() > 0) {
+				TYRoutePart rp = parts.get(0);
+				mapView.setExtent(rp.getRoute());
+				// mapView.checkLabels();
+			}
+
 			mapView.showRouteResultOnCurrentFloor();
 		}
 	};
@@ -104,6 +124,10 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 	private void requestRoute() {
 		// Log.i(TAG, "requestRoute");
 
+		if (!isRouteManagerReady) {
+			return;
+		}
+
 		if (startPoint == null || endPoint == null) {
 			// Toast.makeText(getBaseContext(), "需要两个点请求路径！", Toast.LENGTH_LONG)
 			// .show();
@@ -120,8 +144,9 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		Log.i(TAG, startPoint.getX() + "");
 		Log.i(TAG, startPoint.getY() + "");
 
-		startPoint = new TYLocalPoint(13275974.30287264, 2989071.967726886, 3);
-		endPoint = new TYLocalPoint(13275987.1889, 2989087.670699999, 3);
+		// startPoint = new TYLocalPoint(13275974.30287264, 2989071.967726886,
+		// 3);
+		// endPoint = new TYLocalPoint(13275987.1889, 2989087.670699999, 3);
 
 		mapView.showRouteStartSymbolOnCurrentFloor(startPoint);
 		mapView.showRouteEndSymbolOnCurrentFloor(endPoint);

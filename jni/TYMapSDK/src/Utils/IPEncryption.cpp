@@ -49,7 +49,8 @@ std::string encryptString(std::string originalString, std::string key)
     }
     
     int originalLength = (int)strlen(originalString.c_str());
-    char originalValue[originalLength + 1];
+//    char originalValue[originalLength + 1];
+    char *originalValue = new char[originalLength + 1];
     memcpy(&originalValue[0], originalString.c_str(), originalLength);
     
     int key_pos = 0;
@@ -62,7 +63,9 @@ std::string encryptString(std::string originalString, std::string key)
     }
     originalValue[originalLength] = 0;
     
-    return std::string(originalValue);
+    std::string result(originalValue);
+    delete originalValue;
+    return result;
 }
 
 
@@ -181,7 +184,8 @@ void encryptFile(const char *originalPath, const char *encryptedFile, const char
     
     IPMemory *memory = mOpen(originalPath);
     int originalLength = memory->size;
-    char originalValue[originalLength + 1];
+//    char originalValue[originalLength + 1];
+    char *originalValue = new char[originalLength + 1];
     memcpy(&originalValue[0], memory->buffer, originalLength);
     mClose(memory);
     
@@ -204,6 +208,59 @@ void encryptFile(const char *originalPath, const char *encryptedFile, const char
     
     fwrite(originalValue, originalLength, 1, f);
     fclose(f);
+    delete originalValue;
+}
+
+void encryptBytes(const char *originalBytes, char *encryptedByte, int length)
+{
+    encryptBytes(originalBytes, encryptedByte, length, KEY);
+}
+
+void encryptBytes(const char *originalBytes, char *encryptedByte, int length, const char *key)
+{
+    int passLength = (int)strlen(PASSWORD_FOR_CONTENT);
+    int keyLength = (int)strlen(key);
+
+    char passValue[passLength];
+    memcpy(&passValue[0], PASSWORD_FOR_CONTENT, passLength);
+
+    char keyValue[keyLength];
+    memcpy(&keyValue[0], key, keyLength);
+
+    int pa_pos = 0;
+    for (int i = 0; i < keyLength; ++i) {
+        keyValue[i] ^= passValue[pa_pos];
+        pa_pos++;
+
+        if (pa_pos == passLength) {
+            pa_pos = 0;
+        }
+    }
+
+    int originalLength = length;
+//    printf("Length: %d\n", originalLength);
+    memcpy(&encryptedByte[0], originalBytes, originalLength);
+
+    int key_pos = 0;
+    for (int i = 0; i < originalLength ; ++i) {
+        encryptedByte[i] ^= keyValue[key_pos];
+        key_pos++;
+        if (key_pos == keyLength) {
+            key_pos = 0;
+        }
+    }
+    encryptedByte[originalLength] = 0;
+
+}
+
+void decryptBytes(const char *encryptedBytes, char *originalBytes, int length)
+{
+    decryptBytes(encryptedBytes, originalBytes, length, KEY);
+}
+
+void decryptBytes(const char *encryptedBytes, char *originalBytes, int length, const char *key)
+{
+    encryptBytes(encryptedBytes, originalBytes, length, key);
 }
 
 //std::string decryptFile(const char *file)
@@ -274,7 +331,8 @@ std::string decryptFile(const char *file, const char *key)
     
     IPMemory *memory = mOpen(file);
     int originalLength = memory->size;
-    char originalValue[originalLength + 1];
+//    char originalValue[originalLength + 1];
+    char *originalValue = new char[originalLength + 1];
     memcpy(&originalValue[0], memory->buffer, originalLength);
     mClose(memory);
     
@@ -287,6 +345,7 @@ std::string decryptFile(const char *file, const char *key)
         }
     }
     originalValue[originalLength] = 0;
-    
-    return originalValue;
+    std::string result(originalValue);
+    delete originalValue;
+    return result;
 }

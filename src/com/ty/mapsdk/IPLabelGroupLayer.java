@@ -51,15 +51,14 @@ class IPLabelGroupLayer extends GroupLayer {
 		visiableBorders.clear();
 
 		// long now = System.currentTimeMillis();
-
 		facilityLayer.updateLabels(visiableBorders);
 		// Log.i(TAG, "facilityLayer.updateLabels:"
 		// + (System.currentTimeMillis() - now) / 1000.0f);
 		// now = System.currentTimeMillis();
-
 		labelLayer.updateLabels(visiableBorders);
 		// Log.i(TAG, "labelLayer.updateLabels:"
 		// + (System.currentTimeMillis() - now) / 1000.0f);
+
 	}
 
 	public void removeGraphicsFromSublayers() {

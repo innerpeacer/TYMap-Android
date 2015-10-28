@@ -1,10 +1,10 @@
 package com.ty.mapsdk;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +16,7 @@ import android.graphics.Paint.Align;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
 import com.esri.core.geometry.Envelope;
@@ -31,7 +32,9 @@ class IPTextLabelLayer extends GraphicsLayer {
 	Context context;
 	private IPLabelGroupLayer groupLayer;
 
-	List<IPTextLabel> allTextLabels = new ArrayList<IPTextLabel>();
+	// List<IPTextLabel> allTextLabels = new ArrayList<IPTextLabel>();
+	List<IPTextLabel> allTextLabels = new CopyOnWriteArrayList<IPTextLabel>();
+
 	Map<Graphic, Integer> graphicGidDict = new ConcurrentHashMap<Graphic, Integer>();
 
 	private Map<String, IPBrand> allBrandDict = new HashMap<String, IPBrand>();
@@ -81,15 +84,21 @@ class IPTextLabelLayer extends GraphicsLayer {
 	}
 
 	private void updateLabelState() {
-		for (IPTextLabel tl : allTextLabels) {
-			if (tl.isHidden()) {
-				Symbol symbol = null;
-				updateGraphic(graphicGidDict.get(tl.getTextGraphic()), symbol);
-			} else {
-				updateGraphic(graphicGidDict.get(tl.getTextGraphic()),
-						tl.getTextSymbol());
+		try {
+			for (IPTextLabel tl : allTextLabels) {
+				if (tl.isHidden()) {
+					Symbol symbol = null;
+					updateGraphic(graphicGidDict.get(tl.getTextGraphic()),
+							symbol);
+				} else {
+					updateGraphic(graphicGidDict.get(tl.getTextGraphic()),
+							tl.getTextSymbol());
+				}
 			}
+		} catch (Exception e) {
+			Log.i(TAG, e.toString());
 		}
+
 	}
 
 	public void loadContents(Graphic[] graphics) {
