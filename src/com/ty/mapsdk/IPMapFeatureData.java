@@ -12,6 +12,7 @@ import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 import com.ty.mapdata.TYBuilding;
+import com.ty.mapsdk.swig.IPMapSDK;
 import com.ty.mapsdk.swig.IPXFeatureRecord;
 import com.ty.mapsdk.swig.IPXGeosCoordinate;
 import com.ty.mapsdk.swig.IPXGeosGeometryTypeId;
@@ -116,20 +117,13 @@ class IPMapFeatureData {
 
 	static Geometry agsGeometryFromRecord(IPXFeatureRecord record) {
 		if (record.getGeometry().getGeometryTypeId() == IPXGeosGeometryTypeId.GEOS_POINT) {
-			// Log.i(TAG, "Geometry is Point");
-			return agsPointFromGeosPoint(record.getPoint());
+			return agsPointFromGeosPoint(record.getPointIfSatisfied());
 		} else if (record.getGeometry().getGeometryTypeId() == IPXGeosGeometryTypeId.GEOS_POLYGON) {
-			// Log.i(TAG, "Geometry is Polygon");
-			// Log.i(TAG, record.getPoint() + "");
-			return agsPolygonFromGeosPolygon(record.getPolygon());
-		}
-		// else if (record.getGeometry().getGeometryTypeId() ==
-		// IPXGeosGeometryTypeId.GEOS_MULTIPOLYGON) {
-		// // Log.i(TAG, "Geometry is MultiPolygon");
-		// return agsPolygonFromGeosMultiPolygon((IPXGeosMultiPolygon)
-		// geometry);
-		// }
-		else {
+			return agsPolygonFromGeosPolygon(record.getPolygonIfSatisfied());
+		} else if (record.getGeometry().getGeometryTypeId() == IPXGeosGeometryTypeId.GEOS_MULTIPOLYGON) {
+			return agsPolygonFromGeosMultiPolygon(record
+					.getMultiPolygonIfSatisfied());
+		} else {
 			Log.i(TAG, "Geometry is Geometry");
 			return null;
 		}
@@ -140,7 +134,6 @@ class IPMapFeatureData {
 	}
 
 	static Polygon agsPolygonFromGeosPolygon(IPXGeosPolygon p) {
-		// Log.i(TAG, "agsPolygonFromGeosPolygon");
 		Polygon polygon = new Polygon();
 
 		IPXGeosLineString exteriorRing = p.getExteriorRing();
@@ -176,7 +169,10 @@ class IPMapFeatureData {
 		Polygon polygon = new Polygon();
 
 		for (int l = 0; l < p.getNumGeometries(); l++) {
-			IPXGeosPolygon simplePolygon = (IPXGeosPolygon) p.getGeometryN(l);
+			IPXGeosPolygon simplePolygon = IPMapSDK.getPolygonN(p, l);
+			if (simplePolygon == null) {
+				continue;
+			}
 
 			IPXGeosLineString exteriorRing = simplePolygon.getExteriorRing();
 			if (exteriorRing != null) {
@@ -205,7 +201,6 @@ class IPMapFeatureData {
 				}
 			}
 		}
-
 		return polygon;
 	}
 }

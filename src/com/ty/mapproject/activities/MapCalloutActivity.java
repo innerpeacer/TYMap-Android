@@ -40,7 +40,6 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 		// Log.i(TAG, "onClickAtPoint: " + mappoint);
 
 		mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(), mappoint.getY());
-
 	}
 
 	private View loadCalloutView(String title, String detail) {
@@ -80,6 +79,8 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 			String title = poi.getName();
 			String detail = poi.getPoiID();
 
+			mapCallout.setMaxWidth(1500);
+			mapCallout.setMaxHeight(1300);
 			mapCallout.setContent(loadCalloutView(title, detail));
 			mapCallout.show(location);
 		}

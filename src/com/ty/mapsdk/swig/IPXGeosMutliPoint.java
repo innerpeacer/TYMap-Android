@@ -8,15 +8,15 @@
 
 package com.ty.mapsdk.swig;
 
-public class IPXGeosMultiPolygon extends IPXGeosGeometryCollection {
+public class IPXGeosMutliPoint extends IPXGeosGeometryCollection {
   private long swigCPtr;
 
-  protected IPXGeosMultiPolygon(long cPtr, boolean cMemoryOwn) {
-    super(IPMapSDKJNI.IPXGeosMultiPolygon_SWIGUpcast(cPtr), cMemoryOwn);
+  protected IPXGeosMutliPoint(long cPtr, boolean cMemoryOwn) {
+    super(IPMapSDKJNI.IPXGeosMutliPoint_SWIGUpcast(cPtr), cMemoryOwn);
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(IPXGeosMultiPolygon obj) {
+  protected static long getCPtr(IPXGeosMutliPoint obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
   }
 
@@ -28,7 +28,7 @@ public class IPXGeosMultiPolygon extends IPXGeosGeometryCollection {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        IPMapSDKJNI.delete_IPXGeosMultiPolygon(swigCPtr);
+        IPMapSDKJNI.delete_IPXGeosMutliPoint(swigCPtr);
       }
       swigCPtr = 0;
     }
@@ -36,11 +36,11 @@ public class IPXGeosMultiPolygon extends IPXGeosGeometryCollection {
   }
 
   public long getNumGeometries() {
-    return IPMapSDKJNI.IPXGeosMultiPolygon_getNumGeometries(swigCPtr, this);
+    return IPMapSDKJNI.IPXGeosMutliPoint_getNumGeometries(swigCPtr, this);
   }
 
   public IPXGeosGeometry getGeometryN(long arg0) {
-    long cPtr = IPMapSDKJNI.IPXGeosMultiPolygon_getGeometryN(swigCPtr, this, arg0);
+    long cPtr = IPMapSDKJNI.IPXGeosMutliPoint_getGeometryN(swigCPtr, this, arg0);
     return (cPtr == 0) ? null : new IPXGeosGeometry(cPtr, false);
   }
 

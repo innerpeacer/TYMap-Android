@@ -35,6 +35,17 @@ namespace geos {
 	}
 }
 
+%rename(IPXGeosGeometryCollection) GeometryCollection;
+namespace geos {
+	namespace geom { 
+		class GeometryCollection : public Geometry {
+		public:
+			
+		protected:
+		GeometryCollection();
+		};
+	}
+}
 
 %rename(IPXGeosCoordinate) Coordinate;
 namespace geos {
@@ -60,6 +71,21 @@ namespace geos {
 		};
 	}
 }
+
+%rename(IPXGeosMutliPoint) MultiPoint;
+namespace geos {
+	namespace geom { 
+		class MultiPoint : public GeometryCollection {
+		public:
+			std::size_t getNumGeometries() const;
+			const Geometry* getGeometryN(std::size_t) const;
+			
+		protected:
+			MultiPoint(); 
+		};
+	}
+}
+
 
 %rename(IPXGeosGeometryFactory) GeometryFactory;
 namespace geos {
@@ -88,6 +114,19 @@ namespace geos {
 	}
 }
 
+%rename(IPXGeosMultiLineString) MultiLineString;
+namespace geos {
+	namespace geom { 
+		class MultiLineString : public GeometryCollection {
+		public:
+			std::size_t getNumGeometries() const;
+			const Geometry* getGeometryN(std::size_t) const;
+			
+		protected:
+			MultiLineString();	
+		};
+	}
+}
 
 %rename(IPXGeosPolygon) Polygon;
 namespace geos {
@@ -107,12 +146,13 @@ namespace geos {
 %rename(IPXGeosMultiPolygon) MultiPolygon;
 namespace geos {
 	namespace geom { 
-		class MultiPolygon : public Geometry {
+		class MultiPolygon : public GeometryCollection {
 		public:
 			virtual ~MultiPolygon();
 			
 			std::size_t getNumGeometries() const;
 			const Geometry* getGeometryN(std::size_t) const;
+	
 		protected:
 			MultiPolygon();	
 		};

@@ -11,6 +11,7 @@ package com.ty.mapsdk.swig;
 public class IPMapSDKJNI {
   public final static native void delete_IPXGeosGeometry(long jarg1);
   public final static native int IPXGeosGeometry_getGeometryTypeId(long jarg1, IPXGeosGeometry jarg1_);
+  public final static native void delete_IPXGeosGeometryCollection(long jarg1);
   public final static native void IPXGeosCoordinate_x_set(long jarg1, IPXGeosCoordinate jarg1_, double jarg2);
   public final static native double IPXGeosCoordinate_x_get(long jarg1, IPXGeosCoordinate jarg1_);
   public final static native void IPXGeosCoordinate_y_set(long jarg1, IPXGeosCoordinate jarg1_, double jarg2);
@@ -20,6 +21,9 @@ public class IPMapSDKJNI {
   public final static native double IPXGeosPoint_getX(long jarg1, IPXGeosPoint jarg1_);
   public final static native double IPXGeosPoint_getY(long jarg1, IPXGeosPoint jarg1_);
   public final static native void delete_IPXGeosPoint(long jarg1);
+  public final static native long IPXGeosMutliPoint_getNumGeometries(long jarg1, IPXGeosMutliPoint jarg1_);
+  public final static native long IPXGeosMutliPoint_getGeometryN(long jarg1, IPXGeosMutliPoint jarg1_, long jarg2);
+  public final static native void delete_IPXGeosMutliPoint(long jarg1);
   public final static native long IPXGeosGeometryFactory_createPoint(long jarg1, IPXGeosGeometryFactory jarg1_, long jarg2, IPXGeosCoordinate jarg2_);
   public final static native long new_IPXGeosGeometryFactory();
   public final static native void delete_IPXGeosGeometryFactory(long jarg1);
@@ -28,6 +32,9 @@ public class IPMapSDKJNI {
   public final static native long IPXGeosLineString_getNumPoints(long jarg1, IPXGeosLineString jarg1_);
   public final static native long IPXGeosLineString_getCoordinate(long jarg1, IPXGeosLineString jarg1_);
   public final static native double IPXGeosLineString_getLength(long jarg1, IPXGeosLineString jarg1_);
+  public final static native long IPXGeosMultiLineString_getNumGeometries(long jarg1, IPXGeosMultiLineString jarg1_);
+  public final static native long IPXGeosMultiLineString_getGeometryN(long jarg1, IPXGeosMultiLineString jarg1_, long jarg2);
+  public final static native void delete_IPXGeosMultiLineString(long jarg1);
   public final static native void delete_IPXGeosPolygon(long jarg1);
   public final static native long IPXGeosPolygon_getExteriorRing(long jarg1, IPXGeosPolygon jarg1_);
   public final static native long IPXGeosPolygon_getNumInteriorRing(long jarg1, IPXGeosPolygon jarg1_);
@@ -54,12 +61,17 @@ public class IPMapSDKJNI {
   public final static native boolean IPXRouteNetworkDBAdapter_close(long jarg1, IPXRouteNetworkDBAdapter jarg1_);
   public final static native long IPXRouteNetworkDBAdapter_readRouteNetworkDataset(long jarg1, IPXRouteNetworkDBAdapter jarg1_);
   public final static native void delete_IPXRouteNetworkDBAdapter(long jarg1);
+  public final static native long getPointN(long jarg1, IPXGeosMutliPoint jarg1_, long jarg2);
+  public final static native long getLineStringN(long jarg1, IPXGeosMultiLineString jarg1_, long jarg2);
+  public final static native long getPolygonN(long jarg1, IPXGeosMultiPolygon jarg1_, long jarg2);
   public final static native void IPXFeatureRecord_geometry_set(long jarg1, IPXFeatureRecord jarg1_, long jarg2, IPXGeosGeometry jarg2_);
   public final static native long IPXFeatureRecord_geometry_get(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native void IPXFeatureRecord_point_set(long jarg1, IPXFeatureRecord jarg1_, long jarg2, IPXGeosPoint jarg2_);
-  public final static native long IPXFeatureRecord_point_get(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native void IPXFeatureRecord_polygon_set(long jarg1, IPXFeatureRecord jarg1_, long jarg2, IPXGeosPolygon jarg2_);
-  public final static native long IPXFeatureRecord_polygon_get(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native long IPXFeatureRecord_getPointIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native long IPXFeatureRecord_getMultiPointIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native long IPXFeatureRecord_getLineStringIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native long IPXFeatureRecord_getMultiLineStringIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native long IPXFeatureRecord_getPolygonIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native long IPXFeatureRecord_getMultiPolygonIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
   public final static native void IPXFeatureRecord_geoID_set(long jarg1, IPXFeatureRecord jarg1_, String jarg2);
   public final static native String IPXFeatureRecord_geoID_get(long jarg1, IPXFeatureRecord jarg1_);
   public final static native void IPXFeatureRecord_poiID_set(long jarg1, IPXFeatureRecord jarg1_, String jarg2);
@@ -92,8 +104,11 @@ public class IPMapSDKJNI {
   public final static native boolean IPXMapDataDBAdapter_close(long jarg1, IPXMapDataDBAdapter jarg1_);
   public final static native long IPXMapDataDBAdapter_getAllRecordsOnFloor(long jarg1, IPXMapDataDBAdapter jarg1_, int jarg2);
   public final static native void delete_IPXMapDataDBAdapter(long jarg1);
+  public final static native long IPXGeosGeometryCollection_SWIGUpcast(long jarg1);
   public final static native long IPXGeosPoint_SWIGUpcast(long jarg1);
+  public final static native long IPXGeosMutliPoint_SWIGUpcast(long jarg1);
   public final static native long IPXGeosLineString_SWIGUpcast(long jarg1);
+  public final static native long IPXGeosMultiLineString_SWIGUpcast(long jarg1);
   public final static native long IPXGeosPolygon_SWIGUpcast(long jarg1);
   public final static native long IPXGeosMultiPolygon_SWIGUpcast(long jarg1);
 }

@@ -49,4 +49,19 @@ public class IPMapSDK {
     return IPMapSDKJNI.getExpiredDate(userID, license, buildingID);
   }
 
+  public static IPXGeosPoint getPointN(IPXGeosMutliPoint mp, long n) {
+    long cPtr = IPMapSDKJNI.getPointN(IPXGeosMutliPoint.getCPtr(mp), mp, n);
+    return (cPtr == 0) ? null : new IPXGeosPoint(cPtr, false);
+  }
+
+  public static IPXGeosLineString getLineStringN(IPXGeosMultiLineString ml, long n) {
+    long cPtr = IPMapSDKJNI.getLineStringN(IPXGeosMultiLineString.getCPtr(ml), ml, n);
+    return (cPtr == 0) ? null : new IPXGeosLineString(cPtr, false);
+  }
+
+  public static IPXGeosPolygon getPolygonN(IPXGeosMultiPolygon mp, long n) {
+    long cPtr = IPMapSDKJNI.getPolygonN(IPXGeosMultiPolygon.getCPtr(mp), mp, n);
+    return (cPtr == 0) ? null : new IPXGeosPolygon(cPtr, false);
+  }
+
 }
