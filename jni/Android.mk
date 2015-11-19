@@ -32,9 +32,11 @@ LOCAL_SRC_FILES := 	TYMapSDK_wrap.cxx \
 					TYMapSDK/src/MapDB/IPXFeatureRecord.cpp \
 					TYMapSDK/src/MapDB/IPXMapDataDBAdapter.cpp
 
-LOCAL_CPP_FEATURES += rtti		
-LOCAL_CPPFLAGS += -fexceptions	
-LOCAL_CPPFLAGS += -std=gnu++11 
+LOCAL_CPP_FEATURES += rtti	
+#APP_CPPFLAGS += -fexceptions
+#LOCAL_CPPFLAGS += -fexceptions
+#LOCAL_CPPFLAGS += -rtti	
+LOCAL_CPPFLAGS += -std=gnu++11
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/geos/include $(LOCAL_PATH)/sqlite3/include
 LOCAL_SHARED_LIBRARIES := sqlite3
 LOCAL_STATIC_LIBRARIES := geos

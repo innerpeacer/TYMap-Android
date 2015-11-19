@@ -41,8 +41,8 @@ public class MainListActivity extends HelperListActivity {
 		// settings.setDefaultBuildingID("05910001");
 		// settings.setDefaultBuildingID("05910002");
 
-		// settings.setDefaultCityID("0532");
-		// settings.setDefaultBuildingID("05320001");
+		settings.setDefaultCityID("0532");
+		settings.setDefaultBuildingID("05320001");
 		//
 		// settings.setDefaultCityID("H852");
 		// settings.setDefaultBuildingID("H85200001");
