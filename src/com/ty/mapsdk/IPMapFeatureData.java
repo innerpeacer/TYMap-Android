@@ -8,18 +8,9 @@ import java.util.Map;
 import android.util.Log;
 
 import com.esri.core.geometry.Geometry;
-import com.esri.core.geometry.Point;
-import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 import com.ty.mapdata.TYBuilding;
-import com.ty.mapsdk.swig.IPMapSDK;
 import com.ty.mapsdk.swig.IPXFeatureRecord;
-import com.ty.mapsdk.swig.IPXGeosCoordinate;
-import com.ty.mapsdk.swig.IPXGeosGeometryTypeId;
-import com.ty.mapsdk.swig.IPXGeosLineString;
-import com.ty.mapsdk.swig.IPXGeosMultiPolygon;
-import com.ty.mapsdk.swig.IPXGeosPoint;
-import com.ty.mapsdk.swig.IPXGeosPolygon;
 import com.ty.mapsdk.swig.IPXMapDataDBAdapter;
 import com.ty.mapsdk.swig.VectorOfFeatureRecord;
 
@@ -116,91 +107,7 @@ class IPMapFeatureData {
 	}
 
 	static Geometry agsGeometryFromRecord(IPXFeatureRecord record) {
-		if (record.getGeometry().getGeometryTypeId() == IPXGeosGeometryTypeId.GEOS_POINT) {
-			return agsPointFromGeosPoint(record.getPointIfSatisfied());
-		} else if (record.getGeometry().getGeometryTypeId() == IPXGeosGeometryTypeId.GEOS_POLYGON) {
-			return agsPolygonFromGeosPolygon(record.getPolygonIfSatisfied());
-		} else if (record.getGeometry().getGeometryTypeId() == IPXGeosGeometryTypeId.GEOS_MULTIPOLYGON) {
-			return agsPolygonFromGeosMultiPolygon(record
-					.getMultiPolygonIfSatisfied());
-		} else {
-			Log.i(TAG, "Geometry is Geometry");
-			return null;
-		}
-	}
-
-	static Point agsPointFromGeosPoint(IPXGeosPoint p) {
-		return new Point(p.getX(), p.getY());
-	}
-
-	static Polygon agsPolygonFromGeosPolygon(IPXGeosPolygon p) {
-		Polygon polygon = new Polygon();
-
-		IPXGeosLineString exteriorRing = p.getExteriorRing();
-		if (exteriorRing != null) {
-			for (int i = 0; i < exteriorRing.getNumPoints(); i++) {
-				IPXGeosCoordinate c = exteriorRing.getCoordinateN(i);
-				if (i == 0) {
-					polygon.startPath(c.getX(), c.getY());
-				} else {
-					polygon.lineTo(c.getX(), c.getY());
-				}
-			}
-		}
-
-		for (int j = 0; j < p.getNumInteriorRing(); j++) {
-			IPXGeosLineString interiorRing = p.getInteriorRingN(j);
-			if (interiorRing != null) {
-				for (int k = 0; k < interiorRing.getNumPoints(); k++) {
-					IPXGeosCoordinate c = interiorRing.getCoordinateN(k);
-					if (k == 0) {
-						polygon.startPath(c.getX(), c.getY());
-					} else {
-						polygon.lineTo(c.getX(), c.getY());
-					}
-				}
-			}
-		}
-
-		return polygon;
-	}
-
-	static Polygon agsPolygonFromGeosMultiPolygon(IPXGeosMultiPolygon p) {
-		Polygon polygon = new Polygon();
-
-		for (int l = 0; l < p.getNumGeometries(); l++) {
-			IPXGeosPolygon simplePolygon = IPMapSDK.getPolygonN(p, l);
-			if (simplePolygon == null) {
-				continue;
-			}
-
-			IPXGeosLineString exteriorRing = simplePolygon.getExteriorRing();
-			if (exteriorRing != null) {
-				for (int i = 0; i < exteriorRing.getNumPoints(); i++) {
-					IPXGeosCoordinate c = exteriorRing.getCoordinateN(i);
-					if (i == 0) {
-						polygon.startPath(c.getX(), c.getY());
-					} else {
-						polygon.lineTo(c.getX(), c.getY());
-					}
-				}
-			}
-
-			for (int j = 0; j < simplePolygon.getNumInteriorRing(); j++) {
-				IPXGeosLineString interiorRing = simplePolygon
-						.getInteriorRingN(j);
-				if (interiorRing != null) {
-					for (int k = 0; k < interiorRing.getNumPoints(); k++) {
-						IPXGeosCoordinate c = interiorRing.getCoordinateN(k);
-						if (k == 0) {
-							polygon.startPath(c.getX(), c.getY());
-						} else {
-							polygon.lineTo(c.getX(), c.getY());
-						}
-					}
-				}
-			}
-		}
-		return polygon;
+		return IPGeos2AgsConverter.agsGeometryFromGeosGeometry(record
+				.getGeometry());
 	}
 }

@@ -1082,6 +1082,57 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_CastedMultiPolygon(
 }
 
 
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getPointN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  jlong jresult = 0 ;
+  geos::geom::MultiPoint *arg1 = (geos::geom::MultiPoint *) 0 ;
+  std::size_t arg2 ;
+  geos::geom::Point *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::MultiPoint **)&jarg1; 
+  arg2 = (std::size_t)jarg2; 
+  result = (geos::geom::Point *)Innerpeacer::MapSDK::GeosGeometryCaster::getPointN(arg1,arg2);
+  *(geos::geom::Point **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getLineStringN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  jlong jresult = 0 ;
+  geos::geom::MultiLineString *arg1 = (geos::geom::MultiLineString *) 0 ;
+  std::size_t arg2 ;
+  geos::geom::LineString *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::MultiLineString **)&jarg1; 
+  arg2 = (std::size_t)jarg2; 
+  result = (geos::geom::LineString *)Innerpeacer::MapSDK::GeosGeometryCaster::getLineStringN(arg1,arg2);
+  *(geos::geom::LineString **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getPolygonN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  jlong jresult = 0 ;
+  geos::geom::MultiPolygon *arg1 = (geos::geom::MultiPolygon *) 0 ;
+  std::size_t arg2 ;
+  geos::geom::Polygon *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::MultiPolygon **)&jarg1; 
+  arg2 = (std::size_t)jarg2; 
+  result = (geos::geom::Polygon *)Innerpeacer::MapSDK::GeosGeometryCaster::getPolygonN(arg1,arg2);
+  *(geos::geom::Polygon **)&jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXRouteNetworkDataset(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   Innerpeacer::MapSDK::IPXRouteNetworkDataset *result = 0 ;
@@ -1214,57 +1265,6 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXRouteNetw
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getPointN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  jlong jresult = 0 ;
-  geos::geom::MultiPoint *arg1 = (geos::geom::MultiPoint *) 0 ;
-  std::size_t arg2 ;
-  geos::geom::Point *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(geos::geom::MultiPoint **)&jarg1; 
-  arg2 = (std::size_t)jarg2; 
-  result = (geos::geom::Point *)Innerpeacer::MapSDK::getPointN(arg1,arg2);
-  *(geos::geom::Point **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getLineStringN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  jlong jresult = 0 ;
-  geos::geom::MultiLineString *arg1 = (geos::geom::MultiLineString *) 0 ;
-  std::size_t arg2 ;
-  geos::geom::LineString *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(geos::geom::MultiLineString **)&jarg1; 
-  arg2 = (std::size_t)jarg2; 
-  result = (geos::geom::LineString *)Innerpeacer::MapSDK::getLineStringN(arg1,arg2);
-  *(geos::geom::LineString **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getPolygonN(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  jlong jresult = 0 ;
-  geos::geom::MultiPolygon *arg1 = (geos::geom::MultiPolygon *) 0 ;
-  std::size_t arg2 ;
-  geos::geom::Polygon *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(geos::geom::MultiPolygon **)&jarg1; 
-  arg2 = (std::size_t)jarg2; 
-  result = (geos::geom::Polygon *)Innerpeacer::MapSDK::getPolygonN(arg1,arg2);
-  *(geos::geom::Polygon **)&jresult = result; 
-  return jresult;
-}
-
-
 SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1geometry_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
   geos::geom::Geometry *arg2 = (geos::geom::Geometry *) 0 ;
@@ -1290,96 +1290,6 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1g
   arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
   result = (geos::geom::Geometry *) ((arg1)->geometry);
   *(geos::geom::Geometry **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1getPointIfSatisfied(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
-  geos::geom::Point *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
-  result = (geos::geom::Point *)((Innerpeacer::MapSDK::IPXFeatureRecord const *)arg1)->getPointIfSatisfied();
-  *(geos::geom::Point **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1getMultiPointIfSatisfied(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
-  geos::geom::MultiPoint *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
-  result = (geos::geom::MultiPoint *)((Innerpeacer::MapSDK::IPXFeatureRecord const *)arg1)->getMultiPointIfSatisfied();
-  *(geos::geom::MultiPoint **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1getLineStringIfSatisfied(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
-  geos::geom::LineString *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
-  result = (geos::geom::LineString *)((Innerpeacer::MapSDK::IPXFeatureRecord const *)arg1)->getLineStringIfSatisfied();
-  *(geos::geom::LineString **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1getMultiLineStringIfSatisfied(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
-  geos::geom::MultiLineString *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
-  result = (geos::geom::MultiLineString *)((Innerpeacer::MapSDK::IPXFeatureRecord const *)arg1)->getMultiLineStringIfSatisfied();
-  *(geos::geom::MultiLineString **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1getPolygonIfSatisfied(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
-  geos::geom::Polygon *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
-  result = (geos::geom::Polygon *)((Innerpeacer::MapSDK::IPXFeatureRecord const *)arg1)->getPolygonIfSatisfied();
-  *(geos::geom::Polygon **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1getMultiPolygonIfSatisfied(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
-  geos::geom::MultiPolygon *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
-  result = (geos::geom::MultiPolygon *)((Innerpeacer::MapSDK::IPXFeatureRecord const *)arg1)->getMultiPolygonIfSatisfied();
-  *(geos::geom::MultiPolygon **)&jresult = result; 
   return jresult;
 }
 

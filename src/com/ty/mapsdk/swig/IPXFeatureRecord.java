@@ -44,36 +44,6 @@ public class IPXFeatureRecord {
     return (cPtr == 0) ? null : new IPXGeosGeometry(cPtr, false);
   }
 
-  public IPXGeosPoint getPointIfSatisfied() {
-    long cPtr = IPMapSDKJNI.IPXFeatureRecord_getPointIfSatisfied(swigCPtr, this);
-    return (cPtr == 0) ? null : new IPXGeosPoint(cPtr, false);
-  }
-
-  public IPXGeosMutliPoint getMultiPointIfSatisfied() {
-    long cPtr = IPMapSDKJNI.IPXFeatureRecord_getMultiPointIfSatisfied(swigCPtr, this);
-    return (cPtr == 0) ? null : new IPXGeosMutliPoint(cPtr, false);
-  }
-
-  public IPXGeosLineString getLineStringIfSatisfied() {
-    long cPtr = IPMapSDKJNI.IPXFeatureRecord_getLineStringIfSatisfied(swigCPtr, this);
-    return (cPtr == 0) ? null : new IPXGeosLineString(cPtr, false);
-  }
-
-  public IPXGeosMultiLineString getMultiLineStringIfSatisfied() {
-    long cPtr = IPMapSDKJNI.IPXFeatureRecord_getMultiLineStringIfSatisfied(swigCPtr, this);
-    return (cPtr == 0) ? null : new IPXGeosMultiLineString(cPtr, false);
-  }
-
-  public IPXGeosPolygon getPolygonIfSatisfied() {
-    long cPtr = IPMapSDKJNI.IPXFeatureRecord_getPolygonIfSatisfied(swigCPtr, this);
-    return (cPtr == 0) ? null : new IPXGeosPolygon(cPtr, false);
-  }
-
-  public IPXGeosMultiPolygon getMultiPolygonIfSatisfied() {
-    long cPtr = IPMapSDKJNI.IPXFeatureRecord_getMultiPolygonIfSatisfied(swigCPtr, this);
-    return (cPtr == 0) ? null : new IPXGeosMultiPolygon(cPtr, false);
-  }
-
   public void setGeoID(String value) {
     IPMapSDKJNI.IPXFeatureRecord_geoID_set(swigCPtr, this, value);
   }

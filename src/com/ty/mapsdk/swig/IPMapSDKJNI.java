@@ -58,6 +58,9 @@ public class IPMapSDKJNI {
   public final static native long CastedMultiLineString(long jarg1, IPXGeosGeometry jarg1_);
   public final static native long CastedPolygon(long jarg1, IPXGeosGeometry jarg1_);
   public final static native long CastedMultiPolygon(long jarg1, IPXGeosGeometry jarg1_);
+  public final static native long getPointN(long jarg1, IPXGeosMutliPoint jarg1_, long jarg2);
+  public final static native long getLineStringN(long jarg1, IPXGeosMultiLineString jarg1_, long jarg2);
+  public final static native long getPolygonN(long jarg1, IPXGeosMultiPolygon jarg1_, long jarg2);
   public final static native long new_IPXRouteNetworkDataset();
   public final static native void delete_IPXRouteNetworkDataset(long jarg1);
   public final static native long IPXRouteNetworkDataset_getShorestPath(long jarg1, IPXRouteNetworkDataset jarg1_, long jarg2, IPXGeosPoint jarg2_, long jarg3, IPXGeosPoint jarg3_);
@@ -67,17 +70,8 @@ public class IPMapSDKJNI {
   public final static native boolean IPXRouteNetworkDBAdapter_close(long jarg1, IPXRouteNetworkDBAdapter jarg1_);
   public final static native long IPXRouteNetworkDBAdapter_readRouteNetworkDataset(long jarg1, IPXRouteNetworkDBAdapter jarg1_);
   public final static native void delete_IPXRouteNetworkDBAdapter(long jarg1);
-  public final static native long getPointN(long jarg1, IPXGeosMutliPoint jarg1_, long jarg2);
-  public final static native long getLineStringN(long jarg1, IPXGeosMultiLineString jarg1_, long jarg2);
-  public final static native long getPolygonN(long jarg1, IPXGeosMultiPolygon jarg1_, long jarg2);
   public final static native void IPXFeatureRecord_geometry_set(long jarg1, IPXFeatureRecord jarg1_, long jarg2, IPXGeosGeometry jarg2_);
   public final static native long IPXFeatureRecord_geometry_get(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native long IPXFeatureRecord_getPointIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native long IPXFeatureRecord_getMultiPointIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native long IPXFeatureRecord_getLineStringIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native long IPXFeatureRecord_getMultiLineStringIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native long IPXFeatureRecord_getPolygonIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
-  public final static native long IPXFeatureRecord_getMultiPolygonIfSatisfied(long jarg1, IPXFeatureRecord jarg1_);
   public final static native void IPXFeatureRecord_geoID_set(long jarg1, IPXFeatureRecord jarg1_, String jarg2);
   public final static native String IPXFeatureRecord_geoID_get(long jarg1, IPXFeatureRecord jarg1_);
   public final static native void IPXFeatureRecord_poiID_set(long jarg1, IPXFeatureRecord jarg1_, String jarg2);
