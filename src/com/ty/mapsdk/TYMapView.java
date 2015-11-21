@@ -55,6 +55,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private Map<String, Map<String, Graphic[]>> mapDataCache = new HashMap<String, Map<String, Graphic[]>>();
 
 	private IPStructureGroupLayer structureGroupLayer;
+	private IPParkingLayer parkingLayer;
 	private IPLabelGroupLayer labelGroupLayer;
 
 	private IPRouteLayer routeLayer;
@@ -85,6 +86,65 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	double lastMapRotation = 0.0;
 	double lastMapScale = 0.0;
+
+	/**
+	 * 设置被占用车位颜色
+	 * 
+	 * @param color
+	 *            被占用车位颜色
+	 */
+	public void setOccupiedParkingColor(int color) {
+		parkingLayer.setOccupiedParkingColor(color);
+	}
+
+	/**
+	 * 设置空车位颜色
+	 * 
+	 * @param color
+	 *            空车位颜色
+	 */
+	public void setAvailableParkingColor(int color) {
+		parkingLayer.setAvaiableParkingColor(color);
+	}
+
+	/**
+	 * 显示车位状态
+	 * 
+	 * @param occupiedArray
+	 *            被占用车位poiID数组
+	 * @param availableArray
+	 *            空车位poiID数组
+	 */
+	public void showOccupiedAndAvailableParkingSpaces(
+			List<String> occupiedArray, List<String> availableArray) {
+		parkingLayer.removeAll();
+
+		Graphic[] roomFeatures = mapDataDictionary.get("room");
+		for (int i = 0; i < roomFeatures.length; i++) {
+			Graphic g = roomFeatures[i];
+			if (IPMapType.CATEGORY_ID_FOR_PARKING_SPACE
+					.equalsIgnoreCase((String) g
+							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID))) {
+				String poiID = (String) g
+						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+				if (occupiedArray.contains(poiID)) {
+					parkingLayer.addGraphic(new Graphic(g.getGeometry(),
+							parkingLayer.getOccupiedParkingSymbol()));
+				}
+				if (availableArray.contains(poiID)) {
+					parkingLayer.addGraphic(new Graphic(g.getGeometry(),
+							parkingLayer.getAvailableParkingSymbol()));
+				}
+			}
+		}
+	}
+
+	/**
+	 * 隐藏车位状态
+	 */
+	public void hideParkingSpaces() {
+		parkingLayer.removeAll();
+	}
 
 	/**
 	 * 设置是否启用路线修正功能，需要添加额外的路线数据
@@ -179,6 +239,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		structureGroupLayer = new IPStructureGroupLayer(context,
 				renderingScheme, sr, null);
 		addLayer(structureGroupLayer);
+
+		parkingLayer = new IPParkingLayer();
+		addLayer(parkingLayer);
 
 		labelGroupLayer = new IPLabelGroupLayer(context, this, renderingScheme,
 				sr);
@@ -278,6 +341,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		currentMapInfo = info;
 
+		parkingLayer.removeAll();
 		structureGroupLayer.removeGraphicsFromSublayers();
 		labelGroupLayer.removeGraphicsFromSublayers();
 

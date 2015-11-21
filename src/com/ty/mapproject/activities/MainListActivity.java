@@ -32,20 +32,24 @@ public class MainListActivity extends HelperListActivity {
 				"Licenses.json"));
 
 		TYUserDefaults settings = new TYUserDefaults(this);
-		settings.setDefaultCityID("0021");
-		settings.setDefaultBuildingID("00210100");
-		// settings.setDefaultBuildingID("002100002");
-		// settings.setDefaultBuildingID("00210004");
 
-		// settings.setDefaultCityID("0591");
-		// settings.setDefaultBuildingID("05910001");
-		// settings.setDefaultBuildingID("05910002");
+		if (settings.getDefaultBuildingID() == null) {
+			settings.setDefaultCityID("0021");
+			settings.setDefaultBuildingID("00210100");
+			// settings.setDefaultBuildingID("002100002");
+			// settings.setDefaultBuildingID("00210004");
 
-		// settings.setDefaultCityID("0010");
-		// settings.setDefaultBuildingID("00100003");
-		//
-		// settings.setDefaultCityID("H852");
-		// settings.setDefaultBuildingID("H85200001");
+			// settings.setDefaultCityID("0591");
+			// settings.setDefaultBuildingID("05910001");
+			// settings.setDefaultBuildingID("05910002");
+
+			// settings.setDefaultCityID("0010");
+			// settings.setDefaultBuildingID("00100003");
+			//
+			// settings.setDefaultCityID("H852");
+			// settings.setDefaultBuildingID("H85200001");
+		}
+
 		setTitle(getResources().getString(R.string.app_name));
 	};
 

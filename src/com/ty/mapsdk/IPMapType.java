@@ -22,4 +22,7 @@ class IPMapType {
 	public static final String LAYER_NAME_FACILITY = "FacilityLayer";
 	public static final String LAYER_NAME_LABEL = "LabelLayer";
 
+	// ========= Category ID =========
+	public static final String CATEGORY_ID_FOR_PARKING_SPACE = "110601";
+
 }
