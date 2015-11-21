@@ -63,6 +63,10 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	private IPLocationLayer locationLayer;
 
+	private IPPathCalibration pathCalibration;
+	private boolean isPathCalibrationEnabled = false;
+	double pathCalibrationBuffer = 2.0;
+
 	private Envelope initialEnvelope;
 
 	private TYMapViewMode mapViewMode = TYMapViewMode.TYMapViewModeDefault;
@@ -81,6 +85,41 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	double lastMapRotation = 0.0;
 	double lastMapScale = 0.0;
+
+	/**
+	 * 设置是否启用路线修正功能，需要添加额外的路线数据
+	 * 
+	 * @param enabled
+	 *            是否启用
+	 */
+	public void setPathCalibrationEnabled(boolean enabled) {
+		isPathCalibrationEnabled = enabled;
+	}
+
+	/**
+	 * 设置路线修正的缓冲宽度
+	 * 
+	 * @param width
+	 *            缓冲宽度
+	 */
+	void setPathCalibrationBuffer(double width) {
+		pathCalibration.setBufferWidth(width);
+	}
+
+	/**
+	 * 获取路径修正点。 若目标点落在路径缓冲区之外，则返回目标点。
+	 * 
+	 * @param point
+	 *            目标点
+	 * @return 修正点
+	 */
+	public Point getCalibratedPoint(Point point) {
+		if (isPathCalibrationEnabled) {
+			return pathCalibration.calibrationPoint(point);
+		} else {
+			return point;
+		}
+	}
 
 	/**
 	 * 地图视图构造函数
@@ -297,6 +336,15 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				if (!isInterupted) {
 					labelGroupLayer.loadLabelContents(mapDataDictionary
 							.get("label"));
+				}
+
+				if (!isInterupted) {
+					if (isPathCalibrationEnabled) {
+						pathCalibration = new IPPathCalibration(currentMapInfo);
+						pathCalibration.setBufferWidth(pathCalibrationBuffer);
+					} else {
+						pathCalibration = null;
+					}
 				}
 
 				if (initialEnvelope == null) {

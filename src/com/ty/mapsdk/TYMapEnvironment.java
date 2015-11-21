@@ -84,6 +84,22 @@ public class TYMapEnvironment {
 	}
 
 	/**
+	 * 获取目标建筑的目录路径
+	 * 
+	 * @param cityID
+	 *            城市ID
+	 * @param buildingID
+	 *            建筑ID
+	 * @return 目标建筑的文件路径
+	 */
+	public static String getDirectoryForBuilding(String cityID,
+			String buildingID) {
+		File cityDir = new File(mapFileRootDirectory, cityID);
+		File buildingDir = new File(cityDir, buildingID);
+		return buildingDir.toString();
+	}
+
+	/**
 	 * 设置当前地图显示的语言类型
 	 * 
 	 * @param language

@@ -49,6 +49,36 @@ public class IPMapSDK {
     return IPMapSDKJNI.getExpiredDate(userID, license, buildingID);
   }
 
+  public static IPXGeosPoint CastedPoint(IPXGeosGeometry g) {
+    long cPtr = IPMapSDKJNI.CastedPoint(IPXGeosGeometry.getCPtr(g), g);
+    return (cPtr == 0) ? null : new IPXGeosPoint(cPtr, false);
+  }
+
+  public static IPXGeosMutliPoint CastedMultiPoint(IPXGeosGeometry g) {
+    long cPtr = IPMapSDKJNI.CastedMultiPoint(IPXGeosGeometry.getCPtr(g), g);
+    return (cPtr == 0) ? null : new IPXGeosMutliPoint(cPtr, false);
+  }
+
+  public static IPXGeosLineString CastedLineString(IPXGeosGeometry g) {
+    long cPtr = IPMapSDKJNI.CastedLineString(IPXGeosGeometry.getCPtr(g), g);
+    return (cPtr == 0) ? null : new IPXGeosLineString(cPtr, false);
+  }
+
+  public static IPXGeosMultiLineString CastedMultiLineString(IPXGeosGeometry g) {
+    long cPtr = IPMapSDKJNI.CastedMultiLineString(IPXGeosGeometry.getCPtr(g), g);
+    return (cPtr == 0) ? null : new IPXGeosMultiLineString(cPtr, false);
+  }
+
+  public static IPXGeosPolygon CastedPolygon(IPXGeosGeometry g) {
+    long cPtr = IPMapSDKJNI.CastedPolygon(IPXGeosGeometry.getCPtr(g), g);
+    return (cPtr == 0) ? null : new IPXGeosPolygon(cPtr, false);
+  }
+
+  public static IPXGeosMultiPolygon CastedMultiPolygon(IPXGeosGeometry g) {
+    long cPtr = IPMapSDKJNI.CastedMultiPolygon(IPXGeosGeometry.getCPtr(g), g);
+    return (cPtr == 0) ? null : new IPXGeosMultiPolygon(cPtr, false);
+  }
+
   public static IPXGeosPoint getPointN(IPXGeosMutliPoint mp, long n) {
     long cPtr = IPMapSDKJNI.getPointN(IPXGeosMutliPoint.getCPtr(mp), mp, n);
     return (cPtr == 0) ? null : new IPXGeosPoint(cPtr, false);

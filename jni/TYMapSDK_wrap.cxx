@@ -225,6 +225,7 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #include "TYMapSDK/src/Utils/IPEncryption.hpp"
 #include "TYMapSDK/src/Utils/MD5Utils.hpp"
 #include "TYMapSDK/src/Utils/IPLicenseValidation.h"
+#include "TYMapSDK/src/Utils/IPXGeosGeometryCaster.hpp"
 
 #include <geos.h>
 #include <geos/geom.h>
@@ -235,8 +236,11 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #include "TYMapSDK/src/MapDB/IPXFeatureRecord.hpp"
 #include "TYMapSDK/src/MapDB/IPXMapDataDBAdapter.hpp"
 
+#include "TYMapSDK/src/PathCalibration/IPXPathCalibration.hpp"
+
 using namespace std;
 using namespace Innerpeacer::MapSDK;
+using namespace Innerpeacer::MapSDK::GeosGeometryCaster;
 
 using namespace geos;
 using namespace geos::geom;
@@ -984,6 +988,96 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getExpiredDate(JN
   jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
   result = getExpiredDate(arg1,arg2,arg3);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_CastedPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  geos::geom::Point *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  result = (geos::geom::Point *)Innerpeacer::MapSDK::GeosGeometryCaster::CastedPoint(arg1);
+  *(geos::geom::Point **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_CastedMultiPoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  geos::geom::MultiPoint *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  result = (geos::geom::MultiPoint *)Innerpeacer::MapSDK::GeosGeometryCaster::CastedMultiPoint(arg1);
+  *(geos::geom::MultiPoint **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_CastedLineString(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  geos::geom::LineString *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  result = (geos::geom::LineString *)Innerpeacer::MapSDK::GeosGeometryCaster::CastedLineString(arg1);
+  *(geos::geom::LineString **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_CastedMultiLineString(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  geos::geom::MultiLineString *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  result = (geos::geom::MultiLineString *)Innerpeacer::MapSDK::GeosGeometryCaster::CastedMultiLineString(arg1);
+  *(geos::geom::MultiLineString **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_CastedPolygon(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  geos::geom::Polygon *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  result = (geos::geom::Polygon *)Innerpeacer::MapSDK::GeosGeometryCaster::CastedPolygon(arg1);
+  *(geos::geom::Polygon **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_CastedMultiPolygon(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  geos::geom::Geometry *arg1 = (geos::geom::Geometry *) 0 ;
+  geos::geom::MultiPolygon *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(geos::geom::Geometry **)&jarg1; 
+  result = (geos::geom::MultiPolygon *)Innerpeacer::MapSDK::GeosGeometryCaster::CastedMultiPolygon(arg1);
+  *(geos::geom::MultiPolygon **)&jresult = result; 
   return jresult;
 }
 
@@ -1783,6 +1877,117 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXMapDataDB
   (void)jcls;
   arg1 = *(Innerpeacer::MapSDK::IPXMapDataDBAdapter **)&jarg1; 
   delete arg1;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXPathCalibration(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+  jlong jresult = 0 ;
+  char *arg1 = (char *) 0 ;
+  Innerpeacer::MapSDK::IPXPathCalibration *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = 0;
+  if (jarg1) {
+    arg1 = (char *)jenv->GetStringUTFChars(jarg1, 0);
+    if (!arg1) return 0;
+  }
+  result = (Innerpeacer::MapSDK::IPXPathCalibration *)new Innerpeacer::MapSDK::IPXPathCalibration((char const *)arg1);
+  *(Innerpeacer::MapSDK::IPXPathCalibration **)&jresult = result; 
+  if (arg1) jenv->ReleaseStringUTFChars(jarg1, (const char *)arg1);
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_delete_1IPXPathCalibration(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  Innerpeacer::MapSDK::IPXPathCalibration *arg1 = (Innerpeacer::MapSDK::IPXPathCalibration *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(Innerpeacer::MapSDK::IPXPathCalibration **)&jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXPathCalibration_1setBufferWidth(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2) {
+  Innerpeacer::MapSDK::IPXPathCalibration *arg1 = (Innerpeacer::MapSDK::IPXPathCalibration *) 0 ;
+  double arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXPathCalibration **)&jarg1; 
+  arg2 = (double)jarg2; 
+  (arg1)->setBufferWidth(arg2);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXPathCalibration_1calibratePoint(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXPathCalibration *arg1 = (Innerpeacer::MapSDK::IPXPathCalibration *) 0 ;
+  geos::geom::Coordinate arg2 ;
+  geos::geom::Coordinate *argp2 ;
+  geos::geom::Coordinate result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  (void)jarg2_;
+  arg1 = *(Innerpeacer::MapSDK::IPXPathCalibration **)&jarg1; 
+  argp2 = *(geos::geom::Coordinate **)&jarg2; 
+  if (!argp2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Attempt to dereference null geos::geom::Coordinate");
+    return 0;
+  }
+  arg2 = *argp2; 
+  result = (arg1)->calibratePoint(arg2);
+  *(geos::geom::Coordinate **)&jresult = new geos::geom::Coordinate((const geos::geom::Coordinate &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXPathCalibration_1getPathCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Innerpeacer::MapSDK::IPXPathCalibration *arg1 = (Innerpeacer::MapSDK::IPXPathCalibration *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXPathCalibration **)&jarg1; 
+  result = (int)((Innerpeacer::MapSDK::IPXPathCalibration const *)arg1)->getPathCount();
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXPathCalibration_1getUnionPaths(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXPathCalibration *arg1 = (Innerpeacer::MapSDK::IPXPathCalibration *) 0 ;
+  geos::geom::Geometry *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXPathCalibration **)&jarg1; 
+  result = (geos::geom::Geometry *)((Innerpeacer::MapSDK::IPXPathCalibration const *)arg1)->getUnionPaths();
+  *(geos::geom::Geometry **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXPathCalibration_1getUnionPathBuffer(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  Innerpeacer::MapSDK::IPXPathCalibration *arg1 = (Innerpeacer::MapSDK::IPXPathCalibration *) 0 ;
+  geos::geom::Geometry *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXPathCalibration **)&jarg1; 
+  result = (geos::geom::Geometry *)((Innerpeacer::MapSDK::IPXPathCalibration const *)arg1)->getUnionPathBuffer();
+  *(geos::geom::Geometry **)&jresult = result; 
+  return jresult;
 }
 
 

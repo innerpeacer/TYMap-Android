@@ -52,6 +52,12 @@ public class IPMapSDKJNI {
   public final static native String decryptFile__SWIG_1(String jarg1, String jarg2);
   public final static native boolean checkValidity(String jarg1, String jarg2, String jarg3);
   public final static native String getExpiredDate(String jarg1, String jarg2, String jarg3);
+  public final static native long CastedPoint(long jarg1, IPXGeosGeometry jarg1_);
+  public final static native long CastedMultiPoint(long jarg1, IPXGeosGeometry jarg1_);
+  public final static native long CastedLineString(long jarg1, IPXGeosGeometry jarg1_);
+  public final static native long CastedMultiLineString(long jarg1, IPXGeosGeometry jarg1_);
+  public final static native long CastedPolygon(long jarg1, IPXGeosGeometry jarg1_);
+  public final static native long CastedMultiPolygon(long jarg1, IPXGeosGeometry jarg1_);
   public final static native long new_IPXRouteNetworkDataset();
   public final static native void delete_IPXRouteNetworkDataset(long jarg1);
   public final static native long IPXRouteNetworkDataset_getShorestPath(long jarg1, IPXRouteNetworkDataset jarg1_, long jarg2, IPXGeosPoint jarg2_, long jarg3, IPXGeosPoint jarg3_);
@@ -104,6 +110,13 @@ public class IPMapSDKJNI {
   public final static native boolean IPXMapDataDBAdapter_close(long jarg1, IPXMapDataDBAdapter jarg1_);
   public final static native long IPXMapDataDBAdapter_getAllRecordsOnFloor(long jarg1, IPXMapDataDBAdapter jarg1_, int jarg2);
   public final static native void delete_IPXMapDataDBAdapter(long jarg1);
+  public final static native long new_IPXPathCalibration(String jarg1);
+  public final static native void delete_IPXPathCalibration(long jarg1);
+  public final static native void IPXPathCalibration_setBufferWidth(long jarg1, IPXPathCalibration jarg1_, double jarg2);
+  public final static native long IPXPathCalibration_calibratePoint(long jarg1, IPXPathCalibration jarg1_, long jarg2, IPXGeosCoordinate jarg2_);
+  public final static native int IPXPathCalibration_getPathCount(long jarg1, IPXPathCalibration jarg1_);
+  public final static native long IPXPathCalibration_getUnionPaths(long jarg1, IPXPathCalibration jarg1_);
+  public final static native long IPXPathCalibration_getUnionPathBuffer(long jarg1, IPXPathCalibration jarg1_);
   public final static native long IPXGeosGeometryCollection_SWIGUpcast(long jarg1);
   public final static native long IPXGeosPoint_SWIGUpcast(long jarg1);
   public final static native long IPXGeosMutliPoint_SWIGUpcast(long jarg1);

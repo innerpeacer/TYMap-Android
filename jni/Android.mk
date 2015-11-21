@@ -23,6 +23,7 @@ LOCAL_SRC_FILES := 	TYMapSDK_wrap.cxx \
 					TYMapSDK/src/Utils/IPMemory.cpp \
 					TYMapSDK/src/Utils/MD5.cpp \
 					TYMapSDK/src/Utils/MD5Utils.cpp \
+					TYMapSDK/src/Utils/IPXGeosGeometryCaster.cpp \
 					TYMapSDK/src/RouteNetwork/IPXLink.cpp \
 					TYMapSDK/src/RouteNetwork/IPXLinkRecord.cpp \
 					TYMapSDK/src/RouteNetwork/IPXNode.cpp \
@@ -30,13 +31,11 @@ LOCAL_SRC_FILES := 	TYMapSDK_wrap.cxx \
 					TYMapSDK/src/RouteNetwork/IPXRouteNetworkDBAdapter.cpp \
 					TYMapSDK/src/RouteNetwork/IPXRouteNetworkDataset.cpp \
 					TYMapSDK/src/MapDB/IPXFeatureRecord.cpp \
-					TYMapSDK/src/MapDB/IPXMapDataDBAdapter.cpp
-
-LOCAL_CPP_FEATURES += rtti	
-#APP_CPPFLAGS += -fexceptions
-#LOCAL_CPPFLAGS += -fexceptions
-#LOCAL_CPPFLAGS += -rtti	
-LOCAL_CPPFLAGS += -std=gnu++11
+					TYMapSDK/src/MapDB/IPXMapDataDBAdapter.cpp \
+					TYMapSDK/src/PathCalibration/IPXPathCalibration.cpp \
+					TYMapSDK/src/PathCalibration/IPXPathDBAdapter.cpp
+					
+LOCAL_CPPFLAGS += -std=gnu++11 -fexceptions -frtti
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/geos/include $(LOCAL_PATH)/sqlite3/include
 LOCAL_SHARED_LIBRARIES := sqlite3
 LOCAL_STATIC_LIBRARIES := geos

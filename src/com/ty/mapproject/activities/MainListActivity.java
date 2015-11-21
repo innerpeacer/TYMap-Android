@@ -33,16 +33,16 @@ public class MainListActivity extends HelperListActivity {
 
 		TYUserDefaults settings = new TYUserDefaults(this);
 		settings.setDefaultCityID("0021");
-		// settings.setDefaultBuildingID("00210100");
-		settings.setDefaultBuildingID("002100002");
-		settings.setDefaultBuildingID("00210004");
+		settings.setDefaultBuildingID("00210100");
+		// settings.setDefaultBuildingID("002100002");
+		// settings.setDefaultBuildingID("00210004");
 
 		// settings.setDefaultCityID("0591");
 		// settings.setDefaultBuildingID("05910001");
 		// settings.setDefaultBuildingID("05910002");
 
-		settings.setDefaultCityID("0532");
-		settings.setDefaultBuildingID("05320001");
+		// settings.setDefaultCityID("0010");
+		// settings.setDefaultBuildingID("00100003");
 		//
 		// settings.setDefaultCityID("H852");
 		// settings.setDefaultBuildingID("H85200001");
@@ -75,6 +75,9 @@ public class MainListActivity extends HelperListActivity {
 				new IntentPair(getResources().getString(
 						R.string.location_activity_title), new Intent(this,
 						MapLocationActivity.class)),
+				new IntentPair(getResources().getString(
+						R.string.path_calibraion_activity_title), new Intent(
+						this, PathCalibrationActivity.class)),
 				new IntentPair(getResources().getString(
 						R.string.city_activity_title), new Intent(this,
 						AllCityListActivity.class)) };

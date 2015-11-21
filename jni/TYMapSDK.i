@@ -8,6 +8,7 @@
 #include "TYMapSDK/src/Utils/IPEncryption.hpp"
 #include "TYMapSDK/src/Utils/MD5Utils.hpp"
 #include "TYMapSDK/src/Utils/IPLicenseValidation.h"
+#include "TYMapSDK/src/Utils/IPXGeosGeometryCaster.hpp"
 
 #include <geos.h>
 #include <geos/geom.h>
@@ -18,8 +19,11 @@
 #include "TYMapSDK/src/MapDB/IPXFeatureRecord.hpp"
 #include "TYMapSDK/src/MapDB/IPXMapDataDBAdapter.hpp"
 
+#include "TYMapSDK/src/PathCalibration/IPXPathCalibration.hpp"
+
 using namespace std;
 using namespace Innerpeacer::MapSDK;
+using namespace Innerpeacer::MapSDK::GeosGeometryCaster;
 
 using namespace geos;
 using namespace geos::geom;
@@ -32,3 +36,4 @@ typedef int size_t;
 %include "TYMapSDK/swig/Utils.i"
 %include "TYMapSDK/swig/RouteNetwork.i"
 %include "TYMapSDK/swig/MapDB.i"
+%include "TYMapSDK/swig/PathCalibration.i"

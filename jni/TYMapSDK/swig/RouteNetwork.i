@@ -1,6 +1,6 @@
 /* ============= RouteNetwork ================ */
 /*
- * Swig File for RouteNetwork Structure
+ * Swig File for PathCalibration Structure
  *
  *
 */	

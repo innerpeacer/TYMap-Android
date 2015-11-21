@@ -1,21 +1,19 @@
 package com.ty.mapproject.activities;
 
-import java.io.File;
 import java.util.List;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.esri.android.map.GraphicsLayer;
+import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
+import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapproject.R;
-import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYOfflineRouteManager;
@@ -58,53 +56,6 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 			}
 		}).start();
 
-	}
-
-	void test() {
-		String buildingDir = TYMapEnvironment
-				.getDirectoryForBuilding(currentBuilding);
-		File poiDBFile = new File(buildingDir, String.format("%s_POI.db",
-				currentBuilding.getBuildingID()));
-
-		SQLiteDatabase db = SQLiteDatabase
-				.openOrCreateDatabase(poiDBFile, null);
-		Cursor mCursor = db.query(true, "poi", null, null, null, null, null,
-				null, null);
-		if (mCursor != null && mCursor.moveToFirst()) {
-
-			do {
-				String poiID = mCursor.getString(mCursor
-						.getColumnIndex("POI_ID"));
-				if (poiID.equalsIgnoreCase("053200001F0110053")) {
-					double x = mCursor.getDouble(mCursor
-							.getColumnIndex("LABEL_X"));
-					double y = mCursor.getDouble(mCursor
-							.getColumnIndex("LABEL_Y"));
-					int floor = mCursor.getInt(mCursor
-							.getColumnIndex("FLOOR_INDEX"));
-					// startPoint = new TYLocalPoint(x, y, floor);
-					endPoint = new TYLocalPoint(x, y, floor);
-
-					Log.i(TAG, "Start: " + startPoint);
-				}
-
-				if (poiID.equalsIgnoreCase("053200001F0110079")) {
-					double x = mCursor.getDouble(mCursor
-							.getColumnIndex("LABEL_X"));
-					double y = mCursor.getDouble(mCursor
-							.getColumnIndex("LABEL_Y"));
-					int floor = mCursor.getInt(mCursor
-							.getColumnIndex("FLOOR_INDEX"));
-					// endPoint = new TYLocalPoint(x, y, floor);
-					startPoint = new TYLocalPoint(x, y, floor);
-
-					Log.i(TAG, "End: " + endPoint);
-				}
-			} while (mCursor.moveToNext());
-		}
-		db.close();
-
-		requestRoute();
 	}
 
 	@Override
@@ -228,18 +179,16 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		hintLayer.addGraphic(new Graphic(mappoint, sms));
 
 		Log.i(TAG, "Click: " + mappoint.getX() + ", " + mappoint.getY());
-		//
-		// TYLocalPoint localPoint = new TYLocalPoint(mappoint.getX(),
-		// mappoint.getY(), currentMapInfo.getFloorNumber());
-		// Point p = GeometryEngine.getLabelPointForPolygon(
-		// (Polygon) poi.getGeometry(), mapView.getSpatialReference());
-		// localPoint = new TYLocalPoint(p.getX(), p.getY());
-		//
-		// endPoint = startPoint;
-		// startPoint = localPoint;
-		// requestRoute();
 
-		// test();
+		TYLocalPoint localPoint = new TYLocalPoint(mappoint.getX(),
+				mappoint.getY(), currentMapInfo.getFloorNumber());
+		Point p = GeometryEngine.getLabelPointForPolygon(
+				(Polygon) poi.getGeometry(), mapView.getSpatialReference());
+		localPoint = new TYLocalPoint(p.getX(), p.getY());
+
+		endPoint = startPoint;
+		startPoint = localPoint;
+		requestRoute();
 	}
 
 	@Override

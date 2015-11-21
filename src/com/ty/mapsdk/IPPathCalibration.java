@@ -1,70 +1,78 @@
 package com.ty.mapsdk;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
 
 import com.esri.core.geometry.Geometry;
-import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polygon;
 import com.esri.core.geometry.Polyline;
-import com.esri.core.geometry.Proximity2DResult;
-import com.esri.core.map.FeatureSet;
-import com.esri.core.map.Graphic;
+import com.ty.mapsdk.swig.IPXGeosCoordinate;
+import com.ty.mapsdk.swig.IPXPathCalibration;
 
 class IPPathCalibration {
+	static final String PATH_CALIBRATION_SOURCE_PATH = "%s_Path.db";
 
-	private static final double DEFAULT_BUFFER_WIDTH = 1.0;
+	private boolean pathDBExist = false;
+	private double width;
+	private IPXPathCalibration pathCalibration;
+	private Geometry unionPathLine;
+	private Geometry unionPathPolygon;
 
-	private List<Geometry> featureArray = new ArrayList<Geometry>();
-	private double width = DEFAULT_BUFFER_WIDTH;
+	public IPPathCalibration(TYMapInfo mapInfo) {
+		String buildingDir = TYMapEnvironment.getDirectoryForBuilding(
+				mapInfo.getCityID(), mapInfo.getBuildingID());
+		String pathDBName = String.format(PATH_CALIBRATION_SOURCE_PATH,
+				mapInfo.getMapID());
+		File dbFile = new File(buildingDir, pathDBName);
 
-	private Geometry unionPathLine = new Polyline();
-	private Geometry unionPathPolygon = new Polygon();
+		pathDBExist = dbFile.exists();
+		if (pathDBExist) {
+			pathCalibration = new IPXPathCalibration(dbFile.toString());
+			unionPathLine = new Polyline();
+			unionPathPolygon = new Polygon();
 
-	public IPPathCalibration(String path) {
-		JsonFactory factory = new JsonFactory();
-
-		try {
-			JsonParser parser = factory.createJsonParser(new File(path));
-			FeatureSet set = FeatureSet.fromJson(parser);
-
-			for (Graphic graphic : set.getGraphics()) {
-				featureArray.add(graphic.getGeometry());
+			int pathCount = pathCalibration.getPathCount();
+			if (pathCount > 0) {
+				unionPathLine = IPGeos2AgsConverter
+						.agsGeometryFromGeosGeometry(pathCalibration
+								.getUnionPaths());
+				unionPathPolygon = IPGeos2AgsConverter
+						.agsGeometryFromGeosGeometry(pathCalibration
+								.getUnionPathBuffer());
+			} else {
+				pathDBExist = false;
 			}
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-	}
-
-	public Point calibrationPoint(Point point) {
-		Point result = point;
-		if (GeometryEngine.contains(unionPathPolygon, point,
-				TYMapEnvironment.defaultSpatialReference())) {
-			Proximity2DResult proximityResult = GeometryEngine
-					.getNearestCoordinate(unionPathLine, point, false);
-			result = proximityResult.getCoordinate();
-		}
-		return result;
 	}
 
 	public void setBufferWidth(double w) {
 		width = w;
-		unionPathLine = GeometryEngine.union(
-				(Geometry[]) featureArray.toArray(),
-				TYMapEnvironment.defaultSpatialReference());
-		unionPathPolygon = GeometryEngine.buffer(unionPathLine,
-				TYMapEnvironment.defaultSpatialReference(), width, null);
+		if (pathDBExist) {
+			pathCalibration.setBufferWidth(width);
+			unionPathPolygon = IPGeos2AgsConverter
+					.agsGeometryFromGeosGeometry(pathCalibration
+							.getUnionPathBuffer());
+		}
+	}
+
+	public Point calibrationPoint(Point point) {
+		if (!pathDBExist) {
+			return point;
+		}
+
+		IPXGeosCoordinate c = new IPXGeosCoordinate();
+		c.setX(point.getX());
+		c.setY(point.getY());
+
+		IPXGeosCoordinate result = pathCalibration.calibratePoint(c);
+		return new Point(result.getX(), result.getY());
+	}
+
+	public Polyline getUnionPath() {
+		return (Polyline) unionPathLine;
+	}
+
+	public Polygon getUnionPolygon() {
+		return (Polygon) unionPathPolygon;
 	}
 }

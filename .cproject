@@ -3,7 +3,11 @@
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="com.android.toolchain.gcc.748618581">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.android.toolchain.gcc.748618581" moduleId="org.eclipse.cdt.core.settings" name="Default">
-				<externalSettings/>
+				<externalSettings>
+					<externalSetting>
+						<entry flags="BUILTIN|READONLY|RESOLVED" kind="includePath" name="/Users/innerpeacer/Dev/android-ndk-r9d/platforms/android-9/arch-x86/usr/include"/>
+					</externalSetting>
+				</externalSettings>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -27,14 +31,14 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1583774216" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="com.android.tool.compiler.g++.1688658741" name="Android G++" superClass="com.android.tool.compiler.g++">
 								<option id="gnu.cpp.compiler.option.include.paths.1983364162" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../jni"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MapProject/jni/sqlite3/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MapProject/jni/geos/include}&quot;"/>
-									<listOptionValue builtIn="false" value="/Users/innerpeacer/TY-Android/MapProject/jni/geos"/>
 								</option>
 								<inputType id="com.android.tool.compiler.g++.input.702822248" superClass="com.android.tool.compiler.g++.input"/>
 							</tool>
 							<tool id="com.android.tool.compiler.c.276030527" name="Android GCC" superClass="com.android.tool.compiler.c">
+								<option id="gnu.c.compiler.option.include.paths.819387514" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/Users/innerpeacer/Dev/android-ndk-r9d/platforms/android-18/arch-x86/usr/include"/>
+								</option>
 								<inputType id="com.android.tool.compiler.c.input.818706246" superClass="com.android.tool.compiler.c.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.156630289" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
@@ -45,9 +49,7 @@
 								</inputType>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.base.1422842236" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
-								<option id="gnu.both.asm.option.include.paths.814936347" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../jni"/>
-								</option>
+								<option id="gnu.both.asm.option.include.paths.814936347" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1411745838" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
