@@ -405,6 +405,21 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	}
 
 	/**
+	 * 在地图上显示当前楼层目标位置已经过的路径和未经过的剩余路径
+	 * 
+	 * @param lp
+	 *            目标位置
+	 */
+	public void showPassedAndRemainingRouteResultOnCurrentFloor(TYLocalPoint lp) {
+		List<Polyline> linesToShow = routeLayer
+				.showPassedAndRemainingRouteResultOnFloor(
+						currentMapInfo.getFloorNumber(), lp);
+		if (linesToShow != null && linesToShow.size() > 0) {
+			animatedRouteArrowLayer.showRouteArrows(linesToShow);
+		}
+	}
+
+	/**
 	 * 在地图显示当前楼层当前位置的剩余路径，结合定位结果，移除已经经过的路径部分
 	 * 
 	 * @param lp

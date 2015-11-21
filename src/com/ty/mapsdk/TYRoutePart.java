@@ -13,6 +13,7 @@ public class TYRoutePart {
 
 	TYRoutePart previousPart = null;
 	TYRoutePart nextPart = null;
+	int partIndex;
 
 	/**
 	 * 路径导航段的初始化方法，一般不需要直接调用，由导航管理类调用生成
@@ -128,6 +129,14 @@ public class TYRoutePart {
 	 */
 	public void setNextPart(TYRoutePart nextPart) {
 		this.nextPart = nextPart;
+	}
+
+	protected void setPartIndex(int i) {
+		partIndex = i;
+	}
+
+	protected int getPartIndex() {
+		return partIndex;
 	}
 
 }

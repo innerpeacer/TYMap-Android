@@ -34,6 +34,7 @@ class IPRouteLayer extends GraphicsLayer {
 	TYLocalPoint endPoint;
 
 	Symbol routeSymbol;
+	Symbol passedRouteSymbol;
 
 	TYRouteResult routeResult;
 
@@ -42,6 +43,7 @@ class IPRouteLayer extends GraphicsLayer {
 
 		this.mapView = mapView;
 		routeSymbol = createRouteSymbol();
+		passedRouteSymbol = createPassedRouteSymbol();
 	}
 
 	public void reset() {
@@ -58,6 +60,19 @@ class IPRouteLayer extends GraphicsLayer {
 		showSwitchSymbolForRouteResultOnFloor(floor);
 		showStartSymbol(startPoint);
 		showEndSymbol(endPoint);
+		return linesToReturn;
+	}
+
+	public List<Polyline> showPassedAndRemainingRouteResultOnFloor(int floor,
+			TYLocalPoint location) {
+		removeAll();
+
+		List<Polyline> linesToReturn = showPassedAndRemainingLinesForRouteResultOnFloor(
+				floor, location);
+		showSwitchSymbolForRouteResultOnFloor(floor);
+		showStartSymbol(startPoint);
+		showEndSymbol(endPoint);
+
 		return linesToReturn;
 	}
 
@@ -99,6 +114,44 @@ class IPRouteLayer extends GraphicsLayer {
 		return result;
 	}
 
+	private List<Polyline> showPassedAndRemainingLinesForRouteResultOnFloor(
+			int floor, TYLocalPoint location) {
+		List<Polyline> linesToReturn = new ArrayList<Polyline>();
+		TYRoutePart nearestRoutPart = getNearestRoutePartWithLocation(location);
+
+		if (routeResult != null) {
+			List<TYRoutePart> routePartArray = routeResult
+					.getRoutePartsOnFloor(floor);
+			if (routePartArray != null && routePartArray.size() > 0) {
+				for (TYRoutePart rp : routePartArray) {
+					if (rp == nearestRoutPart) {
+						Polyline remainingLine = getRemainLine(rp.getRoute(),
+								new Point(location.getX(), location.getY()));
+						Polyline passedLine = getPassedLine(rp.getRoute(),
+								new Point(location.getX(), location.getY()));
+						if (remainingLine != null) {
+							addGraphic(new Graphic(remainingLine, routeSymbol));
+						}
+						if (passedLine != null) {
+							addGraphic(new Graphic(passedLine,
+									passedRouteSymbol));
+						}
+
+					} else {
+						if (rp.getPartIndex() < nearestRoutPart.getPartIndex()) {
+							addGraphic(new Graphic(rp.getRoute(),
+									passedRouteSymbol));
+						} else {
+							addGraphic(new Graphic(rp.getRoute(), routeSymbol));
+						}
+					}
+					linesToReturn.add(rp.getRoute());
+				}
+			}
+		}
+		return linesToReturn;
+	}
+
 	private List<Polyline> showRemainingLinesForRouteResultOnFloor(int floor,
 			TYLocalPoint location) {
 		List<Polyline> linesToReturn = new ArrayList<Polyline>();
@@ -128,7 +181,6 @@ class IPRouteLayer extends GraphicsLayer {
 	}
 
 	private Polyline getRemainLine(Polyline originalLine, Point point) {
-
 		Polyline result = null;
 
 		Proximity2DResult proximityResult = GeometryEngine
@@ -142,6 +194,28 @@ class IPRouteLayer extends GraphicsLayer {
 				result.startPath(cutPoint);
 			}
 			result.lineTo(originalLine.getPoint(i));
+		}
+		return result;
+	}
+
+	private Polyline getPassedLine(Polyline originalLine, Point point) {
+		Polyline result = null;
+
+		Proximity2DResult proximityResult = GeometryEngine
+				.getNearestCoordinate(originalLine, point, false);
+		Point cutPoint = proximityResult.getCoordinate();
+		int index = proximityResult.getVertexIndex();
+
+		for (int i = 0; i < index + 1; ++i) {
+			if (i == 0) {
+				result = new Polyline();
+				result.startPath(originalLine.getPoint(i));
+			} else {
+				result.lineTo(originalLine.getPoint(i));
+			}
+		}
+		if (result != null) {
+			result.lineTo(cutPoint);
 		}
 		return result;
 	}
@@ -262,6 +336,23 @@ class IPRouteLayer extends GraphicsLayer {
 
 	public void setRouteSymbol(Symbol routeSymbol) {
 		this.routeSymbol = routeSymbol;
+	}
+
+	// private void setPassedRouteSymbol(Symbol passedSymbol) {
+	// this.passedRouteSymbol = passedSymbol;
+	// }
+
+	private CompositeSymbol createPassedRouteSymbol() {
+		CompositeSymbol cs = new CompositeSymbol();
+
+		SimpleLineSymbol sls1 = new SimpleLineSymbol(Color.argb(255, 255, 255,
+				255), 9, STYLE.SOLID);
+		cs.add(sls1);
+
+		SimpleLineSymbol sls2 = new SimpleLineSymbol(
+				Color.argb(255, 30, 255, 0), 6, STYLE.SOLID);
+		cs.add(sls2);
+		return cs;
 	}
 
 	private CompositeSymbol createRouteSymbol() {

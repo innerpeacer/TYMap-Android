@@ -195,6 +195,8 @@ public class TYOfflineRouteManager {
 			if (i < routePartNum - 1) {
 				rp.setNextPart(routePartArray.get(i + 1));
 			}
+
+			rp.setPartIndex(i);
 		}
 
 		// Log.i(TAG, routePartArray.size() + "");

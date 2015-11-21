@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -19,6 +21,7 @@ import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.ty.mapdata.TYBuilding;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapproject.R;
+import com.ty.mapproject.settings.TYUserDefaults;
 import com.ty.mapsdk.TYBuildingManager;
 import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
@@ -299,4 +302,27 @@ public class BuildingMapViewActivity extends Activity implements
 		mapView.pause();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.add(0, 0, 0, "Set As Default");
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0:
+			TYUserDefaults defaults = new TYUserDefaults(getBaseContext());
+			defaults.setDefaultBuildingID(currentBuilding.getBuildingID());
+			defaults.setDefaultCityID(currentBuilding.getCityID());
+			break;
+
+		default:
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
 }

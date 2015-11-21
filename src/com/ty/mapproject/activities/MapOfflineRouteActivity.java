@@ -5,11 +5,11 @@ import java.util.List;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.esri.android.map.GraphicsLayer;
-import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
-import com.esri.core.geometry.Polygon;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.ty.mapdata.TYLocalPoint;
@@ -38,6 +38,9 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 
 	boolean isRouteManagerReady = false;
 
+	boolean useClickForSnapRoute = false;
+	boolean useClickForChoosingPoint = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,7 +48,6 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		initSymbols();
 
 		new Thread(new Runnable() {
-
 			@Override
 			public void run() {
 				offlineRouteManager = new TYOfflineRouteManager(
@@ -166,13 +168,6 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		super.onClickAtPoint(mapView, mappoint);
 		currentPoint = mappoint;
 
-		//
-		TYPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
-				mappoint.getY());
-		if (poi == null) {
-			return;
-		}
-
 		SimpleMarkerSymbol sms = new SimpleMarkerSymbol(Color.GREEN, 5,
 				com.esri.core.symbol.SimpleMarkerSymbol.STYLE.CIRCLE);
 		hintLayer.removeAll();
@@ -182,13 +177,18 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 
 		TYLocalPoint localPoint = new TYLocalPoint(mappoint.getX(),
 				mappoint.getY(), currentMapInfo.getFloorNumber());
-		Point p = GeometryEngine.getLabelPointForPolygon(
-				(Polygon) poi.getGeometry(), mapView.getSpatialReference());
-		localPoint = new TYLocalPoint(p.getX(), p.getY());
 
-		endPoint = startPoint;
-		startPoint = localPoint;
-		requestRoute();
+		if (useClickForChoosingPoint) {
+			endPoint = startPoint;
+			startPoint = localPoint;
+			requestRoute();
+		}
+
+		if (useClickForSnapRoute) {
+			// mapView.showRemainingRouteResultOnCurrentFloor(localPoint);
+			mapView.showPassedAndRemainingRouteResultOnCurrentFloor(localPoint);
+		}
+
 	}
 
 	@Override
@@ -205,4 +205,31 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		}
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.add(0, 0, 0, "Set Point for Navigation");
+		menu.add(1, 1, 1, "Snap to Route");
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0:
+			useClickForChoosingPoint = true;
+			useClickForSnapRoute = false;
+			break;
+
+		case 1:
+			useClickForChoosingPoint = false;
+			useClickForSnapRoute = true;
+			break;
+		default:
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
 }
