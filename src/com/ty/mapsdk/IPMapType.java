@@ -11,6 +11,9 @@ class IPMapType {
 
 	public static final String GRAPHIC_ATTRIBUTE_FLOOR = "FLOOR";
 
+	public static final String GRAPHIC_ATTRIBUTE_LEVEL_MAX = "LEVEL_MAX";
+	public static final String GRAPHIC_ATTRIBUTE_LEVEL_MIN = "LEVEL_MIN";
+
 	public static final String NAME_FIELD_TRADITIONAL_CHINESE = "NAME_TC";
 	public static final String NAME_FIELD_SIMPLIFIED_CHINESE = "NAME";
 	public static final String NAME_FIELD_ENGLISH = "NAME_EN";

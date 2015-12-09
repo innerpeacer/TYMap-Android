@@ -7,6 +7,9 @@ import com.esri.core.map.Graphic;
 import com.esri.core.symbol.Symbol;
 
 class IPTextLabel {
+	private static final int DEFAULT_MAX_LEVEL = 10000;
+	private static final int DEFAULT_MIN_LEVEL = -1;
+
 	private static final int TEXT_SIZE = 10;
 	private static TextPaint textPaint = new TextPaint();
 	static {
@@ -20,6 +23,8 @@ class IPTextLabel {
 
 	Graphic textGraphic;
 	Symbol textSymbol;
+	int maxLevel = DEFAULT_MAX_LEVEL;
+	int minLevel = DEFAULT_MIN_LEVEL;
 
 	private boolean isHidden;
 

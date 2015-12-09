@@ -100,6 +100,22 @@ public class IPXFeatureRecord {
     return IPMapSDKJNI.IPXFeatureRecord_layer_get(swigCPtr, this);
   }
 
+  public void setLevelMax(int value) {
+    IPMapSDKJNI.IPXFeatureRecord_levelMax_set(swigCPtr, this, value);
+  }
+
+  public int getLevelMax() {
+    return IPMapSDKJNI.IPXFeatureRecord_levelMax_get(swigCPtr, this);
+  }
+
+  public void setLevelMin(int value) {
+    IPMapSDKJNI.IPXFeatureRecord_levelMin_set(swigCPtr, this, value);
+  }
+
+  public int getLevelMin() {
+    return IPMapSDKJNI.IPXFeatureRecord_levelMin_get(swigCPtr, this);
+  }
+
   public IPXFeatureRecord() {
     this(IPMapSDKJNI.new_IPXFeatureRecord(), true);
   }

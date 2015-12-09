@@ -1524,6 +1524,62 @@ SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1la
 }
 
 
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1levelMax_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = (int)jarg2; 
+  if (arg1) (arg1)->levelMax = arg2;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1levelMax_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (int) ((arg1)->levelMax);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1levelMin_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  arg2 = (int)jarg2; 
+  if (arg1) (arg1)->levelMin = arg2;
+}
+
+
+SWIGEXPORT jint JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXFeatureRecord_1levelMin_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jint jresult = 0 ;
+  Innerpeacer::MapSDK::IPXFeatureRecord *arg1 = (Innerpeacer::MapSDK::IPXFeatureRecord *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(Innerpeacer::MapSDK::IPXFeatureRecord **)&jarg1; 
+  result = (int) ((arg1)->levelMin);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_new_1IPXFeatureRecord(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   Innerpeacer::MapSDK::IPXFeatureRecord *result = 0 ;

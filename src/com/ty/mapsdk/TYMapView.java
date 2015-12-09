@@ -1,11 +1,13 @@
 package com.ty.mapsdk;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -88,6 +90,45 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	double lastMapScale = 0.0;
 
 	private boolean isLabelOverlappingDetectingEnabled = true;
+
+	@SuppressLint("UseSparseArrays")
+	private Map<Integer, Double> scaleLevelDict = new HashMap<Integer, Double>();
+
+	/**
+	 * 设置地图的自定义放缩层级，用于按层级显示标签。
+	 * 
+	 * @param dict
+	 *            自定义放缩层级，{Integer: Double} -> {Level : MapScale}
+	 */
+	public void setScaleLevels(Map<Integer, Double> dict) {
+		scaleLevelDict.clear();
+		scaleLevelDict.putAll(dict);
+	}
+
+	/**
+	 * 获取当前地图所处的自定义放缩层级
+	 * 
+	 * @return 当前所处的放缩层级
+	 */
+	public int getCurrentLevel() {
+		int level = 0;
+		double mapScale = getScale();
+
+		List<Integer> allLevels = new ArrayList<Integer>();
+		allLevels.addAll(scaleLevelDict.keySet());
+		Collections.sort(allLevels);
+
+		for (int i = 0; i < allLevels.size(); i++) {
+			int levelNumber = allLevels.get(i);
+			double levelScale = scaleLevelDict.get(levelNumber);
+			if (mapScale <= levelScale) {
+				level = levelNumber;
+			} else {
+				break;
+			}
+		}
+		return level;
+	}
 
 	/**
 	 * 设置是否启用标识重叠检测

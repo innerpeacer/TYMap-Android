@@ -86,6 +86,10 @@ public class IPMapSDKJNI {
   public final static native int IPXFeatureRecord_floorNumber_get(long jarg1, IPXFeatureRecord jarg1_);
   public final static native void IPXFeatureRecord_layer_set(long jarg1, IPXFeatureRecord jarg1_, int jarg2);
   public final static native int IPXFeatureRecord_layer_get(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native void IPXFeatureRecord_levelMax_set(long jarg1, IPXFeatureRecord jarg1_, int jarg2);
+  public final static native int IPXFeatureRecord_levelMax_get(long jarg1, IPXFeatureRecord jarg1_);
+  public final static native void IPXFeatureRecord_levelMin_set(long jarg1, IPXFeatureRecord jarg1_, int jarg2);
+  public final static native int IPXFeatureRecord_levelMin_get(long jarg1, IPXFeatureRecord jarg1_);
   public final static native long new_IPXFeatureRecord();
   public final static native void delete_IPXFeatureRecord(long jarg1);
   public final static native long new_VectorOfFeatureRecord__SWIG_0();

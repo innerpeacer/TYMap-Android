@@ -18,7 +18,9 @@ namespace Innerpeacer {
             int symbolID;
             int floorNumber;
             int layer;
-            
+            int levelMax;
+    		int levelMin;
+    
             IPXFeatureRecord();
             ~IPXFeatureRecord();
         };

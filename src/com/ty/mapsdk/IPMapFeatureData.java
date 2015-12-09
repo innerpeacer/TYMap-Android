@@ -52,6 +52,8 @@ class IPMapFeatureData {
 			if (record.getName() != null && record.getName().length() > 0) {
 				attributes.put("NAME", record.getName());
 			}
+			attributes.put("LEVEL_MAX", record.getLevelMax());
+			attributes.put("LEVEL_MIN", record.getLevelMin());
 
 			Geometry geometry = agsGeometryFromRecord(record);
 			Graphic graphic = new Graphic(geometry, null, attributes);

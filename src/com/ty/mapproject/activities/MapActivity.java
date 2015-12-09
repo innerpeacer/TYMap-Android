@@ -1,7 +1,9 @@
 package com.ty.mapproject.activities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import android.os.Bundle;
@@ -45,8 +47,12 @@ public class MapActivity extends BaseMapViewActivity {
 			}
 		}
 
+		Map<Integer, Double> levelScale = new HashMap<Integer, Double>();
+		levelScale.put(1, 800.0);
+		mapView.setScaleLevels(levelScale);
+
 		mapView.setHighlightPoiOnSelection(true);
-		mapView.setLabelOverlapDetectingEnabled(false);
+		// mapView.setLabelOverlapDetectingEnabled(false);
 
 		graphicsLayer = new GraphicsLayer();
 		mapView.addLayer(graphicsLayer);
@@ -68,6 +74,7 @@ public class MapActivity extends BaseMapViewActivity {
 		Log.i(TAG, "Clicked Point: " + mappoint.getX() + ", " + mappoint.getY());
 		Log.i(TAG, "Center: " + mapView.getCenter().getX() + ", "
 				+ mapView.getCenter().getY());
+		Log.i(TAG, "MapScale: " + mapView.getScale());
 
 		// graphicsLayer.removeAll();
 		// graphicsLayer.addGraphic(new Graphic(mappoint, new

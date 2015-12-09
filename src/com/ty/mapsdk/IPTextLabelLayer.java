@@ -56,8 +56,15 @@ class IPTextLabelLayer extends GraphicsLayer {
 	}
 
 	private synchronized void updateLabelBorders(List<IPLabelBorder> array) {
+		int currentLevel = groupLayer.getMapView().getCurrentLevel();
+
 		if (groupLayer.getMapView().isLabelOverlapDetectingEnabled()) {
 			for (IPTextLabel tl : allTextLabels) {
+				if (!(currentLevel <= tl.maxLevel && currentLevel >= tl.minLevel)) {
+					tl.setHidden(true);
+					continue;
+				}
+
 				Point screenPoint = groupLayer.getMapView().toScreenPoint(
 						tl.getPosition());
 				if (screenPoint == null) {
@@ -84,7 +91,12 @@ class IPTextLabelLayer extends GraphicsLayer {
 			}
 		} else {
 			for (IPTextLabel tl : allTextLabels) {
-				tl.setHidden(false);
+				if (currentLevel <= tl.maxLevel && currentLevel >= tl.minLevel) {
+					tl.setHidden(false);
+				} else {
+					tl.setHidden(true);
+				}
+				// tl.setHidden(false);
 			}
 		}
 
@@ -123,9 +135,22 @@ class IPTextLabelLayer extends GraphicsLayer {
 			// Log.i(TAG, graphic + "");
 			String name = (String) graphic.getAttributeValue(field);
 
+			int maxLevel = (Integer) graphic
+					.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_LEVEL_MAX);
+			int minLevel = (Integer) graphic
+					.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_LEVEL_MIN);
+
 			if (name != null && name.length() > 0) {
 				Point pos = (Point) graphic.getGeometry();
 				IPTextLabel textLabel = new IPTextLabel(name, pos);
+
+				if (maxLevel != 0) {
+					textLabel.maxLevel = maxLevel;
+				}
+
+				if (minLevel != 0) {
+					textLabel.minLevel = minLevel;
+				}
 
 				String poiID = (String) graphic
 						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
