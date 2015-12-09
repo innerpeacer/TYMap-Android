@@ -87,6 +87,27 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	double lastMapRotation = 0.0;
 	double lastMapScale = 0.0;
 
+	private boolean isLabelOverlappingDetectingEnabled = true;
+
+	/**
+	 * 设置是否启用标识重叠检测
+	 * 
+	 * @param enabled
+	 *            是否启用
+	 */
+	public void setLabelOverlapDetectingEnabled(boolean enabled) {
+		isLabelOverlappingDetectingEnabled = enabled;
+	}
+
+	/**
+	 * 当前是否启用标识重叠检测
+	 * 
+	 * @return 是否启用
+	 */
+	public boolean isLabelOverlapDetectingEnabled() {
+		return isLabelOverlappingDetectingEnabled;
+	}
+
 	/**
 	 * 设置被占用车位颜色
 	 * 

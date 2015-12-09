@@ -9,10 +9,6 @@
 package com.ty.mapsdk.swig;
 
 public class IPMapSDK {
-  public static String md5(String str) {
-    return IPMapSDKJNI.md5(str);
-  }
-
   public static String decryptString(String str) {
     return IPMapSDKJNI.decryptString__SWIG_0(str);
   }
@@ -39,6 +35,10 @@ public class IPMapSDK {
 
   public static String decryptFile(String file, String key) {
     return IPMapSDKJNI.decryptFile__SWIG_1(file, key);
+  }
+
+  public static String md5(String str) {
+    return IPMapSDKJNI.md5(str);
   }
 
   public static boolean checkValidity(String userID, String license, String buildingID) {

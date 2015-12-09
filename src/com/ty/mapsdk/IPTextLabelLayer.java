@@ -56,31 +56,38 @@ class IPTextLabelLayer extends GraphicsLayer {
 	}
 
 	private synchronized void updateLabelBorders(List<IPLabelBorder> array) {
-		for (IPTextLabel tl : allTextLabels) {
-			Point screenPoint = groupLayer.getMapView().toScreenPoint(
-					tl.getPosition());
-			if (screenPoint == null) {
-				continue;
-			}
+		if (groupLayer.getMapView().isLabelOverlapDetectingEnabled()) {
+			for (IPTextLabel tl : allTextLabels) {
+				Point screenPoint = groupLayer.getMapView().toScreenPoint(
+						tl.getPosition());
+				if (screenPoint == null) {
+					continue;
+				}
 
-			IPLabelBorder border = IPLabelBorderCalculator.getTextLabelBorder(
-					tl, screenPoint);
+				IPLabelBorder border = IPLabelBorderCalculator
+						.getTextLabelBorder(tl, screenPoint);
 
-			boolean isOverlapping = false;
-			for (IPLabelBorder visibleBorder : array) {
-				if (IPLabelBorder.CheckIntersect(border, visibleBorder)) {
-					isOverlapping = true;
-					break;
+				boolean isOverlapping = false;
+				for (IPLabelBorder visibleBorder : array) {
+					if (IPLabelBorder.CheckIntersect(border, visibleBorder)) {
+						isOverlapping = true;
+						break;
+					}
+				}
+
+				if (isOverlapping) {
+					tl.setHidden(true);
+				} else {
+					tl.setHidden(false);
+					array.add(border);
 				}
 			}
-
-			if (isOverlapping) {
-				tl.setHidden(true);
-			} else {
+		} else {
+			for (IPTextLabel tl : allTextLabels) {
 				tl.setHidden(false);
-				array.add(border);
 			}
 		}
+
 	}
 
 	private void updateLabelState() {

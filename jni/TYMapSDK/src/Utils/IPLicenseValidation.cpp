@@ -11,8 +11,9 @@
 #include "MD5.hpp"
 
 using namespace std;
+using namespace Innerpeacer::MapSDK::Encryption;
 
-bool checkValidity(std::string userID, std::string license, std::string buildingID)
+bool Innerpeacer::MapSDK::License::checkValidity(std::string userID, std::string license, std::string buildingID)
 {
     if (userID.length() < 18) {
         printf("Invalid UserID.\n");
@@ -58,7 +59,7 @@ bool checkValidity(std::string userID, std::string license, std::string building
     }
 }
 
-std::string getExpiredDate(std::string userID, std::string license, std::string buildingID)
+std::string Innerpeacer::MapSDK::License::getExpiredDate(std::string userID, std::string license, std::string buildingID)
 {
     if (userID.length() < 18) {
         printf("Invalid UserID.\n");

@@ -10,6 +10,9 @@
 
 #include <string>
 
+namespace Innerpeacer {
+namespace MapSDK {
 std::string md5(std::string str);
-
+}
+}
 #endif /* MD5UTILS_H_ */

@@ -9,25 +9,27 @@
 #include "IPEncryption.hpp"
 #include "IPMemory.h"
 
+using namespace Innerpeacer::MapSDK::Encryption;
+
 const char *KEY = "6^)(9-p35@%3#4S!4S0)$Y%%^&5(j.&^&o(*0)$Y%!#O@*GpG@=+@j.&6^)(0-=+";
 const char *PASSWORD_FOR_CONTENT = "innerpeacer-content";
 
-std::string decryptString(std::string str)
+std::string Innerpeacer::MapSDK::Encryption::decryptString(std::string str)
 {
     return encryptString(str, KEY);
 }
 
-std::string encryptString(std::string originalString)
+std::string Innerpeacer::MapSDK::Encryption::encryptString(std::string originalString)
 {
     return encryptString(originalString, KEY);
 }
 
-std::string decryptString(std::string str, std::string key)
+std::string Innerpeacer::MapSDK::Encryption::decryptString(std::string str, std::string key)
 {
     return encryptString(str, key);
 }
 
-std::string encryptString(std::string originalString, std::string key)
+std::string Innerpeacer::MapSDK::Encryption::encryptString(std::string originalString, std::string key)
 {
     int passLength = (int)strlen(PASSWORD_FOR_CONTENT);
     int keyLength = (int)key.length();
@@ -156,12 +158,12 @@ std::string encryptString(std::string originalString, std::string key)
 //    fclose(f);
 //}
 
-void encryptFile(const char *originalPath, const char *encryptedFile)
+void Innerpeacer::MapSDK::Encryption::encryptFile(const char *originalPath, const char *encryptedFile)
 {
     encryptFile(originalPath, encryptedFile, KEY);
 }
 
-void encryptFile(const char *originalPath, const char *encryptedFile, const char *key)
+void Innerpeacer::MapSDK::Encryption::encryptFile(const char *originalPath, const char *encryptedFile, const char *key)
 {
     int passLength = (int)strlen(PASSWORD_FOR_CONTENT);
     int keyLength = (int)strlen(key);
@@ -211,12 +213,12 @@ void encryptFile(const char *originalPath, const char *encryptedFile, const char
     delete originalValue;
 }
 
-void encryptBytes(const char *originalBytes, char *encryptedByte, int length)
+void Innerpeacer::MapSDK::Encryption::encryptBytes(const char *originalBytes, char *encryptedByte, int length)
 {
     encryptBytes(originalBytes, encryptedByte, length, KEY);
 }
 
-void encryptBytes(const char *originalBytes, char *encryptedByte, int length, const char *key)
+void Innerpeacer::MapSDK::Encryption::encryptBytes(const char *originalBytes, char *encryptedByte, int length, const char *key)
 {
     int passLength = (int)strlen(PASSWORD_FOR_CONTENT);
     int keyLength = (int)strlen(key);
@@ -253,12 +255,12 @@ void encryptBytes(const char *originalBytes, char *encryptedByte, int length, co
 
 }
 
-void decryptBytes(const char *encryptedBytes, char *originalBytes, int length)
+void Innerpeacer::MapSDK::Encryption::decryptBytes(const char *encryptedBytes, char *originalBytes, int length)
 {
     decryptBytes(encryptedBytes, originalBytes, length, KEY);
 }
 
-void decryptBytes(const char *encryptedBytes, char *originalBytes, int length, const char *key)
+void Innerpeacer::MapSDK::Encryption::decryptBytes(const char *encryptedBytes, char *originalBytes, int length, const char *key)
 {
     encryptBytes(encryptedBytes, originalBytes, length, key);
 }
@@ -303,12 +305,12 @@ void decryptBytes(const char *encryptedBytes, char *originalBytes, int length, c
 //    return originalValue;
 //}
 
-std::string decryptFile(const char *file)
+std::string Innerpeacer::MapSDK::Encryption::decryptFile(const char *file)
 {
     return decryptFile(file, KEY);
 }
 
-std::string decryptFile(const char *file, const char *key)
+std::string Innerpeacer::MapSDK::Encryption::decryptFile(const char *file, const char *key)
 {
     int passLength = (int)strlen(PASSWORD_FOR_CONTENT);
     int keyLength = (int)strlen(key);

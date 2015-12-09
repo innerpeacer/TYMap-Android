@@ -9,6 +9,7 @@
 #include "MD5.hpp"
 
 using namespace std;
+using namespace Innerpeacer::MapSDK;
 
 /* Constants for MD5Transform routine. */
 #define S11 7

@@ -11,7 +11,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-IPMemory *mOpen(const char *fName) {
+using namespace Innerpeacer::MapSDK;
+
+IPMemory *Innerpeacer::MapSDK::mOpen(const char *fName) {
     FILE *f;
     f = fopen(fName, "rb");
     
@@ -34,7 +36,7 @@ IPMemory *mOpen(const char *fName) {
     return memory;
 }
 
-IPMemory *mClose(IPMemory *memory) {
+IPMemory *Innerpeacer::MapSDK::mClose(IPMemory *memory) {
     if (memory->buffer) {
         free(memory->buffer);
     }
@@ -42,7 +44,7 @@ IPMemory *mClose(IPMemory *memory) {
     return NULL;
 }
 
-unsigned int mRead(IPMemory *memory, void *dst, unsigned int size) {
+unsigned int Innerpeacer::MapSDK::mRead(IPMemory *memory, void *dst, unsigned int size) {
     if (memory->position + size > memory->size) {
         size = memory->size - memory->position;
     }
@@ -52,7 +54,7 @@ unsigned int mRead(IPMemory *memory, void *dst, unsigned int size) {
     return size;
 }
 
-void mInsert(IPMemory *memory, char *str, unsigned int position) {
+void Innerpeacer::MapSDK::mInsert(IPMemory *memory, char *str, unsigned int position) {
     unsigned int s1 = (unsigned int) strlen(str);
     unsigned int s2 = memory->size + s1 + 1;
     

@@ -262,7 +262,6 @@ class IPMapDBAdapter {
 					.getDouble(9)));
 			building.setStatus(10);
 		}
-
 		return building;
 	}
 

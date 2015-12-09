@@ -46,6 +46,7 @@ public class MapActivity extends BaseMapViewActivity {
 		}
 
 		mapView.setHighlightPoiOnSelection(true);
+		mapView.setLabelOverlapDetectingEnabled(false);
 
 		graphicsLayer = new GraphicsLayer();
 		mapView.addLayer(graphicsLayer);

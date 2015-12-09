@@ -8,7 +8,9 @@
 #include "MD5Utils.hpp"
 #include "MD5.hpp"
 
-std::string md5(std::string str)
+using namespace Innerpeacer::MapSDK;
+
+std::string Innerpeacer::MapSDK::md5(std::string str)
 {
     MD5 md5(str.c_str());
     return md5.toString();

@@ -241,6 +241,8 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 using namespace std;
 using namespace Innerpeacer::MapSDK;
 using namespace Innerpeacer::MapSDK::GeosGeometryCaster;
+using namespace Innerpeacer::MapSDK::Encryption;
+using namespace Innerpeacer::MapSDK::License;
 
 using namespace geos;
 using namespace geos::geom;
@@ -717,27 +719,6 @@ SWIGEXPORT jlong JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_IPXGeosMultiPolygon
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_md5(JNIEnv *jenv, jclass jcls, jstring jarg1) {
-  jstring jresult = 0 ;
-  std::string arg1 ;
-  std::string result;
-  
-  (void)jenv;
-  (void)jcls;
-  if(!jarg1) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
-    return 0;
-  } 
-  const char *arg1_pstr = (const char *)jenv->GetStringUTFChars(jarg1, 0); 
-  if (!arg1_pstr) return 0;
-  (&arg1)->assign(arg1_pstr);
-  jenv->ReleaseStringUTFChars(jarg1, arg1_pstr); 
-  result = md5(arg1);
-  jresult = jenv->NewStringUTF((&result)->c_str()); 
-  return jresult;
-}
-
-
 SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptString_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jstring jresult = 0 ;
   std::string arg1 ;
@@ -753,7 +734,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptString_1_1
   if (!arg1_pstr) return 0;
   (&arg1)->assign(arg1_pstr);
   jenv->ReleaseStringUTFChars(jarg1, arg1_pstr); 
-  result = decryptString(arg1);
+  result = Innerpeacer::MapSDK::Encryption::decryptString(arg1);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
@@ -774,7 +755,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_encryptString_1_1
   if (!arg1_pstr) return 0;
   (&arg1)->assign(arg1_pstr);
   jenv->ReleaseStringUTFChars(jarg1, arg1_pstr); 
-  result = encryptString(arg1);
+  result = Innerpeacer::MapSDK::Encryption::encryptString(arg1);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
@@ -792,7 +773,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptFile_1_1SW
     arg1 = (char *)jenv->GetStringUTFChars(jarg1, 0);
     if (!arg1) return 0;
   }
-  result = decryptFile((char const *)arg1);
+  result = Innerpeacer::MapSDK::Encryption::decryptFile((char const *)arg1);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   if (arg1) jenv->ReleaseStringUTFChars(jarg1, (const char *)arg1);
   return jresult;
@@ -823,7 +804,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptString_1_1
   if (!arg2_pstr) return 0;
   (&arg2)->assign(arg2_pstr);
   jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-  result = decryptString(arg1,arg2);
+  result = Innerpeacer::MapSDK::Encryption::decryptString(arg1,arg2);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
@@ -853,7 +834,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_encryptString_1_1
   if (!arg2_pstr) return 0;
   (&arg2)->assign(arg2_pstr);
   jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-  result = encryptString(arg1,arg2);
+  result = Innerpeacer::MapSDK::Encryption::encryptString(arg1,arg2);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
@@ -881,7 +862,7 @@ SWIGEXPORT void JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_encryptFile(JNIEnv *
     arg3 = (char *)jenv->GetStringUTFChars(jarg3, 0);
     if (!arg3) return ;
   }
-  encryptFile((char const *)arg1,(char const *)arg2,(char const *)arg3);
+  Innerpeacer::MapSDK::Encryption::encryptFile((char const *)arg1,(char const *)arg2,(char const *)arg3);
   if (arg1) jenv->ReleaseStringUTFChars(jarg1, (const char *)arg1);
   if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
   if (arg3) jenv->ReleaseStringUTFChars(jarg3, (const char *)arg3);
@@ -906,10 +887,31 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_decryptFile_1_1SW
     arg2 = (char *)jenv->GetStringUTFChars(jarg2, 0);
     if (!arg2) return 0;
   }
-  result = decryptFile((char const *)arg1,(char const *)arg2);
+  result = Innerpeacer::MapSDK::Encryption::decryptFile((char const *)arg1,(char const *)arg2);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   if (arg1) jenv->ReleaseStringUTFChars(jarg1, (const char *)arg1);
   if (arg2) jenv->ReleaseStringUTFChars(jarg2, (const char *)arg2);
+  return jresult;
+}
+
+
+SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_md5(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+  jstring jresult = 0 ;
+  std::string arg1 ;
+  std::string result;
+  
+  (void)jenv;
+  (void)jcls;
+  if(!jarg1) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
+    return 0;
+  } 
+  const char *arg1_pstr = (const char *)jenv->GetStringUTFChars(jarg1, 0); 
+  if (!arg1_pstr) return 0;
+  (&arg1)->assign(arg1_pstr);
+  jenv->ReleaseStringUTFChars(jarg1, arg1_pstr); 
+  result = Innerpeacer::MapSDK::md5(arg1);
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
 
@@ -947,7 +949,7 @@ SWIGEXPORT jboolean JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_checkValidity(JN
   if (!arg3_pstr) return 0;
   (&arg3)->assign(arg3_pstr);
   jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
-  result = (bool)checkValidity(arg1,arg2,arg3);
+  result = (bool)Innerpeacer::MapSDK::License::checkValidity(arg1,arg2,arg3);
   jresult = (jboolean)result; 
   return jresult;
 }
@@ -986,7 +988,7 @@ SWIGEXPORT jstring JNICALL Java_com_ty_mapsdk_swig_IPMapSDKJNI_getExpiredDate(JN
   if (!arg3_pstr) return 0;
   (&arg3)->assign(arg3_pstr);
   jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
-  result = getExpiredDate(arg1,arg2,arg3);
+  result = Innerpeacer::MapSDK::License::getExpiredDate(arg1,arg2,arg3);
   jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }

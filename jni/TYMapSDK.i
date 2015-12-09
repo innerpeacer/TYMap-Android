@@ -24,6 +24,8 @@
 using namespace std;
 using namespace Innerpeacer::MapSDK;
 using namespace Innerpeacer::MapSDK::GeosGeometryCaster;
+using namespace Innerpeacer::MapSDK::Encryption;
+using namespace Innerpeacer::MapSDK::License;
 
 using namespace geos;
 using namespace geos::geom;

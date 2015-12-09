@@ -57,29 +57,35 @@ class IPFacilityLayer extends GraphicsLayer {
 	}
 
 	private synchronized void updateLabelBorders(List<IPLabelBorder> array) {
-		for (IPFacilityLabel fl : facilityLabelDict.values()) {
-			Point screenPoint = groupLayer.getMapView().toScreenPoint(
-					fl.getPosition());
-			if (screenPoint == null) {
-				continue;
-			}
+		if (groupLayer.getMapView().isLabelOverlapDetectingEnabled()) {
+			for (IPFacilityLabel fl : facilityLabelDict.values()) {
+				Point screenPoint = groupLayer.getMapView().toScreenPoint(
+						fl.getPosition());
+				if (screenPoint == null) {
+					continue;
+				}
 
-			IPLabelBorder border = IPLabelBorderCalculator
-					.getFacilityLabelBorder(screenPoint);
+				IPLabelBorder border = IPLabelBorderCalculator
+						.getFacilityLabelBorder(screenPoint);
 
-			boolean isOverlapping = false;
-			for (IPLabelBorder visibleBorder : array) {
-				if (IPLabelBorder.CheckIntersect(border, visibleBorder)) {
-					isOverlapping = true;
-					break;
+				boolean isOverlapping = false;
+				for (IPLabelBorder visibleBorder : array) {
+					if (IPLabelBorder.CheckIntersect(border, visibleBorder)) {
+						isOverlapping = true;
+						break;
+					}
+				}
+
+				if (isOverlapping) {
+					fl.setHidden(true);
+				} else {
+					fl.setHidden(false);
+					array.add(border);
 				}
 			}
-
-			if (isOverlapping) {
-				fl.setHidden(true);
-			} else {
+		} else {
+			for (IPFacilityLabel fl : facilityLabelDict.values()) {
 				fl.setHidden(false);
-				array.add(border);
 			}
 		}
 	}

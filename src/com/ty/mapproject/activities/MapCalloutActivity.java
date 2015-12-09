@@ -26,7 +26,6 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		mapCallout = mapView.getCallout();
 	}
 
@@ -37,9 +36,15 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 
 	@Override
 	public void onClickAtPoint(TYMapView mapView, Point mappoint) {
-		// Log.i(TAG, "onClickAtPoint: " + mappoint);
+		Log.i(TAG, "onClickAtPoint: " + mappoint);
 
-		mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(), mappoint.getY());
+		TYPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
+				mappoint.getY());
+		if (poi == null) {
+			Log.i(TAG, "poi: " + null);
+		} else {
+			Log.i(TAG, "poi: " + poi);
+		}
 	}
 
 	private View loadCalloutView(String title, String detail) {

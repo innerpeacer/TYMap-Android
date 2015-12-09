@@ -11,6 +11,7 @@
 
 using namespace std;
 using namespace Innerpeacer::MapSDK;
+using namespace Innerpeacer::MapSDK::Encryption;
 
 #include <geos/geom.h>
 #include <geos/io.h>
