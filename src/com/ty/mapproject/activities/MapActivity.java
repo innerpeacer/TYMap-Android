@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -47,6 +48,7 @@ public class MapActivity extends BaseMapViewActivity {
 			}
 		}
 
+		@SuppressLint("UseSparseArrays")
 		Map<Integer, Double> levelScale = new HashMap<Integer, Double>();
 		levelScale.put(1, 800.0);
 		mapView.setScaleLevels(levelScale);
