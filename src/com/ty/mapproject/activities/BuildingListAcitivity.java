@@ -37,7 +37,6 @@ public class BuildingListAcitivity extends ListActivity {
 		Intent intent = new Intent(this, BuildingMapViewActivity.class);
 		intent.putExtra("cityID", building.getCityID());
 		intent.putExtra("buildingID", building.getBuildingID());
-
 		startActivity(intent);
 	}
 }

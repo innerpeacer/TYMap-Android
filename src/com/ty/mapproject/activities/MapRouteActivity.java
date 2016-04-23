@@ -63,17 +63,6 @@ public class MapRouteActivity extends BaseMapViewActivity implements
 				TYMapEnvironment.defaultUserCredentials(), mapInfos);
 		routeManager.addRouteManagerListener(this);
 
-		endPoint = new TYLocalPoint(1779.204079, 581.868337, 7);
-		startPoint = new TYLocalPoint(1917, 558, 7);
-
-		// IPXGeosCoordinate coord = new IPXGeosCoordinate();
-		// coord.setX(0);
-		// coord.setY(0);
-		//
-		// IPXGeosGeometryFactory factory = new IPXGeosGeometryFactory();
-		//
-		// IPXGeosPoint point = factory.createPoint(coord);
-		// Log.i(TAG, "Geos Point: " + point.getX() + ", " + point.getY());
 	}
 
 	@Override
@@ -281,29 +270,6 @@ public class MapRouteActivity extends BaseMapViewActivity implements
 			} else {
 				mapView.showRemainingRouteResultOnCurrentFloor(localPoint);
 			}
-
-			// NPRoutePart nearestPart = routeResult
-			// .getNearestRoutePart(localPoint);
-			// if (nearestPart != currentRoutePart) {
-			// currentRoutePart = nearestPart;
-			// routeGuides = routeResult
-			// .getRouteDirectionalHint(currentRoutePart);
-			// }
-			//
-			// if (routeGuides != null && routeGuides.size() > 0) {
-			// NPDirectionalHint hint = routeResult
-			// .getDirectionalHintForLocationFromHints(localPoint,
-			// routeGuides);
-			// mapView.showRouteHint(hint, true);
-			//
-			// String hintString = "";
-			// if (hint.hasLandmark()) {
-			// hintString += hint.getLandmarkString();
-			// }
-			// hintString += hint.getDirectionString();
-			//
-			// routeHintLabel.setText(hintString);
-			// }
 		}
 	}
 

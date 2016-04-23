@@ -20,6 +20,7 @@ import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
 import com.ty.mapsdk.TYMapView.TYMapViewListenser;
+import com.ty.mapsdk.TYPictureMarkerSymbol;
 import com.ty.mapsdk.TYPoi;
 
 public abstract class BaseMapViewActivity extends Activity implements
@@ -119,7 +120,15 @@ public abstract class BaseMapViewActivity extends Activity implements
 
 		Map<String, String> dict = LicenseManager
 				.getLicenseForBuilding(currentBuilding.getBuildingID());
+
+		TYPictureMarkerSymbol pms = new TYPictureMarkerSymbol(getResources()
+				.getDrawable(R.drawable.poi_showcase));
+		pms.setWidth(15);
+		pms.setHeight(15);
+		System.out.println(pms + "");
+
 		mapView.init(currentBuilding, dict.get("UserID"), dict.get("License"));
+		mapView.setPointSymbol(pms);
 
 		startLoadTime = System.currentTimeMillis();
 		Log.i(TAG, "Before Load:" + startLoadTime);
@@ -168,14 +177,12 @@ public abstract class BaseMapViewActivity extends Activity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		mapView.unpause();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		mapView.pause();
 	}
 }

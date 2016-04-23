@@ -19,10 +19,12 @@ import com.esri.core.geometry.Point;
 import com.esri.core.map.Graphic;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.ty.mapdata.TYBuilding;
+import com.ty.mapdata.TYCity;
 import com.ty.mapdata.TYLocalPoint;
 import com.ty.mapproject.R;
 import com.ty.mapproject.settings.TYUserDefaults;
 import com.ty.mapsdk.TYBuildingManager;
+import com.ty.mapsdk.TYCityManager;
 import com.ty.mapsdk.TYMapEnvironment;
 import com.ty.mapsdk.TYMapInfo;
 import com.ty.mapsdk.TYMapView;
@@ -41,6 +43,7 @@ public class BuildingMapViewActivity extends Activity implements
 	TYMapView mapView;
 	ListView floorListView;
 
+	TYCity currentCity;
 	TYBuilding currentBuilding;
 	List<TYMapInfo> mapInfos;
 	TYMapInfo currentMapInfo;
@@ -75,6 +78,8 @@ public class BuildingMapViewActivity extends Activity implements
 
 		String cityID = getIntent().getStringExtra("cityID");
 		String buildingID = getIntent().getStringExtra("buildingID");
+
+		currentCity = TYCityManager.parseCityFromFilesById(this, cityID);
 		currentBuilding = TYBuildingManager.parseBuildingFromFilesById(this,
 				cityID, buildingID);
 		mapInfos = TYMapInfo.parseMapInfoFromFiles(this, cityID, buildingID);
@@ -269,7 +274,6 @@ public class BuildingMapViewActivity extends Activity implements
 	public void didFailSolveRouteWithError(TYOfflineRouteManager routeManager,
 			Exception e) {
 		Log.i(TAG, "TYOfflineRouteManager.didFailSolveRouteWithError");
-
 	}
 
 	public void onFinishLoadingFloor(TYMapView mapView, TYMapInfo mapInfo) {
@@ -291,14 +295,12 @@ public class BuildingMapViewActivity extends Activity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		mapView.unpause();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		mapView.pause();
 	}
 

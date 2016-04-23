@@ -129,6 +129,41 @@ class IPMapDBAdapter {
 		return city;
 	}
 
+	public List<TYBuilding> getAllBuildings() {
+		List<TYBuilding> buildingArray = new ArrayList<TYBuilding>();
+		String[] columns = new String[] { FIELD_BUILDING_CITY_ID,
+				FIELD_BUILDING_ID, FIELD_BUILDING_NAME,
+				FIELD_BUILDING_LONGITUDE, FIELD_BUILDING_LATITUDE,
+				FIELD_BUILDING_ADDRESS, FIELD_BUILDING_INIT_ANGLE,
+				FIELD_BUILDING_ROUTE_URL, FIELD_BUILDING_OFFSET_X,
+				FIELD_BUILDING_OFFSET_Y, FIELD_BUILDING_STATUS };
+
+		Cursor c = db.query(true, TABLE_BUILDING, columns, null, null, null,
+				null, null, null, null);
+
+		if (c != null && c.moveToFirst()) {
+			do {
+				TYBuilding building = new TYBuilding();
+
+				building.setCityID(c.getString(0));
+				building.setBuildingID(c.getString(1));
+				building.setName(c.getString(2));
+				building.setLongitude(c.getDouble(3));
+				building.setLatitude(c.getDouble(4));
+				building.setAddress(c.getString(5));
+				building.setInitAngle(c.getDouble(6));
+				building.setRouteURL(c.getString(7));
+				building.setOffset(building.new OffsetSize(c.getDouble(8), c
+						.getDouble(9)));
+				building.setStatus(10);
+
+				buildingArray.add(building);
+			} while (c.moveToNext());
+		}
+
+		return buildingArray;
+	}
+
 	public List<TYBuilding> getAllBuildings(String cityID) {
 		List<TYBuilding> buildingArray = new ArrayList<TYBuilding>();
 		String[] columns = new String[] { FIELD_BUILDING_CITY_ID,

@@ -13,6 +13,22 @@ import com.ty.mapdata.TYBuilding;
  * 
  */
 public class TYBuildingManager {
+	/**
+	 * 从外部存储目录解析所有建筑信息列表
+	 * 
+	 * @param context
+	 *            上下文环境
+	 * 
+	 * @return 建筑类数组
+	 */
+	public static List<TYBuilding> parseAllBuildingsFromFiles(Context context) {
+		String dbPath = IPMapFileManager.getMapDBPath();
+		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		db.open();
+		List<TYBuilding> buildingArray = db.getAllBuildings();
+		db.close();
+		return buildingArray;
+	}
 
 	/**
 	 * 从外部存储目录解析所有建筑信息列表

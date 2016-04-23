@@ -91,7 +91,6 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 				mapView.setExtent(rp.getRoute());
 				// mapView.checkLabels();
 			}
-
 			mapView.showRouteResultOnCurrentFloor();
 		}
 	};
@@ -133,13 +132,10 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		}
 
 		if (startPoint == null || endPoint == null) {
-			// Toast.makeText(getBaseContext(), "需要两个点请求路径！", Toast.LENGTH_LONG)
-			// .show();
 			return;
 		}
 		mapView.showRouteStartSymbolOnCurrentFloor(startPoint);
 		mapView.showRouteEndSymbolOnCurrentFloor(endPoint);
-
 		mapView.resetRouteLayer();
 
 		routeResult = null;
@@ -147,9 +143,6 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 
 		Log.i(TAG, startPoint.getX() + "");
 		Log.i(TAG, startPoint.getY() + "");
-
-		// startPoint = new TYLocalPoint(13402386.8918, 4287405.314801339, 1);
-		// endPoint = new TYLocalPoint(13402418.04687074, 4287369.954955366, 1);
 
 		mapView.showRouteStartSymbolOnCurrentFloor(startPoint);
 		mapView.showRouteEndSymbolOnCurrentFloor(endPoint);
@@ -199,7 +192,6 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 	@Override
 	public void mapViewDidZoomed(TYMapView mapView) {
 		super.mapViewDidZoomed(mapView);
-
 		if (isRouting) {
 			mapView.showRouteResultOnCurrentFloor();
 		}

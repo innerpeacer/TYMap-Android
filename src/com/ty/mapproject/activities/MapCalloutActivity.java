@@ -37,7 +37,6 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 	@Override
 	public void onClickAtPoint(TYMapView mapView, Point mappoint) {
 		Log.i(TAG, "onClickAtPoint: " + mappoint);
-
 		TYPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
 				mappoint.getY());
 		if (poi == null) {
@@ -100,6 +99,5 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 	@Override
 	public void mapViewDidZoomed(TYMapView mapView) {
 		// Log.i(TAG, "mapViewDidZoomed");
-
 	}
 }

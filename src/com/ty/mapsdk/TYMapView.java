@@ -59,6 +59,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private IPStructureGroupLayer structureGroupLayer;
 	private IPParkingLayer parkingLayer;
 	private IPLabelGroupLayer labelGroupLayer;
+	private IPPointLayer pointLayer;
 
 	private IPRouteLayer routeLayer;
 	private IPAnimatedRouteArrowLayer animatedRouteArrowLayer;
@@ -103,6 +104,10 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	public void setScaleLevels(Map<Integer, Double> dict) {
 		scaleLevelDict.clear();
 		scaleLevelDict.putAll(dict);
+	}
+
+	public void setPointSymbol(MarkerSymbol ms) {
+		pointLayer.setMarkerSymbol(ms);
 	}
 
 	/**
@@ -310,6 +315,9 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		labelGroupLayer.setBrandDict(allBrandDict);
 		addLayer(labelGroupLayer);
 
+		pointLayer = new IPPointLayer(context, sr);
+		addLayer(pointLayer);
+
 		routeLayer = new IPRouteLayer(this);
 		addLayer(routeLayer);
 
@@ -406,6 +414,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		parkingLayer.removeAll();
 		structureGroupLayer.removeGraphicsFromSublayers();
 		labelGroupLayer.removeGraphicsFromSublayers();
+		pointLayer.removeAll();
 
 		routeLayer.removeAll();
 		routeHintLayer.removeAll();
@@ -462,6 +471,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				if (!isInterupted) {
 					labelGroupLayer.loadLabelContents(mapDataDictionary
 							.get("label"));
+					pointLayer.loadContents(currentMapInfo);
 				}
 
 				if (!isInterupted) {
@@ -494,6 +504,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				if (isInterupted) {
 					structureGroupLayer.removeGraphicsFromSublayers();
 					labelGroupLayer.removeGraphicsFromSublayers();
+					pointLayer.removeAll();
 					locationLayer.removeLocation();
 				}
 

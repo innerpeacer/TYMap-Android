@@ -2,6 +2,7 @@
 
     <string name="app_name">图呀地图</string>
     <string name="map_activity_title">图呀地图 Demo</string>
+    <string name="switch_map_activity_title">切换地图</string>
     <string name="map_route_activity_title">地图导航 Demo</string>
     <string name="map_callout_activity_title">地图Callout Demo</string>
     <string name="location_activity_title">图呀定位</string>
