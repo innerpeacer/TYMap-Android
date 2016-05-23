@@ -26,6 +26,8 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// 获取地图Callout组件
 		mapCallout = mapView.getCallout();
 	}
 
@@ -34,6 +36,7 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 		contentViewID = R.layout.activity_map_callout;
 	}
 
+	// 点击地图回调方法
 	@Override
 	public void onClickAtPoint(TYMapView mapView, Point mappoint) {
 		Log.i(TAG, "onClickAtPoint: " + mappoint);
@@ -46,6 +49,7 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 		}
 	}
 
+	// 加载自定义弹出框内容
 	private View loadCalloutView(String title, String detail) {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		View view = inflater.inflate(R.layout.layout_callout, null);
@@ -56,6 +60,7 @@ public class MapCalloutActivity extends BaseMapViewActivity {
 		return view;
 	}
 
+	// 点击选中POI回调方法
 	@Override
 	public void onPoiSelected(TYMapView mapView, List<TYPoi> poiList) {
 		Log.i(TAG, "onPoiSelected: " + poiList.size());
