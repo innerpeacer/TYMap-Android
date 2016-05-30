@@ -1,21 +1,11 @@
 package com.ty.mapsdk;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
+import android.util.Log;
 
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
@@ -27,25 +17,30 @@ import com.ty.mapdata.TYBuilding;
 public class TYRenderingScheme {
 	static final String TAG = TYRenderingScheme.class.getSimpleName();
 
-	private static final String JSON_FIELD_ROOT_RENDERING_SCHEME = "RenderingScheme";
-
-	private static final String JSON_FIELD_FIRST_DEFAULT_SYMBOL = "DefaultSymbol";
-	private static final String JSON_FIELD_FIRST_FILL_SYMBOL = "FillSymbol";
-	private static final String JSON_FIELD_FIRST_ICON_SYMBOL = "IconSymbol";
-
-	private static final String JSON_FIELD_SECOND_DEFAULT_FILL_SYMBOL = "DefaultFillSymbol";
-	private static final String JSON_FIELD_SECOND_DEFAULT_HIGHLIGHT_SYMBOL = "DefaultHighlightFillSymbol";
+	// private static final String JSON_FIELD_ROOT_RENDERING_SCHEME =
+	// "RenderingScheme";
+	//
+	// private static final String JSON_FIELD_FIRST_DEFAULT_SYMBOL =
+	// "DefaultSymbol";
+	// private static final String JSON_FIELD_FIRST_FILL_SYMBOL = "FillSymbol";
+	// private static final String JSON_FIELD_FIRST_ICON_SYMBOL = "IconSymbol";
+	//
+	// private static final String JSON_FIELD_SECOND_DEFAULT_FILL_SYMBOL =
+	// "DefaultFillSymbol";
+	// private static final String JSON_FIELD_SECOND_DEFAULT_HIGHLIGHT_SYMBOL =
+	// "DefaultHighlightFillSymbol";
 	// private static final String JSON_FIELD_SECOND_DEFAULT_LINE_SYMBOL =
 	// "DefaultLineSymbol";
 	// private static final String
 	// JSON_FIELD_SECOND_DEFAULT_HIGHLIGHT_LINE_SYMBOL =
 	// "DefaultHighlightLineSymbol";
 
-	private static final String JSON_FIELD_LEAVE_COLOR_ID = "colorID";
-	private static final String JSON_FIELD_LEAVE_FILL_COLOR = "fillColor";
-	private static final String JSON_FIELD_LEAVE_OUTLINE_COLOR = "outlineColor";
-	private static final String JSON_FIELD_LEAVE_LINE_WIDTH = "lineWidth";
-	private static final String JSON_FIELD_LEAVE_ICON = "icon";
+	// private static final String JSON_FIELD_LEAVE_COLOR_ID = "colorID";
+	// private static final String JSON_FIELD_LEAVE_FILL_COLOR = "fillColor";
+	// private static final String JSON_FIELD_LEAVE_OUTLINE_COLOR =
+	// "outlineColor";
+	// private static final String JSON_FIELD_LEAVE_LINE_WIDTH = "lineWidth";
+	// private static final String JSON_FIELD_LEAVE_ICON = "icon";
 
 	Context context;
 
@@ -93,7 +88,8 @@ public class TYRenderingScheme {
 		fillSymbolDictionary = new HashMap<Integer, SimpleFillSymbol>();
 		iconSymbolDictionary = new HashMap<Integer, String>();
 
-		parseRenderingSchemeFileFromFile(path);
+		// parseRenderingSchemeFileFromFile(path);
+		parseRenderingSchemeFromDBFile(path);
 	}
 
 	/**
@@ -105,7 +101,8 @@ public class TYRenderingScheme {
 	 *            目标建筑
 	 */
 	public TYRenderingScheme(Context context, TYBuilding building) {
-		this(context, IPMapFileManager.getRenderingScheme(building));
+		// this(context, IPMapFileManager.getRenderingScheme(building));
+		this(context, IPMapFileManager.getMapDataDBPath(building));
 	}
 
 	/**
@@ -150,108 +147,122 @@ public class TYRenderingScheme {
 		return iconSymbolDictionary;
 	}
 
-	private void parseRenderingSchemeFileFromFile(String path) {
-		// Log.i(TAG, "parseRenderingSchemeFileFromFile");
-		try {
-			FileInputStream inStream = new FileInputStream(new File(path));
-			InputStreamReader inputReader = new InputStreamReader(inStream);
-			BufferedReader bufReader = new BufferedReader(inputReader);
+	private void parseRenderingSchemeFromDBFile(String path) {
+		Log.i(TAG, "parseRenderingSchemeFromDBFile");
 
-			String line = "";
-			StringBuffer jsonStr = new StringBuffer();
-			while ((line = bufReader.readLine()) != null)
-				jsonStr.append(line);
+		IPSymbolDBAdapter db = new IPSymbolDBAdapter(path);
+		db.open();
+		Map<Integer, SimpleFillSymbol> fillDict = db.getFillSymbolDictionary();
+		Map<Integer, String> iconDict = db.getIconSymbolDictionary();
 
-			JSONObject jsonObject = new JSONObject(jsonStr.toString());
-
-			if (jsonObject != null
-					&& !jsonObject.isNull(JSON_FIELD_ROOT_RENDERING_SCHEME)) {
-				// Log.i(TAG, JSON_FIELD_ROOT_RENDERING_SCHEME);
-				JSONObject rootDict = jsonObject
-						.getJSONObject(JSON_FIELD_ROOT_RENDERING_SCHEME);
-
-				JSONObject firstDefaultSymbolDict = rootDict
-						.getJSONObject(JSON_FIELD_FIRST_DEFAULT_SYMBOL);
-				JSONArray firstFillSymbolArray = rootDict
-						.getJSONArray(JSON_FIELD_FIRST_FILL_SYMBOL);
-				JSONArray firstIconSymbolArray = rootDict
-						.getJSONArray(JSON_FIELD_FIRST_ICON_SYMBOL);
-
-				{
-					JSONObject defaultFillSymbolDict = firstDefaultSymbolDict
-							.getJSONObject(JSON_FIELD_SECOND_DEFAULT_FILL_SYMBOL);
-					int fillColor = Color.parseColor(defaultFillSymbolDict
-							.getString(JSON_FIELD_LEAVE_FILL_COLOR));
-					int outlineColor = Color.parseColor(defaultFillSymbolDict
-							.getString(JSON_FIELD_LEAVE_OUTLINE_COLOR));
-					float lineWidth = (float) defaultFillSymbolDict
-							.getDouble(JSON_FIELD_LEAVE_LINE_WIDTH);
-					defaultFillSymbol = new SimpleFillSymbol(fillColor);
-					defaultFillSymbol.setOutline(new SimpleLineSymbol(
-							outlineColor, lineWidth));
-				}
-
-				{
-					JSONObject defaultHighlightFillSymbolDict = firstDefaultSymbolDict
-							.getJSONObject(JSON_FIELD_SECOND_DEFAULT_HIGHLIGHT_SYMBOL);
-					int fillColor = Color
-							.parseColor(defaultHighlightFillSymbolDict
-									.getString(JSON_FIELD_LEAVE_FILL_COLOR));
-					int outlineColor = Color
-							.parseColor(defaultHighlightFillSymbolDict
-									.getString(JSON_FIELD_LEAVE_OUTLINE_COLOR));
-					float lineWidth = (float) defaultHighlightFillSymbolDict
-							.getDouble(JSON_FIELD_LEAVE_LINE_WIDTH);
-					defaultHighlightFillSymbol = new SimpleFillSymbol(fillColor);
-					defaultHighlightFillSymbol.setOutline(new SimpleLineSymbol(
-							outlineColor, lineWidth));
-				}
-
-				{
-					fillSymbolDictionary.clear();
-					for (int i = 0; i < firstFillSymbolArray.length(); i++) {
-						JSONObject secondDict = firstFillSymbolArray
-								.getJSONObject(i);
-						int colorID = secondDict
-								.getInt(JSON_FIELD_LEAVE_COLOR_ID);
-						int fillColor = Color.parseColor(secondDict
-								.getString(JSON_FIELD_LEAVE_FILL_COLOR));
-						int outlineColor = Color.parseColor(secondDict
-								.getString(JSON_FIELD_LEAVE_OUTLINE_COLOR));
-						float lineWidth = (float) secondDict
-								.getDouble(JSON_FIELD_LEAVE_LINE_WIDTH);
-
-						SimpleFillSymbol sfs = new SimpleFillSymbol(fillColor);
-						sfs.setOutline(new SimpleLineSymbol(outlineColor,
-								lineWidth));
-						fillSymbolDictionary.put(colorID, sfs);
-					}
-				}
-
-				{
-					iconSymbolDictionary.clear();
-					for (int i = 0; i < firstIconSymbolArray.length(); i++) {
-						JSONObject secondDict = firstIconSymbolArray
-								.getJSONObject(i);
-						int colorID = secondDict
-								.getInt(JSON_FIELD_LEAVE_COLOR_ID);
-						String icon = secondDict
-								.getString(JSON_FIELD_LEAVE_ICON);
-						iconSymbolDictionary.put(colorID, icon);
-
-					}
-				}
-			}
-
-			inputReader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
+		defaultFillSymbol = fillDict.get(9999);
+		defaultHighlightFillSymbol = fillDict.get(9998);
+		fillSymbolDictionary.putAll(fillDict);
+		iconSymbolDictionary.putAll(iconDict);
+		db.close();
 	}
+
+	// private void parseRenderingSchemeFileFromFile(String path) {
+	// // Log.i(TAG, "parseRenderingSchemeFileFromFile");
+	// try {
+	// FileInputStream inStream = new FileInputStream(new File(path));
+	// InputStreamReader inputReader = new InputStreamReader(inStream);
+	// BufferedReader bufReader = new BufferedReader(inputReader);
+	//
+	// String line = "";
+	// StringBuffer jsonStr = new StringBuffer();
+	// while ((line = bufReader.readLine()) != null)
+	// jsonStr.append(line);
+	//
+	// JSONObject jsonObject = new JSONObject(jsonStr.toString());
+	//
+	// if (jsonObject != null
+	// && !jsonObject.isNull(JSON_FIELD_ROOT_RENDERING_SCHEME)) {
+	// // Log.i(TAG, JSON_FIELD_ROOT_RENDERING_SCHEME);
+	// JSONObject rootDict = jsonObject
+	// .getJSONObject(JSON_FIELD_ROOT_RENDERING_SCHEME);
+	//
+	// JSONObject firstDefaultSymbolDict = rootDict
+	// .getJSONObject(JSON_FIELD_FIRST_DEFAULT_SYMBOL);
+	// JSONArray firstFillSymbolArray = rootDict
+	// .getJSONArray(JSON_FIELD_FIRST_FILL_SYMBOL);
+	// JSONArray firstIconSymbolArray = rootDict
+	// .getJSONArray(JSON_FIELD_FIRST_ICON_SYMBOL);
+	//
+	// {
+	// JSONObject defaultFillSymbolDict = firstDefaultSymbolDict
+	// .getJSONObject(JSON_FIELD_SECOND_DEFAULT_FILL_SYMBOL);
+	// int fillColor = Color.parseColor(defaultFillSymbolDict
+	// .getString(JSON_FIELD_LEAVE_FILL_COLOR));
+	// int outlineColor = Color.parseColor(defaultFillSymbolDict
+	// .getString(JSON_FIELD_LEAVE_OUTLINE_COLOR));
+	// float lineWidth = (float) defaultFillSymbolDict
+	// .getDouble(JSON_FIELD_LEAVE_LINE_WIDTH);
+	// defaultFillSymbol = new SimpleFillSymbol(fillColor);
+	// defaultFillSymbol.setOutline(new SimpleLineSymbol(
+	// outlineColor, lineWidth));
+	// }
+	//
+	// {
+	// JSONObject defaultHighlightFillSymbolDict = firstDefaultSymbolDict
+	// .getJSONObject(JSON_FIELD_SECOND_DEFAULT_HIGHLIGHT_SYMBOL);
+	// int fillColor = Color
+	// .parseColor(defaultHighlightFillSymbolDict
+	// .getString(JSON_FIELD_LEAVE_FILL_COLOR));
+	// int outlineColor = Color
+	// .parseColor(defaultHighlightFillSymbolDict
+	// .getString(JSON_FIELD_LEAVE_OUTLINE_COLOR));
+	// float lineWidth = (float) defaultHighlightFillSymbolDict
+	// .getDouble(JSON_FIELD_LEAVE_LINE_WIDTH);
+	// defaultHighlightFillSymbol = new SimpleFillSymbol(fillColor);
+	// defaultHighlightFillSymbol.setOutline(new SimpleLineSymbol(
+	// outlineColor, lineWidth));
+	// }
+	//
+	// {
+	// fillSymbolDictionary.clear();
+	// for (int i = 0; i < firstFillSymbolArray.length(); i++) {
+	// JSONObject secondDict = firstFillSymbolArray
+	// .getJSONObject(i);
+	// int colorID = secondDict
+	// .getInt(JSON_FIELD_LEAVE_COLOR_ID);
+	// int fillColor = Color.parseColor(secondDict
+	// .getString(JSON_FIELD_LEAVE_FILL_COLOR));
+	// int outlineColor = Color.parseColor(secondDict
+	// .getString(JSON_FIELD_LEAVE_OUTLINE_COLOR));
+	// float lineWidth = (float) secondDict
+	// .getDouble(JSON_FIELD_LEAVE_LINE_WIDTH);
+	//
+	// SimpleFillSymbol sfs = new SimpleFillSymbol(fillColor);
+	// sfs.setOutline(new SimpleLineSymbol(outlineColor,
+	// lineWidth));
+	// fillSymbolDictionary.put(colorID, sfs);
+	// }
+	// }
+	//
+	// {
+	// iconSymbolDictionary.clear();
+	// for (int i = 0; i < firstIconSymbolArray.length(); i++) {
+	// JSONObject secondDict = firstIconSymbolArray
+	// .getJSONObject(i);
+	// int colorID = secondDict
+	// .getInt(JSON_FIELD_LEAVE_COLOR_ID);
+	// String icon = secondDict
+	// .getString(JSON_FIELD_LEAVE_ICON);
+	// iconSymbolDictionary.put(colorID, icon);
+	//
+	// }
+	// }
+	// }
+	//
+	// inputReader.close();
+	// } catch (FileNotFoundException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 }

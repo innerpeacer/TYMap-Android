@@ -26,7 +26,7 @@ public class MainListActivity extends HelperListActivity {
 		if (!new File(mapRootDir).exists()) {
 			copyFileIfNeeded();
 		}
-		copyFileIfNeeded();
+		// copyFileIfNeeded();
 
 		LicenseManager.loadContent(FileHelper.readStringFromAsset(this,
 				"Licenses.json"));

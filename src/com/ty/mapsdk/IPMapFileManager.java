@@ -8,21 +8,21 @@ import java.io.RandomAccessFile;
 import android.os.Environment;
 
 import com.ty.mapdata.TYBuilding;
-import com.ty.mapsdk.swig.IPMapSDK;
 
 class IPMapFileManager {
 
 	static String FILE_MAP_DATABASE = "TYMap.db";
 	static String FILE_MAP_INFO_DATABASE = "%s.tymap";
 
-	static String JSON_FILE_MAP_DATA = "%s.data";
+	// static String JSON_FILE_MAP_DATA = "%s.data";
 	static String FILE_MAP_DB = "%s.tymap";
 
 	static String JSON_FILE_LANDMARK = "%s_LANDMARK.json";
 	static String JSON_FILE_BRANDS = "Brands_Building_%s.json";
 
-	static String JSON_FILE_RENDERING_SCHEME = "%s_RenderingScheme.json";
-	static String JSON_FILE_DEFAULT_RENDERING_SCHEME = "RenderingScheme.json";
+	// static String JSON_FILE_RENDERING_SCHEME = "%s_RenderingScheme.json";
+	// static String JSON_FILE_DEFAULT_RENDERING_SCHEME =
+	// "RenderingScheme.json";
 
 	static String JSON_FILE_CITY = "Cities.json";
 	static String JSON_FILE_BUILDING = "Buildings_City_%s.json";
@@ -85,20 +85,20 @@ class IPMapFileManager {
 		return (new File(buildingDir, fileName).toString());
 	}
 
-	public static String getMapDataPath(TYMapInfo info) {
-		// String buildingDir = getBuildingDir(info.getCityID(),
-		// info.getBuildingID());
-		// String fileName = String.format(JSON_FILE_MAP_DATA, info.getMapID());
-		// return (new File(buildingDir, fileName).toString());
+	// public static String getMapDataPath(TYMapInfo info) {
+	// // String buildingDir = getBuildingDir(info.getCityID(),
+	// // info.getBuildingID());
+	// // String fileName = String.format(JSON_FILE_MAP_DATA, info.getMapID());
+	// // return (new File(buildingDir, fileName).toString());
+	//
+	// String buildingDir = getBuildingDir(info.getCityID(),
+	// info.getBuildingID());
+	// String fileName = String.format(JSON_FILE_MAP_DATA, info.getMapID());
+	// fileName = String.format("%s.tymap", IPMapSDK.md5(fileName));
+	// return (new File(buildingDir, fileName).toString());
+	// }
 
-		String buildingDir = getBuildingDir(info.getCityID(),
-				info.getBuildingID());
-		String fileName = String.format(JSON_FILE_MAP_DATA, info.getMapID());
-		fileName = String.format("%s.tymap", IPMapSDK.md5(fileName));
-		return (new File(buildingDir, fileName).toString());
-	}
-
-	public static String getMapDBPath(TYBuilding building) {
+	public static String getMapDataDBPath(TYBuilding building) {
 		String buildingDir = getBuildingDir(building.getCityID(),
 				building.getBuildingID());
 		String fileName = String.format(FILE_MAP_DB, building.getBuildingID());
@@ -119,25 +119,25 @@ class IPMapFileManager {
 		return (new File(buildingDir, fileName).toString());
 	}
 
-	public static String getRenderingScheme(TYBuilding building) {
-		String buildingDir = getBuildingDir(building.getCityID(),
-				building.getBuildingID());
-		String fileName = String.format(JSON_FILE_RENDERING_SCHEME,
-				building.getBuildingID());
+	// public static String getRenderingScheme(TYBuilding building) {
+	// String buildingDir = getBuildingDir(building.getCityID(),
+	// building.getBuildingID());
+	// String fileName = String.format(JSON_FILE_RENDERING_SCHEME,
+	// building.getBuildingID());
+	//
+	// File result = new File(buildingDir, fileName);
+	// if (result.exists()) {
+	// return result.toString();
+	// } else {
+	// return getDefaultRenderingScheme();
+	// }
+	// }
 
-		File result = new File(buildingDir, fileName);
-		if (result.exists()) {
-			return result.toString();
-		} else {
-			return getDefaultRenderingScheme();
-		}
-	}
-
-	public static String getDefaultRenderingScheme() {
-		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
-		String fileName = JSON_FILE_DEFAULT_RENDERING_SCHEME;
-		return (new File(mapRootDir, fileName).toString());
-	}
+	// public static String getDefaultRenderingScheme() {
+	// String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
+	// String fileName = JSON_FILE_DEFAULT_RENDERING_SCHEME;
+	// return (new File(mapRootDir, fileName).toString());
+	// }
 
 	public static String getPOIDBPath(TYBuilding building) {
 		String buildingDir = getBuildingDir(building.getCityID(),

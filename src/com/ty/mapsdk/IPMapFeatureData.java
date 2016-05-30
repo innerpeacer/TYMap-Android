@@ -29,7 +29,7 @@ class IPMapFeatureData {
 	Map<String, Graphic[]> getAllMapDataOnFloor(int floor) {
 		Map<String, Graphic[]> resultDict = new HashMap<String, Graphic[]>();
 
-		String dbPath = IPMapFileManager.getMapDBPath(currentBuilding);
+		String dbPath = IPMapFileManager.getMapDataDBPath(currentBuilding);
 		IPXMapDataDBAdapter db = new IPXMapDataDBAdapter(dbPath);
 		db.open();
 		VectorOfFeatureRecord allRecords = db.getAllRecordsOnFloor(floor);

@@ -75,7 +75,6 @@ class IPMapDBAdapter {
 				city.setStatus(c.getInt(5));
 
 				cityArray.add(city);
-
 			} while (c.moveToNext());
 		}
 		return cityArray;
