@@ -30,7 +30,7 @@ public class TYOfflineRouteManager {
 	IPXGeosGeometryFactory factory;
 	private TYRouteResult routeResult;
 
-	private IPRoutePointConverter routePointConverter;
+	private IPRTRoutePointConverter routePointConverter;
 	List<TYMapInfo> allMapInfoArray = new ArrayList<TYMapInfo>();
 
 	/***
@@ -45,7 +45,7 @@ public class TYOfflineRouteManager {
 			List<TYMapInfo> mapInfoArray) {
 		allMapInfoArray.addAll(mapInfoArray);
 		TYMapInfo info = allMapInfoArray.get(0);
-		routePointConverter = new IPRoutePointConverter(info.getMapExtent(),
+		routePointConverter = new IPRTRoutePointConverter(info.getMapExtent(),
 				building.getOffset());
 
 		String dbPath = getRouteDBPath(building);

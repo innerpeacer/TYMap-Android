@@ -34,7 +34,7 @@ public class TYRouteManager {
 	private RouteParameters routeParams;
 	private RouteResult routeResult;
 
-	private IPRoutePointConverter routePointConverter;
+	private IPRTRoutePointConverter routePointConverter;
 	List<TYMapInfo> allMapInfoArray = new ArrayList<TYMapInfo>();
 
 	private Exception mException;
@@ -75,7 +75,7 @@ public class TYRouteManager {
 		allMapInfoArray.addAll(mapInfoArray);
 		TYMapInfo info = allMapInfoArray.get(0);
 
-		routePointConverter = new IPRoutePointConverter(info.getMapExtent(),
+		routePointConverter = new IPRTRoutePointConverter(info.getMapExtent(),
 				building.getOffset());
 
 		try {

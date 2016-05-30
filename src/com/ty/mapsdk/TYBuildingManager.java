@@ -22,8 +22,8 @@ public class TYBuildingManager {
 	 * @return 建筑类数组
 	 */
 	public static List<TYBuilding> parseAllBuildingsFromFiles(Context context) {
-		String dbPath = IPMapFileManager.getMapDBPath();
-		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapDBPath();
+		IPDBMapDBAdapter db = new IPDBMapDBAdapter(dbPath);
 		db.open();
 		List<TYBuilding> buildingArray = db.getAllBuildings();
 		db.close();
@@ -41,8 +41,8 @@ public class TYBuildingManager {
 	 */
 	public static List<TYBuilding> parseBuildingFromFiles(Context context,
 			String cityID) {
-		String dbPath = IPMapFileManager.getMapDBPath();
-		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapDBPath();
+		IPDBMapDBAdapter db = new IPDBMapDBAdapter(dbPath);
 		db.open();
 		List<TYBuilding> buildingArray = db.getAllBuildings(cityID);
 		db.close();
@@ -64,8 +64,8 @@ public class TYBuildingManager {
 	 */
 	public static TYBuilding parseBuildingFromFilesById(Context context,
 			String cityID, String buildingID) {
-		String dbPath = IPMapFileManager.getMapDBPath();
-		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapDBPath();
+		IPDBMapDBAdapter db = new IPDBMapDBAdapter(dbPath);
 		db.open();
 		TYBuilding building = db.getBuildingByID(cityID, buildingID);
 		db.close();
@@ -89,8 +89,8 @@ public class TYBuildingManager {
 	 */
 	public static TYBuilding parseBuildingFromFilesByName(Context context,
 			String cityID, String buildingName) {
-		String dbPath = IPMapFileManager.getMapDBPath();
-		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapDBPath();
+		IPDBMapDBAdapter db = new IPDBMapDBAdapter(dbPath);
 		db.open();
 		TYBuilding building = db.getBuildingByName(buildingName);
 		db.close();

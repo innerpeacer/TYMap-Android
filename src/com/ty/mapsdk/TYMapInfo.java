@@ -248,8 +248,8 @@ public class TYMapInfo implements Parcelable {
 	 * @return 目标楼层所有地图信息
 	 */
 	public static List<TYMapInfo> parseAllMapInfo(TYBuilding building) {
-		String dbPath = IPMapFileManager.getMapInfoDBPath(building);
-		IPMapInfoDBAdapter db = new IPMapInfoDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapInfoDBPath(building);
+		IPDBMapInfoDBAdapter db = new IPDBMapInfoDBAdapter(dbPath);
 		db.open();
 		List<TYMapInfo> mapInfoArray = db.getAllMapInfo();
 		db.close();
@@ -269,9 +269,9 @@ public class TYMapInfo implements Parcelable {
 	 */
 	public static List<TYMapInfo> parseMapInfoFromFiles(Context context,
 			String cityID, String buildingID) {
-		String dbPath = IPMapFileManager.getMapInfoDBPath(cityID, buildingID);
+		String dbPath = IPHPMapFileManager.getMapInfoDBPath(cityID, buildingID);
 		Log.i(TAG, dbPath);
-		IPMapInfoDBAdapter db = new IPMapInfoDBAdapter(dbPath);
+		IPDBMapInfoDBAdapter db = new IPDBMapInfoDBAdapter(dbPath);
 		db.open();
 		List<TYMapInfo> mapInfoArray = db.getAllMapInfo();
 		db.close();
@@ -298,8 +298,8 @@ public class TYMapInfo implements Parcelable {
 	public static TYMapInfo parseMapInfoFromFilesById(Context context,
 			String cityID, String buildingID, String mapID) {
 		TYMapInfo info = null;
-		String dbPath = IPMapFileManager.getMapInfoDBPath(cityID, buildingID);
-		IPMapInfoDBAdapter db = new IPMapInfoDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapInfoDBPath(cityID, buildingID);
+		IPDBMapInfoDBAdapter db = new IPDBMapInfoDBAdapter(dbPath);
 		db.open();
 		info = db.getMapInfoWithMapID(mapID);
 		db.close();

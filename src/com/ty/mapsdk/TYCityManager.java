@@ -22,8 +22,8 @@ public class TYCityManager {
 	 * @return 城市类数组
 	 */
 	public static List<TYCity> parseCityFromFiles(Context context) {
-		String dbPath = IPMapFileManager.getMapDBPath();
-		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapDBPath();
+		IPDBMapDBAdapter db = new IPDBMapDBAdapter(dbPath);
 		db.open();
 		List<TYCity> cityArray = db.getAllCities();
 		db.close();
@@ -41,8 +41,8 @@ public class TYCityManager {
 	 * @return 城市类
 	 */
 	public static TYCity parseCityFromFilesById(Context context, String cityId) {
-		String dbPath = IPMapFileManager.getMapDBPath();
-		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapDBPath();
+		IPDBMapDBAdapter db = new IPDBMapDBAdapter(dbPath);
 		db.open();
 		TYCity city = db.getCityByID(cityId);
 		db.close();
@@ -63,8 +63,8 @@ public class TYCityManager {
 	 */
 	public static TYCity parseCityFromFilesByName(Context context,
 			String cityName) {
-		String dbPath = IPMapFileManager.getMapDBPath();
-		IPMapDBAdapter db = new IPMapDBAdapter(dbPath);
+		String dbPath = IPHPMapFileManager.getMapDBPath();
+		IPDBMapDBAdapter db = new IPDBMapDBAdapter(dbPath);
 		db.open();
 		TYCity city = db.getCityByName(cityName);
 		db.close();

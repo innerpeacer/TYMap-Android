@@ -35,7 +35,7 @@ public class TYDirectionalHint {
 	private TYLandmark landmark;
 	private TYRoutePart routePart;
 
-	private IPRouteVector2 vector;
+	private IPRTRouteVector2 vector;
 
 	/**
 	 * 导航方向提示的初始化方法，一般不需要直接调用，由导航管理类调用生成
@@ -51,7 +51,7 @@ public class TYDirectionalHint {
 		this.startPoint = start;
 		this.endPoint = end;
 
-		vector = new IPRouteVector2(endPoint.getX() - startPoint.getX(),
+		vector = new IPRTRouteVector2(endPoint.getX() - startPoint.getX(),
 				endPoint.getY() - startPoint.getY());
 		length = GeometryEngine.distance(startPoint, endPoint, null);
 		currentAngle = vector.getAngle();

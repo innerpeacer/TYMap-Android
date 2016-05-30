@@ -56,18 +56,18 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private Map<String, Graphic[]> mapDataDictionary = new HashMap<String, Graphic[]>();
 	private Map<String, Map<String, Graphic[]>> mapDataCache = new HashMap<String, Map<String, Graphic[]>>();
 
-	private IPStructureGroupLayer structureGroupLayer;
-	private IPParkingLayer parkingLayer;
-	private IPLabelGroupLayer labelGroupLayer;
-	private IPPointLayer pointLayer;
+	private IPLAStructureGroupLayer structureGroupLayer;
+	private IPLAParkingLayer parkingLayer;
+	private IPLALabelGroupLayer labelGroupLayer;
+	private IPLAPointLayer pointLayer;
 
-	private IPRouteLayer routeLayer;
-	private IPAnimatedRouteArrowLayer animatedRouteArrowLayer;
-	private IPRouteHintLayer routeHintLayer;
+	private IPLARouteLayer routeLayer;
+	private IPLAAnimatedRouteArrowLayer animatedRouteArrowLayer;
+	private IPLARouteHintLayer routeHintLayer;
 
-	private IPLocationLayer locationLayer;
+	private IPLALocationLayer locationLayer;
 
-	private IPPathCalibration pathCalibration;
+	private IPHPPathCalibration pathCalibration;
 	private boolean isPathCalibrationEnabled = false;
 	double pathCalibrationBuffer = 2.0;
 
@@ -82,7 +82,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 	private double lastRotationAngle = 0.0;
 
-	private Map<String, IPBrand> allBrandDict = new HashMap<String, IPBrand>();
+	private Map<String, IPHPBrand> allBrandDict = new HashMap<String, IPHPBrand>();
 
 	private String userID;
 	private String mapLicense;
@@ -189,11 +189,11 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		Graphic[] roomFeatures = mapDataDictionary.get("room");
 		for (int i = 0; i < roomFeatures.length; i++) {
 			Graphic g = roomFeatures[i];
-			if (IPMapType.CATEGORY_ID_FOR_PARKING_SPACE
+			if (IPHPMapType.CATEGORY_ID_FOR_PARKING_SPACE
 					.equalsIgnoreCase((String) g
-							.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID))) {
+							.getAttributeValue(IPHPMapType.GRAPHIC_ATTRIBUTE_CATEGORY_ID))) {
 				String poiID = (String) g
-						.getAttributeValue(IPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
+						.getAttributeValue(IPHPMapType.GRAPHIC_ATTRIBUTE_POI_ID);
 				if (occupiedArray.contains(poiID)) {
 					parkingLayer.addGraphic(new Graphic(g.getGeometry(),
 							parkingLayer.getOccupiedParkingSymbol()));
@@ -296,38 +296,38 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		renderingScheme = new TYRenderingScheme(this.context, this.building);
 
-		List<IPBrand> brandArray = IPBrand.parseAllBrands(building);
-		for (IPBrand brand : brandArray) {
+		List<IPHPBrand> brandArray = IPHPBrand.parseAllBrands(building);
+		for (IPHPBrand brand : brandArray) {
 			allBrandDict.put(brand.getPoiID(), brand);
 		}
 
 		SpatialReference sr = TYMapEnvironment.defaultSpatialReference();
 
-		structureGroupLayer = new IPStructureGroupLayer(context,
+		structureGroupLayer = new IPLAStructureGroupLayer(context,
 				renderingScheme, sr, null);
 		addLayer(structureGroupLayer);
 
-		parkingLayer = new IPParkingLayer();
+		parkingLayer = new IPLAParkingLayer();
 		addLayer(parkingLayer);
 
-		labelGroupLayer = new IPLabelGroupLayer(context, this, renderingScheme,
+		labelGroupLayer = new IPLALabelGroupLayer(context, this, renderingScheme,
 				sr);
 		labelGroupLayer.setBrandDict(allBrandDict);
 		addLayer(labelGroupLayer);
 
-		pointLayer = new IPPointLayer(context, sr);
+		pointLayer = new IPLAPointLayer(context, sr);
 		addLayer(pointLayer);
 
-		routeLayer = new IPRouteLayer(this);
+		routeLayer = new IPLARouteLayer(this);
 		addLayer(routeLayer);
 
-		routeHintLayer = new IPRouteHintLayer(context);
+		routeHintLayer = new IPLARouteHintLayer(context);
 		addLayer(routeHintLayer);
 
-		animatedRouteArrowLayer = new IPAnimatedRouteArrowLayer(context, this);
+		animatedRouteArrowLayer = new IPLAAnimatedRouteArrowLayer(context, this);
 		addLayer(animatedRouteArrowLayer);
 
-		locationLayer = new IPLocationLayer(context);
+		locationLayer = new IPLALocationLayer(context);
 		addLayer(locationLayer);
 
 		setOnSingleTapListener(this);
@@ -354,8 +354,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 		renderingScheme = new TYRenderingScheme(this.context, this.building);
 
-		List<IPBrand> brandArray = IPBrand.parseAllBrands(building);
-		for (IPBrand brand : brandArray) {
+		List<IPHPBrand> brandArray = IPHPBrand.parseAllBrands(building);
+		for (IPHPBrand brand : brandArray) {
 			allBrandDict.put(brand.getPoiID(), brand);
 		}
 
@@ -375,11 +375,11 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	 */
 	public void setFloor(final TYMapInfo info) {
 		// Log.i(TAG, "setFloor: " + info);
-		if (!IPLicenseValidation.checkValidity(userID, mapLicense, building)) {
+		if (!IPHPLicenseValidation.checkValidity(userID, mapLicense, building)) {
 			return;
 		}
 
-		Date expiredDate = IPLicenseValidation.evaluateLicense(userID,
+		Date expiredDate = IPHPLicenseValidation.evaluateLicense(userID,
 				mapLicense, building);
 		if (expiredDate == null) {
 			return;
@@ -476,7 +476,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 				if (!isInterupted) {
 					if (isPathCalibrationEnabled) {
-						pathCalibration = new IPPathCalibration(currentMapInfo);
+						pathCalibration = new IPHPPathCalibration(currentMapInfo);
 						pathCalibration.setBufferWidth(pathCalibrationBuffer);
 					} else {
 						pathCalibration = null;
@@ -517,7 +517,7 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	}
 
 	private Map<String, Graphic[]> readMapDataFromDB(TYMapInfo info) {
-		IPMapFeatureData featureData = new IPMapFeatureData(building);
+		IPHPMapFeatureData featureData = new IPHPMapFeatureData(building);
 		return featureData.getAllMapDataOnFloor(info.getFloorNumber());
 	}
 

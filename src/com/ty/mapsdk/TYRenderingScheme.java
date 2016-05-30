@@ -102,7 +102,7 @@ public class TYRenderingScheme {
 	 */
 	public TYRenderingScheme(Context context, TYBuilding building) {
 		// this(context, IPMapFileManager.getRenderingScheme(building));
-		this(context, IPMapFileManager.getMapDataDBPath(building));
+		this(context, IPHPMapFileManager.getMapDataDBPath(building));
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class TYRenderingScheme {
 	private void parseRenderingSchemeFromDBFile(String path) {
 		Log.i(TAG, "parseRenderingSchemeFromDBFile");
 
-		IPSymbolDBAdapter db = new IPSymbolDBAdapter(path);
+		IPDBSymbolDBAdapter db = new IPDBSymbolDBAdapter(path);
 		db.open();
 		Map<Integer, SimpleFillSymbol> fillDict = db.getFillSymbolDictionary();
 		Map<Integer, String> iconDict = db.getIconSymbolDictionary();

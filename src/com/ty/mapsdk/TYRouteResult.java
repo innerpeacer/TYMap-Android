@@ -149,7 +149,7 @@ public class TYRouteResult {
 	public List<TYDirectionalHint> getRouteDirectionalHint(TYRoutePart rp) {
 		List<TYDirectionalHint> result = new ArrayList<TYDirectionalHint>();
 
-		IPLandmarkManager landmarkManager = IPLandmarkManager.sharedManager();
+		IPHPLandmarkManager landmarkManager = IPHPLandmarkManager.sharedManager();
 		landmarkManager.loadLandmark(rp.getMapInfo());
 
 		Polyline line = processPolyline(rp.getRoute());
@@ -245,7 +245,7 @@ public class TYRouteResult {
 				continue;
 			}
 
-			IPRouteVector2 v = new IPRouteVector2(p1.getX() - p0.getX(),
+			IPRTRouteVector2 v = new IPRTRouteVector2(p1.getX() - p0.getX(),
 					p1.getY() - p0.getY());
 			double angle = v.getAngle();
 
