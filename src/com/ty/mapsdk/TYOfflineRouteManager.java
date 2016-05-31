@@ -1,6 +1,5 @@
 package com.ty.mapsdk;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,8 @@ public class TYOfflineRouteManager {
 		routePointConverter = new IPRTRoutePointConverter(info.getMapExtent(),
 				building.getOffset());
 
-		String dbPath = getRouteDBPath(building);
+		// String dbPath = getRouteDBPath(building);
+		String dbPath = IPHPMapFileManager.getRouteDBPath(building);
 		IPXRouteNetworkDBAdapter db = new IPXRouteNetworkDBAdapter(dbPath);
 		db.open();
 		networkDataset = db.readRouteNetworkDataset();
@@ -59,11 +59,11 @@ public class TYOfflineRouteManager {
 		factory = new IPXGeosGeometryFactory();
 	}
 
-	private String getRouteDBPath(TYBuilding building) {
-		String dbName = String.format("%s_Route.db", building.getBuildingID());
-		return new File(TYMapEnvironment.getDirectoryForBuilding(building),
-				dbName).toString();
-	}
+	// private String getRouteDBPath(TYBuilding building) {
+	// String dbName = String.format("%s_Route.db", building.getBuildingID());
+	// return new File(TYMapEnvironment.getDirectoryForBuilding(building),
+	// dbName).toString();
+	// }
 
 	/**
 	 * 请求路径规划，在代理方法获取规划结果

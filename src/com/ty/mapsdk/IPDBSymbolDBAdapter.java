@@ -60,8 +60,8 @@ public class IPDBSymbolDBAdapter {
 		if (c != null && c.moveToFirst()) {
 			do {
 				int symbolID = c.getInt(0);
-				int fillColor = Color.parseColor(c.getString(1));
-				int outlineColor = Color.parseColor(c.getString(2));
+				int fillColor = Color.parseColor(c.getString(1).trim());
+				int outlineColor = Color.parseColor(c.getString(2).trim());
 				float lineWidth = (float) c.getDouble(3);
 
 				SimpleFillSymbol sfs = new SimpleFillSymbol(fillColor);

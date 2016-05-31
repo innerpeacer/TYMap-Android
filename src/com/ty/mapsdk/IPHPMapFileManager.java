@@ -43,6 +43,13 @@ class IPHPMapFileManager {
 		return file;
 	}
 
+	public static String getRouteDBPath(TYBuilding building) {
+		String buildingDir = getBuildingDir(building.getCityID(),
+				building.getBuildingID());
+		String fileName = String.format(FILE_MAP_DB, building.getBuildingID());
+		return (new File(buildingDir, fileName).toString());
+	}
+
 	public static String getMapDBPath() {
 		String mapRootDir = TYMapEnvironment.getRootDirectoryForMapFiles();
 		String fileName = FILE_MAP_DATABASE;
@@ -61,7 +68,6 @@ class IPHPMapFileManager {
 		String buildingDir = getBuildingDir(cityID, buildingID);
 		String fileName = String.format(FILE_MAP_INFO_DATABASE, buildingID);
 		return (new File(buildingDir, fileName).toString());
-
 	}
 
 	public static String getCityJsonPath() {
