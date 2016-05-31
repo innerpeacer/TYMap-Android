@@ -19,11 +19,11 @@ include $(PREBUILT_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := TYMapSDK
 LOCAL_SRC_FILES := 	TYMapSDK_wrap.cxx \
-					TYMapSDK/src/Utils/IPEncryption.cpp \
-					TYMapSDK/src/Utils/IPLicenseValidation.cpp \
-					TYMapSDK/src/Utils/IPMemory.cpp \
-					TYMapSDK/src/Utils/MD5.cpp \
-					TYMapSDK/src/Utils/MD5Utils.cpp \
+					TYMapSDK/src/Utils/IPXEncryption.cpp \
+					TYMapSDK/src/Utils/IPXLicenseValidation.cpp \
+					TYMapSDK/src/Utils/IPXMemory.cpp \
+					TYMapSDK/src/Utils/IPXMD5.cpp \
+					TYMapSDK/src/Utils/IPXBase64Encoding.cpp \
 					TYMapSDK/src/Utils/IPXGeosGeometryCaster.cpp \
 					TYMapSDK/src/RouteNetwork/IPXLink.cpp \
 					TYMapSDK/src/RouteNetwork/IPXLinkRecord.cpp \

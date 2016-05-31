@@ -5,9 +5,9 @@
 
 %{
 
-#include "TYMapSDK/src/Utils/IPEncryption.hpp"
-#include "TYMapSDK/src/Utils/MD5Utils.hpp"
-#include "TYMapSDK/src/Utils/IPLicenseValidation.h"
+#include "TYMapSDK/src/Utils/IPXEncryption.hpp"
+#include "TYMapSDK/src/Utils/IPXMD5.hpp"
+#include "TYMapSDK/src/Utils/IPXLicenseValidation.h"
 #include "TYMapSDK/src/Utils/IPXGeosGeometryCaster.hpp"
 
 #include <geos.h>
@@ -24,8 +24,8 @@
 using namespace std;
 using namespace Innerpeacer::MapSDK;
 using namespace Innerpeacer::MapSDK::GeosGeometryCaster;
-using namespace Innerpeacer::MapSDK::Encryption;
-using namespace Innerpeacer::MapSDK::License;
+//using namespace Innerpeacer::MapSDK::Encryption;
+//using namespace Innerpeacer::MapSDK::License;
 
 using namespace geos;
 using namespace geos::geom;

@@ -13,32 +13,48 @@ public class IPMapSDK {
     return IPMapSDKJNI.decryptString__SWIG_0(str);
   }
 
-  public static String encryptString(String str) {
-    return IPMapSDKJNI.encryptString__SWIG_0(str);
-  }
-
-  public static String decryptFile(String file) {
-    return IPMapSDKJNI.decryptFile__SWIG_0(file);
-  }
-
   public static String decryptString(String str, String key) {
     return IPMapSDKJNI.decryptString__SWIG_1(str, key);
+  }
+
+  public static String encryptString(String str) {
+    return IPMapSDKJNI.encryptString__SWIG_0(str);
   }
 
   public static String encryptString(String originalString, String key) {
     return IPMapSDKJNI.encryptString__SWIG_1(originalString, key);
   }
 
+  public static void encryptFile(String originalPath, String encryptedFile) {
+    IPMapSDKJNI.encryptFile__SWIG_0(originalPath, encryptedFile);
+  }
+
   public static void encryptFile(String originalPath, String encryptedFile, String key) {
-    IPMapSDKJNI.encryptFile(originalPath, encryptedFile, key);
+    IPMapSDKJNI.encryptFile__SWIG_1(originalPath, encryptedFile, key);
+  }
+
+  public static String decryptFile(String file) {
+    return IPMapSDKJNI.decryptFile__SWIG_0(file);
   }
 
   public static String decryptFile(String file, String key) {
     return IPMapSDKJNI.decryptFile__SWIG_1(file, key);
   }
 
-  public static String md5(String str) {
-    return IPMapSDKJNI.md5(str);
+  public static void encryptBytes(String originalBytes, String encryptedByte, int length) {
+    IPMapSDKJNI.encryptBytes__SWIG_0(originalBytes, encryptedByte, length);
+  }
+
+  public static void encryptBytes(String originalBytes, String encryptedByte, int length, String key) {
+    IPMapSDKJNI.encryptBytes__SWIG_1(originalBytes, encryptedByte, length, key);
+  }
+
+  public static void decryptBytes(String encryptedBytes, String originalBytes, int length) {
+    IPMapSDKJNI.decryptBytes__SWIG_0(encryptedBytes, originalBytes, length);
+  }
+
+  public static void decryptBytes(String encryptedBytes, String originalBytes, int length, String key) {
+    IPMapSDKJNI.decryptBytes__SWIG_1(encryptedBytes, originalBytes, length, key);
   }
 
   public static boolean checkValidity(String userID, String license, String buildingID) {
