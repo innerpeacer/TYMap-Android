@@ -16,6 +16,7 @@ import com.ty.mapsdk.TYPoi.POI_LAYER;
 class IPLAStructureGroupLayer extends GroupLayer {
 	static final String TAG = IPLAStructureGroupLayer.class.getSimpleName();
 	private IPLAFloorLayer floorLayer;
+	private IPLAShadeLayer shadeLayer;
 	private IPLARoomLayer roomLayer;
 	private GraphicsLayer roomHighlightLayer;
 	private IPLAAssetLayer assetLayer;
@@ -28,6 +29,9 @@ class IPLAStructureGroupLayer extends GroupLayer {
 		floorLayer = new IPLAFloorLayer(context, renderingScheme, sr, envelope);
 		addLayer(floorLayer);
 
+		shadeLayer = new IPLAShadeLayer(context, renderingScheme, sr, envelope);
+		addLayer(shadeLayer);
+
 		roomLayer = new IPLARoomLayer(context, renderingScheme, sr, null);
 		addLayer(roomLayer);
 
@@ -38,26 +42,30 @@ class IPLAStructureGroupLayer extends GroupLayer {
 
 		assetLayer = new IPLAAssetLayer(context, renderingScheme, sr, null);
 		addLayer(assetLayer);
-
 	}
 
 	public void setRenderScheme(TYRenderingScheme rs) {
 		floorLayer.setRenderScheme(rs);
+		shadeLayer.setRenderScheme(rs);
 		roomLayer.setRenderScheme(rs);
 		assetLayer.setRenderScheme(rs);
 	}
 
 	public void removeGraphicsFromSublayers() {
 		floorLayer.removeAll();
+		shadeLayer.removeAll();
 		roomLayer.removeAll();
 		roomHighlightLayer.removeAll();
 		assetLayer.removeAll();
-
 	}
 
 	public void loadFloorContent(Graphic[] graphics) {
 		// Log.i(TAG, "loadFloorContent: " + graphics.length);
 		floorLayer.loadContents(graphics);
+	}
+
+	public void loadShadeContent(Graphic[] grahpics) {
+		shadeLayer.loadContents(grahpics);
 	}
 
 	public void loadRoomContent(Graphic[] graphics) {

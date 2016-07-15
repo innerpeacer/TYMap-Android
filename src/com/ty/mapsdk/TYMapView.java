@@ -310,8 +310,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 		parkingLayer = new IPLAParkingLayer();
 		addLayer(parkingLayer);
 
-		labelGroupLayer = new IPLALabelGroupLayer(context, this, renderingScheme,
-				sr);
+		labelGroupLayer = new IPLALabelGroupLayer(context, this,
+				renderingScheme, sr);
 		labelGroupLayer.setBrandDict(allBrandDict);
 		addLayer(labelGroupLayer);
 
@@ -453,6 +453,11 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 				}
 
 				if (!isInterupted) {
+					structureGroupLayer.loadShadeContent(mapDataDictionary
+							.get("shade"));
+				}
+
+				if (!isInterupted) {
 					structureGroupLayer.loadRoomContent(mapDataDictionary
 							.get("room"));
 
@@ -476,7 +481,8 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 
 				if (!isInterupted) {
 					if (isPathCalibrationEnabled) {
-						pathCalibration = new IPHPPathCalibration(currentMapInfo);
+						pathCalibration = new IPHPPathCalibration(
+								currentMapInfo);
 						pathCalibration.setBufferWidth(pathCalibrationBuffer);
 					} else {
 						pathCalibration = null;

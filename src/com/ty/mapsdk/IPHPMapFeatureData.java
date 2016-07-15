@@ -36,6 +36,7 @@ class IPHPMapFeatureData {
 		db.close();
 
 		List<Graphic> floorArray = new ArrayList<Graphic>();
+		List<Graphic> shadeArray = new ArrayList<Graphic>();
 		List<Graphic> roomArray = new ArrayList<Graphic>();
 		List<Graphic> assetArray = new ArrayList<Graphic>();
 		List<Graphic> facilityArray = new ArrayList<Graphic>();
@@ -74,6 +75,11 @@ class IPHPMapFeatureData {
 			case 5:
 				labelArray.add(graphic);
 				break;
+
+			case 6:
+				shadeArray.add(graphic);
+				break;
+
 			default:
 				break;
 			}
@@ -83,6 +89,10 @@ class IPHPMapFeatureData {
 			Graphic[] floorGraphic = new Graphic[floorArray.size()];
 			floorArray.toArray(floorGraphic);
 			resultDict.put("floor", floorGraphic);
+
+			Graphic[] shadeGraphic = new Graphic[shadeArray.size()];
+			shadeArray.toArray(shadeGraphic);
+			resultDict.put("shade", shadeGraphic);
 
 			Graphic[] roomGraphic = new Graphic[roomArray.size()];
 			roomArray.toArray(roomGraphic);
