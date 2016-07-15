@@ -128,6 +128,9 @@ public abstract class BaseMapViewActivity extends Activity implements
 		System.out.println(pms + "");
 
 		mapView.init(currentBuilding, dict.get("UserID"), dict.get("License"));
+		// mapView.init(currentBuilding, "ty4e13f85911a44a75",
+		// "d1a2d1461c0g31di60feaifff1f012b3");
+
 		mapView.setPointSymbol(pms);
 
 		startLoadTime = System.currentTimeMillis();

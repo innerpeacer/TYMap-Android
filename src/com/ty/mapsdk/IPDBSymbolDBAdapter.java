@@ -12,7 +12,7 @@ import android.graphics.Color;
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
 
-public class IPDBSymbolDBAdapter {
+class IPDBSymbolDBAdapter {
 	static final String TAG = IPDBSymbolDBAdapter.class.getSimpleName();
 
 	static final String TABLE_FILL_SYMBOL = "FILL_SYMBOL";

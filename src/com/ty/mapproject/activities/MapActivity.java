@@ -46,12 +46,14 @@ public class MapActivity extends BaseMapViewActivity {
 				+ mapView.getCenter().getY());
 		Log.i(TAG, "MapScale: " + mapView.getScale());
 
+		TYPoi poi = mapView.extractRoomPoiOnCurrentFloor(mappoint.getX(),
+				mappoint.getY());
+		Log.i(TAG, poi.toString());
 	}
 
 	@Override
 	public void onFinishLoadingFloor(TYMapView mapView, TYMapInfo mapInfo) {
 		super.onFinishLoadingFloor(mapView, mapInfo);
-
 	}
 
 	@Override

@@ -143,10 +143,12 @@ class IPLARoomLayer extends GraphicsLayer {
 				String buildingID = (String) graphic
 						.getAttributeValue(IPHPMapType.GRAPHIC_ATTRIBUTE_BUILDING_ID);
 
+				// String name = graphic
+				// .getAttributeValue(IPHPMapType.GRAPHIC_ATTRIBUTE_NAME);
 				String name = null;
 				Object nameObject = graphic
 						.getAttributeValue(IPHPMapType.GRAPHIC_ATTRIBUTE_NAME);
-				if (nameObject.getClass() == String.class) {
+				if (nameObject != null) {
 					name = (String) nameObject;
 				}
 

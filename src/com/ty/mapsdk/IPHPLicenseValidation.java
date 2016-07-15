@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
+
 import com.ty.mapdata.TYBuilding;
 import com.ty.mapsdk.swig.IPMapSDKJNI;
 
@@ -23,6 +25,7 @@ class IPHPLicenseValidation {
 				building.getBuildingID());
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	static Date evaluateLicense(String userID, String license,
 			TYBuilding building) {
 		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -39,7 +42,6 @@ class IPHPLicenseValidation {
 		} catch (ParseException e) {
 			// e.printStackTrace();
 		}
-
 		return date;
 	}
 
