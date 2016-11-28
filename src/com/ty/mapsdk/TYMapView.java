@@ -1145,12 +1145,10 @@ public class TYMapView extends MapView implements OnSingleTapListener,
 	private List<TYPoi> extractSelectedPoi(float x, float y) {
 		// Log.i(TAG, "extractSelectedPoi");
 		List<TYPoi> poiList = new ArrayList<TYPoi>();
-
 		poiList.addAll(labelGroupLayer.extractSelectedPoi(x, y,
 				DEFAULT_TOLERANCE));
 		poiList.addAll(structureGroupLayer.extractSelectedPoi(x, y,
 				DEFAULT_TOLERANCE));
-
 		return poiList;
 	}
 

@@ -32,14 +32,16 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 	TYLocalPoint endPoint;
 
 	TYOfflineRouteManager offlineRouteManager;
-	boolean isRouting;
-	TYRouteResult routeResult;
+
 	GraphicsLayer hintLayer;
 
 	boolean isRouteManagerReady = false;
 
 	boolean useClickForSnapRoute = false;
 	boolean useClickForChoosingPoint = true;
+
+	boolean isRouting;
+	TYRouteResult routeResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,15 @@ public class MapOfflineRouteActivity extends BaseMapViewActivity implements
 		mapView.setRouteEnd(endPoint);
 
 		mapView.showRouteResultOnCurrentFloor();
+
+		// 缩放到路段
+		// 获取当前楼层的路段
+		List<TYRoutePart> routeParts = rs.getRoutePartsOnFloor(currentMapInfo
+				.getFloorNumber());
+		// 当前单层情况下只有一段，取第一段
+		TYRoutePart part = routeParts.get(0);
+		// 缩放至当前路段
+		mapView.setExtent(part.getRoute(), 100);
 	}
 
 	@Override

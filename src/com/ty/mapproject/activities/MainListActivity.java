@@ -19,6 +19,11 @@ public class MainListActivity extends HelperListActivity {
 	public void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// Log.i(TAG, "Generate License:");
+		// Base64.encodeBase64String(new byte[] { 1, 2, 3 });
+		// Log.i(TAG, TYLicenseGenerator.generateBase64License40(
+		// "ty4e13f85911a44a75", "00210100", "20180801"));
+
 		String mapRootDir = Environment.getExternalStorageDirectory()
 				+ "/TuYaMap/MapEncrypted";
 		TYMapEnvironment.setRootDirectoryForMapFiles(mapRootDir);
@@ -30,25 +35,12 @@ public class MainListActivity extends HelperListActivity {
 
 		LicenseManager.loadContent(FileHelper.readStringFromAsset(this,
 				"Licenses.json"));
-
 		TYUserDefaults settings = new TYUserDefaults(this);
 
-		if (settings.getDefaultBuildingID() == null) {
-			settings.setDefaultCityID("0023");
-			settings.setDefaultBuildingID("00230002");
-			// settings.setDefaultBuildingID("002100002");
-			// settings.setDefaultBuildingID("00210004");
-
-			// settings.setDefaultCityID("0591");
-			// settings.setDefaultBuildingID("05910001");
-			// settings.setDefaultBuildingID("05910002");
-
-			// settings.setDefaultCityID("0010");
-			// settings.setDefaultBuildingID("00100003");
-			//
-			// settings.setDefaultCityID("H852");
-			// settings.setDefaultBuildingID("H85200001");
-		}
+		// if (settings.getDefaultBuildingID() == null) {
+		settings.setDefaultCityID("0021");
+		settings.setDefaultBuildingID("00210025");
+		// }
 		setTitle(getResources().getString(R.string.app_name));
 	};
 
@@ -86,7 +78,9 @@ public class MainListActivity extends HelperListActivity {
 						this, PathCalibrationActivity.class)),
 				new IntentPair(getResources().getString(
 						R.string.city_activity_title), new Intent(this,
-						AllCityListActivity.class)) };
+						AllCityListActivity.class)),
+				new IntentPair("轨迹层",
+						new Intent(this, TraceLayerActivity.class)) };
 	}
 
 	@Override

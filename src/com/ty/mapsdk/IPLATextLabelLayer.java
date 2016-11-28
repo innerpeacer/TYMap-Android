@@ -205,7 +205,6 @@ class IPLATextLabelLayer extends GraphicsLayer {
 
 		cv.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG
 				| Paint.FILTER_BITMAP_FLAG));
-
 		cv.drawText(text, width / 2, 30, paint);
 
 		cv.save(Canvas.ALL_SAVE_FLAG);

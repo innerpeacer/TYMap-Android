@@ -113,7 +113,6 @@ class IPHPBrand {
 						IPLBLabelSize size = new IPLBLabelSize(width, height);
 						brand.setLogoSize(size);
 					}
-
 					toReturn.add(brand);
 				}
 			}

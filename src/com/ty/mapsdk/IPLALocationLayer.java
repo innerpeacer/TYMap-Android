@@ -9,6 +9,7 @@ import com.esri.core.symbol.MarkerSymbol;
 import com.ty.mapsdk.TYMapView.TYMapViewMode;
 
 class IPLALocationLayer extends GraphicsLayer {
+	static final String TAG = IPLALocationLayer.class.getSimpleName();
 	private MarkerSymbol locationSymbol;
 
 	private Graphic locationGraphic;
@@ -36,9 +37,11 @@ class IPLALocationLayer extends GraphicsLayer {
 
 	public void updateDeviceHeading(double deviceHeading, double initAngle,
 			TYMapViewMode mode) {
+
 		switch (mode) {
 		case TYMapViewModeDefault:
 			locationSymbol.setAngle((float) (deviceHeading + initAngle));
+			updateGraphic(locationGraphicID, locationSymbol);
 			break;
 
 		case TYMapViewModeFollowing:
